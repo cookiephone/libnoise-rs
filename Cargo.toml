@@ -1,0 +1,20 @@
+[workspace]
+members = ["."]
+
+[package]
+name = "noise"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[profile.dev]
+opt-level = 1
+
+[profile.release]
+opt-level = 3
+lto = true
+
+[profile.release-with-debug]
+inherits = "release"
+debug = true
