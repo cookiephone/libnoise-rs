@@ -56,41 +56,28 @@ const GRADIENT_LUT_4D: [[f64; 4]; 32] = [
     [1.0, 1.0, 1.0, 0.0],
 ];
 
-struct SimplexAccelerator {
-    permutation_table: Vec<usize>,
-}
-
-impl SimplexAccelerator {
-    fn new(seed: u64, w: usize) -> Self {
-        let permutation_table = build_permutation_table(seed, w, false);
-        Self {
-            permutation_table,
-        }
-    }
-}
-
 pub struct Simplex {
     pub seed: u64,
     pub w: usize,
     pub r2: f64,
-    accelerator: SimplexAccelerator,
+    permutation_table: Vec<usize>,
 }
 
 impl Simplex {
     pub fn new(seed: u64, w: usize, r2: f64) -> Self {
-        let accelerator = SimplexAccelerator::new(seed, w);
+        let permutation_table = build_permutation_table(seed, w, false);
         Self {
             seed,
             w,
             r2,
-            accelerator,
+            permutation_table,
         }
     }
 
     pub fn noise2d(&self, x: f64, y: f64) -> f64 {
         macro_rules! hash {
             ($e:expr) => {
-                self.accelerator.permutation_table[($e) % self.w]
+                self.permutation_table[($e) % self.w]
             };
         }
 
@@ -150,22 +137,4 @@ fn contribution2d(r2: f64, x: f64, y: f64, gradient: &[f64]) -> f64 {
     } else {
         t.powi(4) * (gradient[0] * x + gradient[1] * y)
     }
-}
-
-fn build_gradient_lut(dim: usize) -> Vec<Vec<f64>> {
-    let n_nonzero_choices = 2_usize.pow((dim - 1) as u32);
-    let n_gradients = dim * n_nonzero_choices;
-    (0..n_gradients)
-        .map(|i| {
-            let zero_pos = i % dim;
-            let signature = i / dim;
-            let mut gradient = (0..(dim - 1))
-                .map(|n| (signature >> n) & 1)
-                .map(|bit| if bit == 0 { -1.0 } else { 1.0 })
-                .collect::<Vec<f64>>();
-            gradient.shrink_to_fit();
-            gradient.insert(zero_pos, 0.0);
-            gradient
-        })
-        .collect()
 }
