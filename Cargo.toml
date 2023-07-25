@@ -7,6 +7,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+rand = "*"
+
+[dev-dependencies]
+itertools = "*"
+image = "*"
 
 [profile.dev]
 opt-level = 1
