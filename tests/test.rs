@@ -5,7 +5,7 @@ use noise::*;
 #[test]
 fn test() {
     let gen = Simplex::new(0, 256, 0.5);
-    let (w, h) = (300, 200);
+    let (w, h) = (3000, 2000);
     let mut data = vec![vec![0.0; w]; h];
     for (i, j) in (0..h).cartesian_product(0..w) {
         data[i][j] = gen.noise2d(i as f64 * 0.05, j as f64 * 0.05);
