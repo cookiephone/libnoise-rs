@@ -3,7 +3,7 @@ use itertools::Itertools;
 
 #[test]
 fn test() {
-    let (w, h) = (3000, 2000);
+    let (w, h) = (3000, 3000);
     let mut data = vec![vec![0.0; w]; h];
     for (i, j) in (0..h).cartesian_product(0..w) {
         data[i][j] = noise::simplex::noise2d(i as f64 * 0.05, j as f64 * 0.05);

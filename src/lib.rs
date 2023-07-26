@@ -1,2 +1,2 @@
-pub mod simplex;
 mod constants;
+pub mod simplex;

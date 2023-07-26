@@ -34,8 +34,8 @@ pub fn noise2d(x: f64, y: f64) -> f64 {
     let x2 = x0 - 1.0 + 2.0 * UNSKEW_FACTOR_2D;
     let y2 = y0 - 1.0 + 2.0 * UNSKEW_FACTOR_2D;
     // hashed gradient indices, safe because this permutation table cannot index out of bounds
-    let is = is as usize;
-    let js = js as usize;
+    let is = is as usize % 256;
+    let js = js as usize % 256;
     let gi0 = unsafe { hash![is + hash![js]] % 4 };
     let gi1 = unsafe { hash![is + i1 as usize + hash![js + j1 as usize]] % 4 };
     let gi2 = unsafe { hash![is + 1 + hash![js + 1]] % 4 };
