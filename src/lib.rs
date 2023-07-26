@@ -1,3 +1,2 @@
-mod noise;
-mod ptable;
-pub use noise::*;
+pub mod simplex;
+mod constants;
