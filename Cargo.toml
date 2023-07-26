@@ -10,8 +10,14 @@ edition = "2021"
 rand = "*"
 
 [dev-dependencies]
+criterion = "*"
+plotters = "*"
 itertools = "*"
 image = "*"
+
+[[bench]]
+name = "benchmark"
+harness = false
 
 [profile.dev]
 opt-level = 1

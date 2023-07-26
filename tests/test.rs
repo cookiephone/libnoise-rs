@@ -4,7 +4,7 @@ use noise::*;
 
 #[test]
 fn test() {
-    let gen = Simplex::new(0, 256, 0.5);
+    let gen = Simplex::new(0, 256);
     let (w, h) = (3000, 2000);
     let mut data = vec![vec![0.0; w]; h];
     for (i, j) in (0..h).cartesian_product(0..w) {

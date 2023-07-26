@@ -6,6 +6,8 @@ macro_rules! grad {
     };
 }
 
+const R_SQUARED: f64 = 0.5;
+
 const SKEW_FACTOR_2D: f64 = 0.3660254037844386;
 const UNSKEW_FACTOR_2D: f64 = 0.21132486540518713;
 
@@ -62,17 +64,15 @@ const GRADIENT_LUT_4D: [[f64; 4]; 32] = [
 pub struct Simplex {
     pub seed: u64,
     pub w: usize,
-    pub r2: f64,
     permutation_table: Vec<usize>,
 }
 
 impl Simplex {
-    pub fn new(seed: u64, w: usize, r2: f64) -> Self {
+    pub fn new(seed: u64, w: usize) -> Self {
         let permutation_table = build_permutation_table(seed, w, true);
         Self {
             seed,
             w,
-            r2,
             permutation_table,
         }
     }
@@ -118,7 +118,7 @@ impl Simplex {
     }
 
     unsafe fn contribution2d(&self, x: f64, y: f64, gradient: &[f64]) -> f64 {
-        let mut t = self.r2 - x * x - y * y;
+        let mut t = R_SQUARED - x * x - y * y;
         if t <= 0.0 {
             0.0
         } else {
