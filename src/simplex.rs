@@ -1,7 +1,7 @@
 use crate::{constants::*, ptable::build_permutation_table};
 use std::sync::Once;
 
-static mut PERMUTATION_TABLE_DOUBLED: (Once, Option<Vec<usize>>) = (Once::new(), None);
+static mut PERMUTATION_TABLE_DOUBLED: (Once, Option<u64>, Option<Vec<usize>>) = (Once::new(), None, None);
 
 macro_rules! grad {
     ($e:expr) => {
@@ -11,11 +11,15 @@ macro_rules! grad {
 
 fn get_permutation_table(seed: u64) -> &'static Vec<usize> {
     unsafe {
+        if PERMUTATION_TABLE_DOUBLED.1.is_some_and(|old_seed| old_seed != seed) {
+            PERMUTATION_TABLE_DOUBLED.0 = Once::new();
+        }
         PERMUTATION_TABLE_DOUBLED.0.call_once(|| {
-            PERMUTATION_TABLE_DOUBLED.1 =
+            PERMUTATION_TABLE_DOUBLED.1 = Some(seed);
+            PERMUTATION_TABLE_DOUBLED.2 =
                 Some(build_permutation_table(seed, PERMUTATION_TABLE_SIZE, true));
         });
-        PERMUTATION_TABLE_DOUBLED.1.as_ref().unwrap()
+        PERMUTATION_TABLE_DOUBLED.2.as_ref().unwrap()
     }
 }
 
