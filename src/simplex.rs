@@ -1,4 +1,7 @@
-use crate::constants::*;
+use crate::{constants::*, ptable::build_permutation_table};
+use std::sync::Once;
+
+static mut PERMUTATION_TABLE_DOUBLED: (Once, Option<Vec<usize>>) = (Once::new(), None);
 
 macro_rules! grad {
     ($e:expr) => {
@@ -6,13 +9,24 @@ macro_rules! grad {
     };
 }
 
-macro_rules! hash {
-    ($e:expr) => {
-        PERMUTATION_TABLE_256_DOUBLED.get_unchecked($e)
-    };
+fn get_permutation_table(seed: u64) -> &'static Vec<usize> {
+    unsafe {
+        PERMUTATION_TABLE_DOUBLED.0.call_once(|| {
+            PERMUTATION_TABLE_DOUBLED.1 =
+                Some(build_permutation_table(seed, PERMUTATION_TABLE_SIZE, true));
+        });
+        PERMUTATION_TABLE_DOUBLED.1.as_ref().unwrap()
+    }
 }
 
-pub fn noise2d(x: f64, y: f64) -> f64 {
+pub fn noise2d(seed: u64, x: f64, y: f64) -> f64 {
+    // basic setup for later clarity
+    let permutation_table = get_permutation_table(seed);
+    macro_rules! hash {
+        ($e:expr) => {
+            permutation_table.get_unchecked($e)
+        };
+    }
     // transform into lattice space and floor for cube origin
     let skew = (x + y) * SKEW_FACTOR_2D;
     let is = (x + skew).floor();
