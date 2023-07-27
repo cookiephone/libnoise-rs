@@ -1,26 +1,40 @@
 use crate::{constants::*, ptable::build_permutation_table};
 use std::sync::Once;
 
-static mut PERMUTATION_TABLE: (Once, Option<u64>, Option<Vec<usize>>) = (Once::new(), None, None);
+struct StaticPermutationTable {
+    table: Option<Vec<usize>>,
+    seed: Option<u64>,
+    sync: Once,
+}
+
+static mut PERMUTATION_TABLE: StaticPermutationTable = StaticPermutationTable {
+    table: None,
+    seed: None,
+    sync: Once::new(),
+};
 
 fn get_permutation_table(seed: u64) -> &'static Vec<usize> {
     unsafe {
-        if PERMUTATION_TABLE.1.is_some_and(|old_seed| old_seed != seed) {
-            PERMUTATION_TABLE.0 = Once::new();
+        if PERMUTATION_TABLE
+            .seed
+            .is_some_and(|old_seed| old_seed != seed)
+        {
+            PERMUTATION_TABLE.sync = Once::new();
         }
-        PERMUTATION_TABLE.0.call_once(|| {
-            PERMUTATION_TABLE.1 = Some(seed);
-            PERMUTATION_TABLE.2 = Some(build_permutation_table(seed, PERMUTATION_TABLE_SIZE, true));
+        PERMUTATION_TABLE.sync.call_once(|| {
+            PERMUTATION_TABLE.seed = Some(seed);
+            PERMUTATION_TABLE.table =
+                Some(build_permutation_table(seed, PERMUTATION_TABLE_SIZE, true));
         });
-        PERMUTATION_TABLE.2.as_ref().unwrap()
+        PERMUTATION_TABLE.table.as_ref().unwrap()
     }
 }
 
 pub fn noise2d(seed: u64, x: f64, y: f64) -> f64 {
     // transform into lattice space and floor for cube origin
     let skew = (x + y) * SKEW_FACTOR_2D;
-    let is = (x + skew).floor();
-    let js = (y + skew).floor();
+    let is = fast_floor(x + skew);
+    let js = fast_floor(y + skew);
     // input point relative to unskewed cube (and simplex) origin in source space
     let unskew = (is + js) * UNSKEW_FACTOR_2D;
     let x0 = x - is + unskew;
@@ -40,9 +54,9 @@ pub fn noise2d(seed: u64, x: f64, y: f64) -> f64 {
     // hashed gradient indices, safe because this permutation table cannot index out of bounds
     let is = is as usize % 256;
     let js = js as usize % 256;
-    let gi0 = unsafe { hash2d(seed, is, js) };// unsafe { hash![is + hash![js]] % 4 };
-    let gi1 = unsafe { hash2d(seed, is + i1 as usize, js + j1 as usize) };// unsafe { hash![is + i1 as usize + hash![js + j1 as usize]] % 4 };
-    let gi2 = unsafe { hash2d(seed, is + 1, js + 1) };// unsafe { hash![is + 1 + hash![js + 1]] % 4 };
+    let gi0 = unsafe { hash2d(seed, is, js) } % GRADIENT_LUT_2D_SIZE;
+    let gi1 = unsafe { hash2d(seed, is + i1 as usize, js + j1 as usize) } % GRADIENT_LUT_2D_SIZE;
+    let gi2 = unsafe { hash2d(seed, is + 1, js + 1) } % GRADIENT_LUT_2D_SIZE;
     // compute contributions, safe because gradient lookup table is known
     let n0 = unsafe { contribution2d(x0, y0, gi0) };
     let n1 = unsafe { contribution2d(x1, y1, gi1) };
@@ -51,9 +65,14 @@ pub fn noise2d(seed: u64, x: f64, y: f64) -> f64 {
     (n0 + n1 + n2) * 99.83685446303647
 }
 
+fn fast_floor(x: f64) -> f64 {
+    let x_int = x as i64;
+    x_int as f64 - (x < x_int as f64) as i32 as f64
+}
+
 unsafe fn hash2d(seed: u64, i: usize, j: usize) -> usize {
     let perm = get_permutation_table(seed);
-    perm.get_unchecked(i + perm.get_unchecked(j)) % 4
+    *perm.get_unchecked(i + perm.get_unchecked(j))
 }
 
 unsafe fn contribution2d(x: f64, y: f64, gi: usize) -> f64 {
