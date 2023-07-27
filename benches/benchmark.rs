@@ -35,7 +35,7 @@ fn bench(c: &mut Criterion) {
 }
 
 fn bench_competitors(c: &mut Criterion) {
-    opensimplex2::fast::noise2(42, 0.0, 0.0);  // warmup init-once things
+    opensimplex2::fast::noise2(42, 0.0, 0.0); // warmup init-once things
     c.bench_function("opensimplex2_noise2d", |b| {
         b.iter(|| bench_opensimplex2_noise2d(2000, 2000, 0.033));
     });

@@ -40,22 +40,22 @@ pub fn noise2d(seed: u64, x: f64, y: f64) -> f64 {
     let x0 = x - is + unskew;
     let y0 = y - js + unskew;
     // compute middle simplex vector(s) between 0-vector and 1-vector
-    let mut i1 = 1.0;
-    let mut j1 = 0.0;
+    let mut i1 = 1;
+    let mut j1 = 0;
     if x0 < y0 {
-        i1 = 0.0;
-        j1 = 1.0;
+        i1 = 0;
+        j1 = 1;
     }
     // imput point relative to other unskewed simplex vertices
-    let x1 = x0 - i1 + UNSKEW_FACTOR_2D;
-    let y1 = y0 - j1 + UNSKEW_FACTOR_2D;
+    let x1 = x0 - i1 as f64 + UNSKEW_FACTOR_2D;
+    let y1 = y0 - j1 as f64 + UNSKEW_FACTOR_2D;
     let x2 = x0 - 1.0 + 2.0 * UNSKEW_FACTOR_2D;
     let y2 = y0 - 1.0 + 2.0 * UNSKEW_FACTOR_2D;
     // hashed gradient indices, safe because this permutation table cannot index out of bounds
     let is = is as usize % 256;
     let js = js as usize % 256;
     let gi0 = unsafe { hash2d(seed, is, js) } % GRADIENT_LUT_2D_SIZE;
-    let gi1 = unsafe { hash2d(seed, is + i1 as usize, js + j1 as usize) } % GRADIENT_LUT_2D_SIZE;
+    let gi1 = unsafe { hash2d(seed, is + i1, js + j1) } % GRADIENT_LUT_2D_SIZE;
     let gi2 = unsafe { hash2d(seed, is + 1, js + 1) } % GRADIENT_LUT_2D_SIZE;
     // compute contributions, safe because gradient lookup table is known
     let n0 = unsafe { contribution2d(x0, y0, gi0) };
