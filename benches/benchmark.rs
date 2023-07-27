@@ -42,6 +42,9 @@ fn bench(c: &mut Criterion) {
     c.bench_function("simplex_noise2d", |b| {
         b.iter(|| bench_simplex_noise2d(42, 3000, 3000, 0.033));
     });
+}
+
+fn bench_competitors(c: &mut Criterion) {
     c.bench_function("opensimplex_noise2d", |b| {
         b.iter(|| bench_opensimplex_noise2d(3000, 3000, 0.033));
     });
