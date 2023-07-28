@@ -7,12 +7,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rand = "*"
+core = { path = "core" }
 
 [dev-dependencies]
 criterion = "*"
 plotters = "*"
 itertools = "*"
+num = "*"
 image = "*"
 opensimplex_noise_rs = "*"
 opensimplex2 = "*"

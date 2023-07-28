@@ -1,3 +1,1 @@
-mod constants;
-mod ptable;
-pub mod simplex;
+pub use core::simplex;
