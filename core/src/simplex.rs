@@ -81,7 +81,7 @@ unsafe fn hash2d(seed: u64, i: usize, j: usize) -> usize {
 }
 
 unsafe fn contribution1d(x: f64, gi: usize) -> f64 {
-    if x.abs() >= 0.5_f64.sqrt() {
+    if x.abs() >= std::f64::consts::FRAC_1_SQRT_2 {
         0.0
     } else {
         let mut t = R_SQUARED - x * x;

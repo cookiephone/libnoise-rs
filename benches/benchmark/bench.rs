@@ -1,4 +1,4 @@
-use crate::helpers::{noise_2d_bencher, noise_1d_bencher};
+use crate::helpers::{noise_1d_bencher, noise_2d_bencher};
 use criterion::Criterion;
 
 const SEED: u64 = 42;

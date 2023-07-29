@@ -9,10 +9,7 @@ where
     S: Copy,
 {
     for point in cartesian_lattice_points(shape, scale) {
-        black_box(noise(
-            seed,
-            black_box(point[0] * scale),
-        ));
+        black_box(noise(seed, black_box(point[0] * scale)));
     }
 }
 
