@@ -1,5 +1,9 @@
-use image::GrayImage;
+use image::{
+    codecs::gif::{GifEncoder, Repeat},
+    ColorType, GrayImage,
+};
 use itertools::Itertools;
+use std::fs::OpenOptions;
 
 #[test]
 fn test_1d() {
@@ -34,4 +38,38 @@ fn test_2d() {
         .collect::<Vec<u8>>();
     let image = GrayImage::from_raw(w as u32, h as u32, data).unwrap();
     image.save("./img.png").unwrap();
+}
+
+#[test]
+fn test_3d() {
+    let (w, h, d) = (300, 300, 50);
+    let mut data = vec![vec![vec![0; w]; h]; d];
+
+    for (i, j, k) in [d, h, w]
+        .iter()
+        .map(|&dim_size| 0..dim_size)
+        .multi_cartesian_product()
+        .map(|p| (p[0], p[1], p[2]))
+    {
+        let noise =
+            noise::simplex::noise3d(42, i as f64 * 0.033, j as f64 * 0.033, k as f64 * 0.033);
+        data[i][j][k] = (noise * 172.5 + 172.5) as u8
+    }
+    let file_out = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .open("./img.gif")
+        .unwrap();
+    let mut encoder = GifEncoder::new(file_out);
+    encoder.set_repeat(Repeat::Infinite).unwrap();
+    for channel in data.iter().map(|c| {
+        c.iter()
+            .flatten()
+            .flat_map(|&val| std::iter::repeat(val).take(3))
+            .collect::<Vec<u8>>()
+    }) {
+        encoder
+            .encode(&channel, w as u32, h as u32, ColorType::Rgb8)
+            .unwrap();
+    }
 }

@@ -15,7 +15,11 @@ pub(crate) const GRADIENT_LUT_2D_SIZE: usize = 4;
 pub(crate) const GRADIENT_LUT_2D: [[f64; 2]; 4] =
     [[0.0, -1.0], [-1.0, 0.0], [0.0, 1.0], [1.0, 0.0]];
 
-/*pub(crate) const GRADIENT_LUT_3D: [[f64; 3]; 12] = [
+pub(crate) const SKEW_FACTOR_3D: f64 = 0.3333333333333333;
+pub(crate) const UNSKEW_FACTOR_3D: f64 = 0.16666666666666666;
+pub(crate) const NORMALIZATION_FACTOR_3D: f64 = 76.88375854620836;
+pub(crate) const GRADIENT_LUT_3D_SIZE: usize = 12;
+pub(crate) const GRADIENT_LUT_3D: [[f64; 3]; 12] = [
     [0.0, -1.0, -1.0],
     [-1.0, 0.0, -1.0],
     [-1.0, -1.0, 0.0],
@@ -29,7 +33,17 @@ pub(crate) const GRADIENT_LUT_2D: [[f64; 2]; 4] =
     [1.0, 0.0, 1.0],
     [1.0, 1.0, 0.0],
 ];
-pub(crate) const GRADIENT_LUT_4D: [[f64; 4]; 32] = [
+pub(crate) const SIMPLEX_TRAVERSAL_LUT_3D: [[usize; 6]; 8] = [
+    [0, 0, 1, 0, 1, 1], // 0: z > y > x
+    [0, 0, 0, 0, 0, 0], // 1: pad only
+    [0, 1, 0, 0, 1, 1], // 2: y > z > x
+    [0, 1, 0, 1, 1, 0], // 3: y > x > z
+    [0, 0, 1, 1, 0, 1], // 4: z > x > y
+    [1, 0, 0, 1, 0, 1], // 5: x > z > y
+    [0, 0, 0, 0, 0, 0], // 6: pad only
+    [1, 0, 0, 1, 1, 0], // 7: x > y > z
+];
+/*pub(crate) const GRADIENT_LUT_4D: [[f64; 4]; 32] = [
     [0.0, -1.0, -1.0, -1.0],
     [-1.0, 0.0, -1.0, -1.0],
     [-1.0, -1.0, 0.0, -1.0],
