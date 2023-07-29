@@ -29,7 +29,7 @@ fn bench_simplex_noise2d(c: &mut Criterion) {
 
 fn bench_opensimplex2_noise2d(c: &mut Criterion) {
     opensimplex2::fast::noise2(SEED as i64, 0.0, 0.0); // warmup init-once things
-    c.bench_function("simplex_noise2d", |b| {
+    c.bench_function("opensimplex2_fast_noise2d", |b| {
         b.iter(|| noise_2d_bencher(opensimplex2::fast::noise2, SEED as i64, SHAPE_2D, SCALE));
     });
 }
