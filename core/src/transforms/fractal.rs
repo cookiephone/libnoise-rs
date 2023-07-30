@@ -13,7 +13,9 @@ static mut NORMALIZATION_FACTOR: StaticNormalizationFactor = StaticNormalization
 };
 
 fn compute_normalization_factor(octaves: u32, amplitude: f64, persistence: f64) -> f64 {
-    1.0 / (0..octaves).fold(0.0, |acc, octave| acc + amplitude * persistence.powi(octave as i32))
+    1.0 / (0..octaves).fold(0.0, |acc, octave| {
+        acc + amplitude * persistence.powi(octave as i32)
+    })
 }
 
 fn get_normalization_factor(octaves: u32, amplitude: f64, persistence: f64) -> &'static f64 {
@@ -25,10 +27,12 @@ fn get_normalization_factor(octaves: u32, amplitude: f64, persistence: f64) -> &
             NORMALIZATION_FACTOR.sync = Once::new();
         }
         NORMALIZATION_FACTOR.sync.call_once(|| {
-            println!("RECOMPUTE!");
             NORMALIZATION_FACTOR.params = Some((octaves, amplitude, persistence));
-            NORMALIZATION_FACTOR.factor =
-                Some(compute_normalization_factor(octaves, amplitude, persistence));
+            NORMALIZATION_FACTOR.factor = Some(compute_normalization_factor(
+                octaves,
+                amplitude,
+                persistence,
+            ));
         });
         NORMALIZATION_FACTOR.factor.as_ref().unwrap()
     }
