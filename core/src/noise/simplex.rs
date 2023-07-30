@@ -1,4 +1,5 @@
-use crate::{constants::*, ptable::build_permutation_table};
+use super::constants::*;
+use crate::utils::ptable::build_permutation_table;
 use std::sync::Once;
 
 struct StaticPermutationTable {
