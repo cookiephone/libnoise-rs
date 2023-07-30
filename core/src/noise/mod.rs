@@ -1,2 +1,2 @@
-mod constants;
+pub(crate) mod constants;
 pub mod simplex;

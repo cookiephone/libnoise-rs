@@ -81,13 +81,11 @@ fn test_noise2d<F>(generator: F, path: &str)
 where
     F: Fn(u64, f64, f64) -> f64,
 {
+    let generator = noise::transforms::inputscale::transform2d(generator, 0.013);
     let (w, h) = (3000, 3000);
-    let mut data = vec![vec![0.0; w]; h];
-    for (i, j) in (0..h).cartesian_product(0..w) {
-        data[i][j] = generator(42, i as f64 * 0.013, j as f64 * 0.013);
-    }
-    let data = data.into_iter().flatten().collect::<Vec<f64>>();
-    let data = data
+    let noisebuf = noise::utils::NoiseBuffer::new2d(&[w, h], generator, 42);
+    let data = noisebuf
+        .buffer
         .iter()
         .map(|&val| (127.5 + val * 127.5) as u8)
         .collect::<Vec<u8>>();
@@ -99,18 +97,9 @@ fn test_noise3d<F>(generator: F, path: &str)
 where
     F: Fn(u64, f64, f64, f64) -> f64,
 {
+    let generator = noise::transforms::inputscale::transform3d(generator, 0.033);
     let (w, h, d) = (300, 300, 50);
-    let mut data = vec![vec![vec![0; w]; h]; d];
-
-    for (i, j, k) in [d, h, w]
-        .iter()
-        .map(|&dim_size| 0..dim_size)
-        .multi_cartesian_product()
-        .map(|p| (p[0], p[1], p[2]))
-    {
-        let noise = generator(42, i as f64 * 0.033, j as f64 * 0.033, k as f64 * 0.033);
-        data[i][j][k] = (noise * 172.5 + 172.5) as u8
-    }
+    let noisebuf = noise::utils::NoiseBuffer::new3d(&[w, h, d], generator, 42);
     let file_out = OpenOptions::new()
         .write(true)
         .create(true)
@@ -118,12 +107,11 @@ where
         .unwrap();
     let mut encoder = GifEncoder::new(file_out);
     encoder.set_repeat(Repeat::Infinite).unwrap();
-    for channel in data.iter().map(|c| {
-        c.iter()
-            .flatten()
-            .flat_map(|&val| std::iter::repeat(val).take(3))
-            .collect::<Vec<u8>>()
-    }) {
+    for c in 0..d {
+        let channel = tensor_indices(&[w, h])
+            .map(|p| (127.5 + noisebuf[&[p[0], p[1], c]] * 127.5) as u8)
+            .flat_map(|val| std::iter::repeat(val).take(3))
+            .collect::<Vec<u8>>();
         encoder
             .encode(&channel, w as u32, h as u32, ColorType::Rgb8)
             .unwrap();
@@ -134,31 +122,13 @@ fn test_noise4d<F>(generator: F, path: &str)
 where
     F: Fn(u64, f64, f64, f64, f64) -> f64,
 {
+    let generator = noise::transforms::inputscale::transform4d(generator, 0.033);
     let size = 50;
-    let mut slice_yzw = vec![vec![vec![0; size]; size]; size];
-    let mut slice_xzw = vec![vec![vec![0; size]; size]; size];
-    let mut slice_xyw = vec![vec![vec![0; size]; size]; size];
-    let mut slice_xyz = vec![vec![vec![0; size]; size]; size];
-    for (i, j, k, l) in [size, size, size, size]
-        .iter()
-        .map(|&dim_size| 0..dim_size)
-        .multi_cartesian_product()
-        .map(|p| (p[0], p[1], p[2], p[3]))
-    {
-        let ifs = i as f64 * 0.033;
-        let jfs = j as f64 * 0.033;
-        let kfs = k as f64 * 0.033;
-        let lfs = l as f64 * 0.033;
-        let noise_yzw = generator(42, 0.0, jfs, kfs, lfs);
-        let noise_xzw = generator(42, ifs, 0.0, kfs, lfs);
-        let noise_xyw = generator(42, ifs, jfs, 0.0, lfs);
-        let noise_xyz = generator(42, ifs, jfs, kfs, 0.0);
-        slice_yzw[j][k][l] = (noise_yzw * 172.5 + 172.5) as u8;
-        slice_xzw[i][k][l] = (noise_xzw * 172.5 + 172.5) as u8;
-        slice_xyw[i][j][l] = (noise_xyw * 172.5 + 172.5) as u8;
-        slice_xyz[i][j][k] = (noise_xyz * 172.5 + 172.5) as u8;
-    }
-    let slices = [slice_yzw, slice_xzw, slice_xyw, slice_xyz];
+    let noisebuf_yzw = noise::utils::NoiseBuffer::new4d(&[1, size, size, size], &generator, 42);
+    let noisebuf_xzw = noise::utils::NoiseBuffer::new4d(&[size, 1, size, size], &generator, 42);
+    let noisebuf_xyw = noise::utils::NoiseBuffer::new4d(&[size, size, 1, size], &generator, 42);
+    let noisebuf_xyz = noise::utils::NoiseBuffer::new4d(&[size, size, size, 1], &generator, 42);
+    let buffers = [noisebuf_yzw, noisebuf_xzw, noisebuf_xyw, noisebuf_xyz];
     let file_out = OpenOptions::new()
         .write(true)
         .create(true)
@@ -176,12 +146,26 @@ where
             .map(|p| {
                 let p0 = p[0] as usize;
                 let p1 = p[1] as usize;
-                slices[p1 / size][p1 % size][p0][t]
+                match p1 / size {
+                    0 => buffers[0][&[0, p1 % size, p0, t]],
+                    1 => buffers[1][&[p1 % size, 0, p0, t]],
+                    2 => buffers[2][&[p1 % size, p0, 0, t]],
+                    3 => buffers[3][&[p1 % size, p0, t, 0]],
+                    _ => unreachable!(),
+                }
             })
+            .map(|val| (val * 172.5 + 172.5) as u8)
             .flat_map(|val| std::iter::repeat(val).take(3))
             .collect::<Vec<u8>>();
         encoder
             .encode(&channel, frame_w, frame_h, ColorType::Rgb8)
             .unwrap();
     }
+}
+
+fn tensor_indices(shape: &[usize]) -> impl Iterator<Item = Vec<usize>> {
+    shape
+        .iter()
+        .map(|&dim_size| 0..dim_size)
+        .multi_cartesian_product()
 }

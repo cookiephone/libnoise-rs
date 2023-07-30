@@ -1,2 +1,3 @@
-pub use core::simplex;
+pub use core::noise::simplex;
 pub use core::transforms;
+pub use core::utils;
