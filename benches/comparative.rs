@@ -1,5 +1,6 @@
-use crate::helpers::{noise_2d_bencher, noise_3d_bencher, noise_4d_bencher};
-use criterion::Criterion;
+mod utils;
+use criterion::{Criterion, criterion_group, criterion_main, PlottingBackend};
+use utils::*;
 
 const SEED: u64 = 42;
 const SCALE: f64 = 0.033;
@@ -42,8 +43,17 @@ fn bench_opensimplex2_noise4d(c: &mut Criterion) {
     });
 }
 
-pub(crate) fn bench_competitors(c: &mut Criterion) {
+fn bench(c: &mut Criterion) {
     bench_opensimplex2_noise2d(c);
     bench_opensimplex2_noise3d(c);
     bench_opensimplex2_noise4d(c);
 }
+
+criterion_group! {
+    name = benches;
+    config = Criterion::default()
+        .plotting_backend(PlottingBackend::Plotters);
+    targets = bench
+}
+
+criterion_main!(benches);

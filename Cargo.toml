@@ -22,6 +22,10 @@ opensimplex2 = "*"
 name = "benchmark"
 harness = false
 
+[[bench]]
+name = "comparative"
+harness = false
+
 [profile.dev]
 opt-level = 1
 
