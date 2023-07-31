@@ -1,10 +1,10 @@
-use std::ops::{Index, IndexMut};
 use super::math::tensor_indices;
+use std::ops::{Index, IndexMut};
 
 pub struct NoiseBuffer {
     pub shape: Vec<usize>,
     pub seed: u64,
-    offsets: Vec<usize>,
+    pub(crate) offsets: Vec<usize>,
     pub buffer: Vec<f64>,
 }
 
@@ -68,12 +68,12 @@ impl NoiseBuffer {
         noisebuf
     }
 
-    fn new_empty(shape: &[usize], seed: u64) -> Self {
+    pub(crate) fn new_empty(shape: &[usize], seed: u64) -> Self {
         let bufsize = shape.iter().product();
         Self {
             shape: shape.to_vec(),
             seed,
-            offsets: precompute_offsets(shape),
+            offsets: precompute_flat_index_offsets(shape),
             buffer: vec![0.0; bufsize],
         }
     }
@@ -87,7 +87,7 @@ impl NoiseBuffer {
     }
 }
 
-fn precompute_offsets(shape: &[usize]) -> Vec<usize> {
+pub(crate) fn precompute_flat_index_offsets(shape: &[usize]) -> Vec<usize> {
     let offsets = shape
         .iter()
         .rev()

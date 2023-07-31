@@ -1,6 +1,6 @@
 use image::{
     codecs::gif::{GifEncoder, Repeat},
-    ColorType, GrayImage,
+    ColorType,
 };
 use itertools::Itertools;
 use std::fs::OpenOptions;
@@ -61,69 +61,38 @@ fn test_noise1d<F>(generator: F, path: &str)
 where
     F: Fn(u64, f64) -> f64,
 {
-    let (w, h) = (3000, 300);
-    let mut data = vec![vec![255; w]; h];
-    for j in 0..w {
-        let noise = generator(42, j as f64 * 0.013);
-        let noise = (h as f64 * (noise * 0.5 + 0.5)) as usize;
-        for (i, row) in data.iter_mut().enumerate() {
-            if noise.abs_diff(i) < (h / 30) {
-                row[j] = 0;
-            }
-        }
-    }
-    let data = data.into_iter().flatten().collect::<Vec<u8>>();
-    let image = GrayImage::from_raw(w as u32, h as u32, data).unwrap();
-    image.save(path).unwrap();
+    let shape = &[100];
+    let generator = noise::transforms::inputscale::transform1d(generator, 0.013);
+    let noisebuf = noise::utils::NoiseBuffer::new1d(shape, generator, 42);
+    noise::utils::Visualizer::from(noisebuf).write_to_file(path);
 }
 
 fn test_noise2d<F>(generator: F, path: &str)
 where
     F: Fn(u64, f64, f64) -> f64,
 {
+    let shape = &[3000, 3000];
     let generator = noise::transforms::inputscale::transform2d(generator, 0.013);
-    let (w, h) = (3000, 3000);
-    let noisebuf = noise::utils::NoiseBuffer::new2d(&[w, h], generator, 42);
-    let data = noisebuf
-        .buffer
-        .iter()
-        .map(|&val| (127.5 + val * 127.5) as u8)
-        .collect::<Vec<u8>>();
-    let image = GrayImage::from_raw(w as u32, h as u32, data).unwrap();
-    image.save(path).unwrap();
+    let noisebuf = noise::utils::NoiseBuffer::new2d(shape, generator, 42);
+    noise::utils::Visualizer::from(noisebuf).write_to_file(path);
 }
 
 fn test_noise3d<F>(generator: F, path: &str)
 where
     F: Fn(u64, f64, f64, f64) -> f64,
 {
+    let shape = &[300, 300, 50];
     let generator = noise::transforms::inputscale::transform3d(generator, 0.033);
-    let (w, h, d) = (300, 300, 50);
-    let noisebuf = noise::utils::NoiseBuffer::new3d(&[w, h, d], generator, 42);
-    let file_out = OpenOptions::new()
-        .write(true)
-        .create(true)
-        .open(path)
-        .unwrap();
-    let mut encoder = GifEncoder::new(file_out);
-    encoder.set_repeat(Repeat::Infinite).unwrap();
-    for c in 0..d {
-        let channel = tensor_indices(&[w, h])
-            .map(|p| (127.5 + noisebuf[&[p[0], p[1], c]] * 127.5) as u8)
-            .flat_map(|val| std::iter::repeat(val).take(3))
-            .collect::<Vec<u8>>();
-        encoder
-            .encode(&channel, w as u32, h as u32, ColorType::Rgb8)
-            .unwrap();
-    }
+    let noisebuf = noise::utils::NoiseBuffer::new3d(shape, generator, 42);
+    noise::utils::Visualizer::from(noisebuf).write_to_file(path);
 }
 
 fn test_noise4d<F>(generator: F, path: &str)
 where
     F: Fn(u64, f64, f64, f64, f64) -> f64,
 {
-    let generator = noise::transforms::inputscale::transform4d(generator, 0.033);
     let size = 50;
+    let generator = noise::transforms::inputscale::transform4d(generator, 0.033);
     let noisebuf_yzw = noise::utils::NoiseBuffer::new4d(&[1, size, size, size], &generator, 42);
     let noisebuf_xzw = noise::utils::NoiseBuffer::new4d(&[size, 1, size, size], &generator, 42);
     let noisebuf_xyw = noise::utils::NoiseBuffer::new4d(&[size, size, 1, size], &generator, 42);
@@ -161,11 +130,4 @@ where
             .encode(&channel, frame_w, frame_h, ColorType::Rgb8)
             .unwrap();
     }
-}
-
-fn tensor_indices(shape: &[usize]) -> impl Iterator<Item = Vec<usize>> {
-    shape
-        .iter()
-        .map(|&dim_size| 0..dim_size)
-        .multi_cartesian_product()
 }
