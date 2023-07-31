@@ -1,5 +1,5 @@
 mod utils;
-use criterion::{Criterion, criterion_group, criterion_main, PlottingBackend};
+use criterion::{criterion_group, criterion_main, Criterion, PlottingBackend};
 use utils::*;
 
 const SEED: u64 = 42;

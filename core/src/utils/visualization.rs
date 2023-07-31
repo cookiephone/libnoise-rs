@@ -36,7 +36,7 @@ impl Visualizer {
             1 => self.write_to_file_1d(path),
             2 => self.write_to_file_2d(path),
             3 => self.write_to_file_3d(path),
-            4 => unimplemented!("general 4d visualization is nontrivial"),
+            4 => self.write_to_file_4d(path),
             _ => panic!("unsupported number of dimensions"),
         }
     }
@@ -58,6 +58,23 @@ impl Visualizer {
     }
 
     fn write_to_file_3d(&self, path: &str) {
+        let scale = 0.45;
+        let center = (self.shape[0] as f64 * 0.5, self.shape[1] as f64 * 0.5);
+        let mut buf = vec![0; self.shape[0] * self.shape[1]];
+        for z_idx in (0..self.shape[2]).rev() {
+            for p in tensor_indices(&[self.shape[0], self.shape[1]]) {
+                if let Some(buf_idx) =
+                    xyz_screen_to_buff_indices(p[0], p[1], z_idx, center.0, center.1, scale)
+                {
+                    buf[p[0] * self.shape[0] + p[1]] = self[&[buf_idx.0, buf_idx.1, buf_idx.2]];
+                }
+            }
+        }
+        let image = GrayImage::from_raw(self.shape[1] as u32, self.shape[0] as u32, buf).unwrap();
+        image.save(path).unwrap();
+    }
+
+    fn write_to_file_4d(&self, path: &str) {
         let file_out = OpenOptions::new()
             .write(true)
             .create(true)
@@ -65,14 +82,27 @@ impl Visualizer {
             .unwrap();
         let mut encoder = GifEncoder::new(file_out);
         encoder.set_repeat(Repeat::Infinite).unwrap();
-        for c in 0..self.shape[2] {
-            let channel = tensor_indices(&[self.shape[0], self.shape[1]])
-                .map(|p| self[&[p[0], p[1], c]])
+        let scale = 0.45;
+        let center = (self.shape[0] as f64 * 0.5, self.shape[1] as f64 * 0.5);
+        for t in 0..self.shape[3] {
+            let mut buf = vec![0; self.shape[0] * self.shape[1]];
+            for z_idx in (0..self.shape[2]).rev() {
+                for p in tensor_indices(&[self.shape[0], self.shape[1]]) {
+                    if let Some(buf_idx) =
+                        xyz_screen_to_buff_indices(p[0], p[1], z_idx, center.0, center.1, scale)
+                    {
+                        buf[p[0] * self.shape[0] + p[1]] =
+                            self[&[buf_idx.0, buf_idx.1, buf_idx.2, t]];
+                    }
+                }
+            }
+            buf = buf
+                .into_iter()
                 .flat_map(|val| std::iter::repeat(val).take(3))
-                .collect::<Vec<u8>>();
+                .collect();
             encoder
                 .encode(
-                    &channel,
+                    &buf,
                     self.shape[0] as u32,
                     self.shape[1] as u32,
                     ColorType::Rgb8,
@@ -102,4 +132,27 @@ impl From<NoiseBuffer> for Visualizer {
 
 pub(crate) fn norm_to_u8(x: f64) -> u8 {
     (127.5 + x * 127.5) as u8
+}
+
+fn xyz_screen_to_buff_indices(
+    x: usize,
+    y: usize,
+    z: usize,
+    center_x: f64,
+    center_y: f64,
+    scale: f64,
+) -> Option<(usize, usize, usize)> {
+    let mut x = x as f64;
+    let mut y = y as f64;
+    x -= center_x * (1.0 - scale) + scale * z as f64;
+    y -= center_y;
+    let xx = -(x + y / 3_f64.sqrt());
+    let yy = 2.0 * y / 3_f64.sqrt() + xx;
+    x = xx / scale + center_x;
+    y = yy / scale + center_y;
+    if x < 0.0 || y < 0.0 || x >= 2.0 * center_x || y >= 2.0 * center_y {
+        None
+    } else {
+        Some((x as usize, y as usize, z))
+    }
 }
