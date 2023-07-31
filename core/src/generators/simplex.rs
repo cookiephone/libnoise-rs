@@ -1,18 +1,10 @@
 use super::constants::*;
-use crate::utils::ptable::build_permutation_table;
-use std::sync::Once;
-
-struct StaticPermutationTable {
-    table: Option<Vec<usize>>,
-    seed: Option<u64>,
-    sync: Once,
-}
-
-static mut PERMUTATION_TABLE: StaticPermutationTable = StaticPermutationTable {
-    table: None,
-    seed: None,
-    sync: Once::new(),
+use crate::utils::{
+    math::fast_floor,
+    ptable::{get_static_permutation_table, StaticPermutationTable},
 };
+
+static mut PERMUTATION_TABLE: StaticPermutationTable = StaticPermutationTable::const_default();
 
 pub fn noise1d(seed: u64, x: f64) -> f64 {
     // no transformation into lattice space required, get cube origin
@@ -22,8 +14,9 @@ pub fn noise1d(seed: u64, x: f64) -> f64 {
     let x1 = x0 - 1.0;
     // hashed gradient (-1 or 1) directly, safe because this permutation table cannot index out of bounds
     let i0 = i0 as usize % PERMUTATION_TABLE_SIZE;
-    let gi0 = unsafe { hash1d(seed, i0) % SIMPLEX_GRADIENT_LUT_1D_SIZE };
-    let gi1 = unsafe { hash1d(seed, i0 + 1) % SIMPLEX_GRADIENT_LUT_1D_SIZE };
+    let perm = unsafe { get_static_permutation_table(&mut PERMUTATION_TABLE, seed) };
+    let gi0 = unsafe { perm.hash1d(i0) % SIMPLEX_GRADIENT_LUT_1D_SIZE };
+    let gi1 = unsafe { perm.hash1d(i0 + 1) % SIMPLEX_GRADIENT_LUT_1D_SIZE };
     // compute contributions, safe because gradient lookup table is known
     let n0 = unsafe { contribution1d(x0, gi0) };
     let n1 = unsafe { contribution1d(x1, gi1) };
@@ -55,9 +48,10 @@ pub fn noise2d(seed: u64, x: f64, y: f64) -> f64 {
     // hashed gradient indices, safe because this permutation table cannot index out of bounds
     let is = is as usize % PERMUTATION_TABLE_SIZE;
     let js = js as usize % PERMUTATION_TABLE_SIZE;
-    let gi0 = unsafe { hash2d(seed, is, js) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
-    let gi1 = unsafe { hash2d(seed, is + i1, js + j1) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
-    let gi2 = unsafe { hash2d(seed, is + 1, js + 1) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
+    let perm = unsafe { get_static_permutation_table(&mut PERMUTATION_TABLE, seed) };
+    let gi0 = unsafe { perm.hash2d(is, js) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
+    let gi1 = unsafe { perm.hash2d(is + i1, js + j1) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
+    let gi2 = unsafe { perm.hash2d(is + 1, js + 1) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
     // compute contributions, safe because gradient lookup table is known
     let n0 = unsafe { contribution2d(x0, y0, gi0) };
     let n1 = unsafe { contribution2d(x1, y1, gi1) };
@@ -99,10 +93,11 @@ pub fn noise3d(seed: u64, x: f64, y: f64, z: f64) -> f64 {
     let is = is as usize % PERMUTATION_TABLE_SIZE;
     let js = js as usize % PERMUTATION_TABLE_SIZE;
     let ks = ks as usize % PERMUTATION_TABLE_SIZE;
-    let gi0 = unsafe { hash3d(seed, is, js, ks) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
-    let gi1 = unsafe { hash3d(seed, is + i1, js + j1, ks + k1) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
-    let gi2 = unsafe { hash3d(seed, is + i2, js + j2, ks + k2) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
-    let gi3 = unsafe { hash3d(seed, is + 1, js + 1, ks + 1) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
+    let perm = unsafe { get_static_permutation_table(&mut PERMUTATION_TABLE, seed) };
+    let gi0 = unsafe { perm.hash3d(is, js, ks) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
+    let gi1 = unsafe { perm.hash3d(is + i1, js + j1, ks + k1) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
+    let gi2 = unsafe { perm.hash3d(is + i2, js + j2, ks + k2) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
+    let gi3 = unsafe { perm.hash3d(is + 1, js + 1, ks + 1) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
     // compute contributions, safe because gradient lookup table is known
     let n0 = unsafe { contribution3d(x0, y0, z0, gi0) };
     let n1 = unsafe { contribution3d(x1, y1, z1, gi1) };
@@ -166,15 +161,15 @@ pub fn noise4d(seed: u64, x: f64, y: f64, z: f64, w: f64) -> f64 {
     let js = js as usize % PERMUTATION_TABLE_SIZE;
     let ks = ks as usize % PERMUTATION_TABLE_SIZE;
     let ls = ls as usize % PERMUTATION_TABLE_SIZE;
-    let gi0 = unsafe { hash4d(seed, is, js, ks, ls) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
+    let perm = unsafe { get_static_permutation_table(&mut PERMUTATION_TABLE, seed) };
+    let gi0 = unsafe { perm.hash4d(is, js, ks, ls) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
     let gi1 =
-        unsafe { hash4d(seed, is + i1, js + j1, ks + k1, ls + l1) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
+        unsafe { perm.hash4d(is + i1, js + j1, ks + k1, ls + l1) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
     let gi2 =
-        unsafe { hash4d(seed, is + i2, js + j2, ks + k2, ls + l2) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
+        unsafe { perm.hash4d(is + i2, js + j2, ks + k2, ls + l2) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
     let gi3 =
-        unsafe { hash4d(seed, is + i3, js + j3, ks + k3, ls + l3) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
-    let gi4 =
-        unsafe { hash4d(seed, is + 1, js + 1, ks + 1, ls + 1) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
+        unsafe { perm.hash4d(is + i3, js + j3, ks + k3, ls + l3) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
+    let gi4 = unsafe { perm.hash4d(is + 1, js + 1, ks + 1, ls + 1) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
     // compute contributions, safe because gradient lookup table is known
     let n0 = unsafe { contribution4d(x0, y0, z0, w0, gi0) };
     let n1 = unsafe { contribution4d(x1, y1, z1, w1, gi1) };
@@ -183,31 +178,6 @@ pub fn noise4d(seed: u64, x: f64, y: f64, z: f64, w: f64) -> f64 {
     let n4 = unsafe { contribution4d(x4, y4, z4, w4, gi4) };
     // combine contributions and scale to [-1, 1]
     (n0 + n1 + n2 + n3 + n4) * SIMPLEX_NORMALIZATION_FACTOR_4D
-}
-
-fn fast_floor(x: f64) -> f64 {
-    let x_int = x as i64;
-    x_int as f64 - (x < x_int as f64) as i32 as f64
-}
-
-unsafe fn hash1d(seed: u64, i: usize) -> usize {
-    let perm = get_permutation_table(seed);
-    *perm.get_unchecked(i)
-}
-
-unsafe fn hash2d(seed: u64, i: usize, j: usize) -> usize {
-    let perm = get_permutation_table(seed);
-    *perm.get_unchecked(i + perm.get_unchecked(j))
-}
-
-unsafe fn hash3d(seed: u64, i: usize, j: usize, k: usize) -> usize {
-    let perm = get_permutation_table(seed);
-    *perm.get_unchecked(i + perm.get_unchecked(j + perm.get_unchecked(k)))
-}
-
-unsafe fn hash4d(seed: u64, i: usize, j: usize, k: usize, l: usize) -> usize {
-    let perm = get_permutation_table(seed);
-    *perm.get_unchecked(i + perm.get_unchecked(j + perm.get_unchecked(k + perm.get_unchecked(l))))
 }
 
 unsafe fn contribution1d(x: f64, gi: usize) -> f64 {
@@ -257,22 +227,5 @@ unsafe fn contribution4d(x: f64, y: f64, z: f64, w: f64, gi: usize) -> f64 {
                 + gradient.get_unchecked(1) * y
                 + gradient.get_unchecked(2) * z
                 + gradient.get_unchecked(3) * w)
-    }
-}
-
-fn get_permutation_table(seed: u64) -> &'static Vec<usize> {
-    unsafe {
-        if PERMUTATION_TABLE
-            .seed
-            .is_some_and(|old_seed| old_seed != seed)
-        {
-            PERMUTATION_TABLE.sync = Once::new();
-        }
-        PERMUTATION_TABLE.sync.call_once(|| {
-            PERMUTATION_TABLE.seed = Some(seed);
-            PERMUTATION_TABLE.table =
-                Some(build_permutation_table(seed, PERMUTATION_TABLE_SIZE, true));
-        });
-        PERMUTATION_TABLE.table.as_ref().unwrap()
     }
 }
