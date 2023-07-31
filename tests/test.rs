@@ -7,53 +7,77 @@ use std::fs::OpenOptions;
 
 #[test]
 fn test_simplex_noise1d() {
-    let noise = noise::simplex::noise1d;
+    let noise = noise::generators::simplex::noise1d;
     test_noise1d(noise, "simplex_1d.png");
 }
 
 #[test]
 fn test_simplex_noise2d() {
-    let noise = noise::simplex::noise2d;
+    let noise = noise::generators::simplex::noise2d;
     test_noise2d(noise, "simplex_2d.png");
 }
 
 #[test]
 fn test_simplex_noise3d() {
-    let noise = noise::simplex::noise3d;
+    let noise = noise::generators::simplex::noise3d;
     test_noise3d(noise, "simplex_3d.gif");
 }
 
 #[test]
 fn test_simplex_noise4d() {
-    let noise = noise::simplex::noise4d;
+    let noise = noise::generators::simplex::noise4d;
     test_noise4d(noise, "simplex_4d.gif");
 }
 
 #[test]
 fn test_fractal_simplex_noise1d() {
-    let noise =
-        noise::transforms::fractal::transform1d(noise::simplex::noise1d, 4, 1.0, 1.0, 2.0, 0.5);
+    let noise = noise::transforms::fractal::transform1d(
+        noise::generators::simplex::noise1d,
+        4,
+        1.0,
+        1.0,
+        2.0,
+        0.5,
+    );
     test_noise1d(noise, "fractal_simplex_1d.png");
 }
 
 #[test]
 fn test_fractal_simplex_noise2d() {
-    let noise =
-        noise::transforms::fractal::transform2d(noise::simplex::noise2d, 4, 1.0, 1.0, 2.0, 0.5);
+    let noise = noise::transforms::fractal::transform2d(
+        noise::generators::simplex::noise2d,
+        4,
+        1.0,
+        1.0,
+        2.0,
+        0.5,
+    );
     test_noise2d(noise, "fractal_simplex_2d.png");
 }
 
 #[test]
 fn test_fractal_simplex_noise3d() {
-    let noise =
-        noise::transforms::fractal::transform3d(noise::simplex::noise3d, 4, 1.0, 1.0, 2.0, 0.5);
+    let noise = noise::transforms::fractal::transform3d(
+        noise::generators::simplex::noise3d,
+        4,
+        1.0,
+        1.0,
+        2.0,
+        0.5,
+    );
     test_noise3d(noise, "fractal_simplex_3d.gif");
 }
 
 #[test]
 fn test_fractal_simplex_noise4d() {
-    let noise =
-        noise::transforms::fractal::transform4d(noise::simplex::noise4d, 4, 1.0, 1.0, 2.0, 0.5);
+    let noise = noise::transforms::fractal::transform4d(
+        noise::generators::simplex::noise4d,
+        4,
+        1.0,
+        1.0,
+        2.0,
+        0.5,
+    );
     test_noise4d(noise, "fractal_simplex_4d.gif");
 }
 

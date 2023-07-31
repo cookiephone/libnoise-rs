@@ -9,30 +9,30 @@ const SHAPE_3D: &[usize] = &[100, 100, 100];
 const SHAPE_4D: &[usize] = &[30, 30, 30, 30];
 
 fn bench_simplex_noise1d(c: &mut Criterion) {
-    noise::simplex::noise1d(SEED, 0.0); // warmup init-once things
+    noise::generators::simplex::noise1d(SEED, 0.0); // warmup init-once things
     c.bench_function("simplex_noise1d", |b| {
-        b.iter(|| noise_1d_bencher(noise::simplex::noise1d, SEED, SHAPE_1D, SCALE));
+        b.iter(|| noise_1d_bencher(noise::generators::simplex::noise1d, SEED, SHAPE_1D, SCALE));
     });
 }
 
 fn bench_simplex_noise2d(c: &mut Criterion) {
-    noise::simplex::noise2d(SEED, 0.0, 0.0); // warmup init-once things
+    noise::generators::simplex::noise2d(SEED, 0.0, 0.0); // warmup init-once things
     c.bench_function("simplex_noise2d", |b| {
-        b.iter(|| noise_2d_bencher(noise::simplex::noise2d, SEED, SHAPE_2D, SCALE));
+        b.iter(|| noise_2d_bencher(noise::generators::simplex::noise2d, SEED, SHAPE_2D, SCALE));
     });
 }
 
 fn bench_simplex_noise3d(c: &mut Criterion) {
-    noise::simplex::noise3d(SEED, 0.0, 0.0, 0.0); // warmup init-once things
+    noise::generators::simplex::noise3d(SEED, 0.0, 0.0, 0.0); // warmup init-once things
     c.bench_function("simplex_noise3d", |b| {
-        b.iter(|| noise_3d_bencher(noise::simplex::noise3d, SEED, SHAPE_3D, SCALE));
+        b.iter(|| noise_3d_bencher(noise::generators::simplex::noise3d, SEED, SHAPE_3D, SCALE));
     });
 }
 
 fn bench_simplex_noise4d(c: &mut Criterion) {
-    noise::simplex::noise4d(SEED, 0.0, 0.0, 0.0, 0.0); // warmup init-once things
+    noise::generators::simplex::noise4d(SEED, 0.0, 0.0, 0.0, 0.0); // warmup init-once things
     c.bench_function("simplex_noise4d", |b| {
-        b.iter(|| noise_4d_bencher(noise::simplex::noise4d, SEED, SHAPE_4D, SCALE));
+        b.iter(|| noise_4d_bencher(noise::generators::simplex::noise4d, SEED, SHAPE_4D, SCALE));
     });
 }
 
