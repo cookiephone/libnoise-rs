@@ -6,7 +6,8 @@ use crate::utils::{
 
 static mut PERMUTATION_TABLE: StaticPermutationTable = StaticPermutationTable::const_default();
 
-pub fn noise1d(seed: u64, x: f64) -> f64 {
+pub fn noise1d(seed: u64, point: [f64; 1]) -> f64 {
+    let x = point[0];
     // no transformation into lattice space required, get cube origin
     let i0 = fast_floor(x);
     // input point relative the two simplex vertices
@@ -24,7 +25,9 @@ pub fn noise1d(seed: u64, x: f64) -> f64 {
     (n0 + n1) * SIMPLEX_NORMALIZATION_FACTOR_1D
 }
 
-pub fn noise2d(seed: u64, x: f64, y: f64) -> f64 {
+pub fn noise2d(seed: u64, point: [f64; 2]) -> f64 {
+    let x = point[0];
+    let y = point[1];
     // transform into lattice space and floor for cube origin
     let skew = (x + y) * SIMPLEX_SKEW_FACTOR_2D;
     let is = fast_floor(x + skew);
@@ -60,7 +63,10 @@ pub fn noise2d(seed: u64, x: f64, y: f64) -> f64 {
     (n0 + n1 + n2) * SIMPLEX_NORMALIZATION_FACTOR_2D
 }
 
-pub fn noise3d(seed: u64, x: f64, y: f64, z: f64) -> f64 {
+pub fn noise3d(seed: u64, point: [f64; 3]) -> f64 {
+    let x = point[0];
+    let y = point[1];
+    let z = point[2];
     // transform into lattice space and floor for cube origin
     let skew = (x + y + z) * SIMPLEX_SKEW_FACTOR_3D;
     let is = fast_floor(x + skew);
@@ -107,7 +113,11 @@ pub fn noise3d(seed: u64, x: f64, y: f64, z: f64) -> f64 {
     (n0 + n1 + n2 + n3) * SIMPLEX_NORMALIZATION_FACTOR_3D
 }
 
-pub fn noise4d(seed: u64, x: f64, y: f64, z: f64, w: f64) -> f64 {
+pub fn noise4d(seed: u64, point: [f64; 4]) -> f64 {
+    let x = point[0];
+    let y = point[1];
+    let z = point[2];
+    let w = point[3];
     // transform into lattice space and floor for cube origin
     let skew = (x + y + z + w) * SIMPLEX_SKEW_FACTOR_4D;
     let is = fast_floor(x + skew);

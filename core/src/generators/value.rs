@@ -6,7 +6,8 @@ use crate::utils::{
 
 static mut PERMUTATION_TABLE: StaticPermutationTable = StaticPermutationTable::const_default();
 
-pub fn noise1d(seed: u64, x: f64) -> f64 {
+pub fn noise1d(seed: u64, point: [f64; 1]) -> f64 {
+    let x = point[0];
     // origin of hypercube in which input lies
     let x0 = fast_floor_usize(x);
     // smoothed distance from hypercube origin
@@ -20,7 +21,9 @@ pub fn noise1d(seed: u64, x: f64) -> f64 {
     normalize(xf)
 }
 
-pub fn noise2d(seed: u64, x: f64, y: f64) -> f64 {
+pub fn noise2d(seed: u64, point: [f64; 2]) -> f64 {
+    let x = point[0];
+    let y = point[1];
     // origin of hypercube in which input lies
     let x0 = fast_floor_usize(x);
     let y0 = fast_floor_usize(y);
@@ -40,7 +43,10 @@ pub fn noise2d(seed: u64, x: f64, y: f64) -> f64 {
     normalize(yf)
 }
 
-pub fn noise3d(seed: u64, x: f64, y: f64, z: f64) -> f64 {
+pub fn noise3d(seed: u64, point: [f64; 3]) -> f64 {
+    let x = point[0];
+    let y = point[1];
+    let z = point[2];
     // origin of hypercube in which input lies
     let x0 = fast_floor_usize(x);
     let y0 = fast_floor_usize(y);
@@ -70,7 +76,11 @@ pub fn noise3d(seed: u64, x: f64, y: f64, z: f64) -> f64 {
     normalize(zf)
 }
 
-pub fn noise4d(seed: u64, x: f64, y: f64, z: f64, w: f64) -> f64 {
+pub fn noise4d(seed: u64, point: [f64; 4]) -> f64 {
+    let x = point[0];
+    let y = point[1];
+    let z = point[2];
+    let w = point[3];
     // origin of hypercube in which input lies
     let x0 = fast_floor_usize(x);
     let y0 = fast_floor_usize(y);

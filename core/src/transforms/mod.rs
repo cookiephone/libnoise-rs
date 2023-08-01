@@ -1,2 +1,2 @@
-pub mod fractal;
-pub mod inputscale;
+pub mod scale;
+pub mod translate;

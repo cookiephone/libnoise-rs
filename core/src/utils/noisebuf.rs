@@ -24,46 +24,14 @@ impl IndexMut<&[usize]> for NoiseBuffer {
 }
 
 impl NoiseBuffer {
-    pub fn new1d<F>(shape: &[usize], generator: F, seed: u64) -> Self
+    pub fn new<F, const D: usize>(shape: &[usize], generator: F, seed: u64) -> Self
     where
-        F: Fn(u64, f64) -> f64,
+        F: Fn(u64, [f64; D]) -> f64,
     {
         let mut noisebuf = Self::new_empty(shape, seed);
         for p in tensor_indices(shape) {
-            noisebuf[&p] = generator(seed, p[0] as f64);
-        }
-        noisebuf
-    }
-
-    pub fn new2d<F>(shape: &[usize], generator: F, seed: u64) -> Self
-    where
-        F: Fn(u64, f64, f64) -> f64,
-    {
-        let mut noisebuf = Self::new_empty(shape, seed);
-        for p in tensor_indices(shape) {
-            noisebuf[&p] = generator(seed, p[0] as f64, p[1] as f64);
-        }
-        noisebuf
-    }
-
-    pub fn new3d<F>(shape: &[usize], generator: F, seed: u64) -> Self
-    where
-        F: Fn(u64, f64, f64, f64) -> f64,
-    {
-        let mut noisebuf = Self::new_empty(shape, seed);
-        for p in tensor_indices(shape) {
-            noisebuf[&p] = generator(seed, p[0] as f64, p[1] as f64, p[2] as f64);
-        }
-        noisebuf
-    }
-
-    pub fn new4d<F>(shape: &[usize], generator: F, seed: u64) -> Self
-    where
-        F: Fn(u64, f64, f64, f64, f64) -> f64,
-    {
-        let mut noisebuf = Self::new_empty(shape, seed);
-        for p in tensor_indices(shape) {
-            noisebuf[&p] = generator(seed, p[0] as f64, p[1] as f64, p[2] as f64, p[3] as f64);
+            let point = p.iter().map(|&x| x as f64).collect::<Vec<f64>>();
+            noisebuf[&p] = generator(seed, point.try_into().unwrap());
         }
         noisebuf
     }
