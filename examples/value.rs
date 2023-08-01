@@ -1,4 +1,4 @@
-use libnoise::{sources, transforms, utils::Visualizer};
+use libnoise::{sources, utils::Visualizer, Generator};
 
 fn main() {
     example_value_noise1d();
@@ -8,25 +8,21 @@ fn main() {
 }
 
 fn example_value_noise1d() {
-    let generator = sources::Value::new(42);
-    let generator = transforms::Scale::new(generator, [0.013; 1]);
+    let generator = sources::value(42).scale([0.013; 1]);
     Visualizer::<1>::new([100], generator).write_to_file("value_1d.png");
 }
 
 fn example_value_noise2d() {
-    let generator = sources::Value::new(42);
-    let generator = transforms::Scale::new(generator, [0.013; 2]);
+    let generator = sources::value(42).scale([0.013; 2]);
     Visualizer::<2>::new([1000, 1000], generator).write_to_file("value_2d.png");
 }
 
 fn example_value_noise3d() {
-    let generator = sources::Value::new(42);
-    let generator = transforms::Scale::new(generator, [0.013; 3]);
+    let generator = sources::value(42).scale([0.013; 3]);
     Visualizer::<3>::new([200, 200, 200], generator).write_to_file("value_3d.png");
 }
 
 fn example_value_noise4d() {
-    let generator = sources::Value::new(42);
-    let generator = transforms::Scale::new(generator, [0.033; 4]);
+    let generator = sources::value(42).scale([0.033; 4]);
     Visualizer::<4>::new([60, 60, 60, 60], generator).write_to_file("value_4d.gif");
 }

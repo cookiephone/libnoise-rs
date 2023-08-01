@@ -19,17 +19,28 @@ opensimplex_noise_rs = "*"
 opensimplex2 = "*"
 
 [[bench]]
-name = "benchmark"
+name = "simplex"
 harness = false
 
-[[example]]
+[[bench]]
+name = "value"
+harness = false
+
+[[bench]]
 name = "fractal"
+harness = false
 
 [[example]]
 name = "simplex"
 
 [[example]]
 name = "value"
+
+[[example]]
+name = "fractal"
+
+[[example]]
+name = "chaining"
 
 [profile.dev]
 opt-level = 1

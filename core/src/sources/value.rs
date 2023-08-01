@@ -35,3 +35,7 @@ impl Generator<4> for Value {
         functional::value::noise4d(&self.permutation_table, point)
     }
 }
+
+pub fn value(seed: u64) -> Value {
+    Value::new(seed)
+}

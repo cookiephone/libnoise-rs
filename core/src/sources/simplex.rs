@@ -35,3 +35,7 @@ impl Generator<4> for Simplex {
         functional::simplex::noise4d(&self.permutation_table, point)
     }
 }
+
+pub fn simplex(seed: u64) -> Simplex {
+    Simplex::new(seed)
+}
