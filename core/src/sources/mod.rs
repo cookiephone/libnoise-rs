@@ -1,3 +1,5 @@
-pub(crate) mod constants;
-pub mod simplex;
-pub mod value;
+pub(crate) mod functional;
+mod simplex;
+mod value;
+pub use simplex::Simplex;
+pub use value::Value;

@@ -1,4 +1,5 @@
 mod utils;
+use libnoise::sources;
 use criterion::{criterion_group, criterion_main, Criterion, PlottingBackend};
 use utils::*;
 
@@ -9,23 +10,23 @@ const SHAPE_3D: &[usize] = &[100, 100, 100];
 const SHAPE_4D: &[usize] = &[30, 30, 30, 30];
 
 fn bench_simplex_noise2d(c: &mut Criterion) {
-    libnoise::sources::simplex::noise2d(SEED, [0.0, 0.0]); // warmup init-once things
+    let generator = sources::Simplex::new(SEED);
     c.bench_function("simplex_noise2d", |b| {
-        b.iter(|| noise_bencher(libnoise::sources::simplex::noise2d, SEED, SHAPE_2D, SCALE));
+        b.iter(|| noise_bencher::<2,_>(&generator, SHAPE_2D, SCALE));
     });
 }
 
 fn bench_simplex_noise3d(c: &mut Criterion) {
-    libnoise::sources::simplex::noise3d(SEED, [0.0, 0.0, 0.0]); // warmup init-once things
+    let generator = sources::Simplex::new(SEED);
     c.bench_function("simplex_noise3d", |b| {
-        b.iter(|| noise_bencher(libnoise::sources::simplex::noise3d, SEED, SHAPE_3D, SCALE));
+        b.iter(|| noise_bencher::<3,_>(&generator, SHAPE_3D, SCALE));
     });
 }
 
 fn bench_simplex_noise4d(c: &mut Criterion) {
-    libnoise::sources::simplex::noise4d(SEED, [0.0, 0.0, 0.0, 0.0]); // warmup init-once things
+    let generator = sources::Simplex::new(SEED);
     c.bench_function("simplex_noise4d", |b| {
-        b.iter(|| noise_bencher(libnoise::sources::simplex::noise4d, SEED, SHAPE_4D, SCALE));
+        b.iter(|| noise_bencher::<4,_>(&generator, SHAPE_4D, SCALE));
     });
 }
 

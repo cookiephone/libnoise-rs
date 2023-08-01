@@ -1,6 +1,12 @@
-pub mod abs;
-pub mod add;
-pub mod clamp;
-pub mod lambda;
-pub mod mul;
-pub mod neg;
+mod abs;
+mod add;
+mod clamp;
+mod lambda;
+mod mul;
+mod neg;
+pub use abs::Abs;
+pub use add::Add;
+pub use clamp::Clamp;
+pub use lambda::Lambda;
+pub use mul::Mul;
+pub use neg::Neg;

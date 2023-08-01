@@ -3,19 +3,21 @@ use std::{
     ops::{Index, IndexMut},
 };
 
+use crate::generator::Generator;
+
 use super::{math::tensor_indices, NoiseBuffer};
 use image::{
     codecs::gif::{GifEncoder, Repeat},
     ColorType, GrayImage,
 };
 
-pub struct Visualizer {
-    shape: Vec<usize>,
-    offsets: Vec<usize>,
+pub struct Visualizer<const D: usize> {
+    shape: [usize; D],
+    offsets: [usize; D],
     pixel_buffer: Vec<u8>,
 }
 
-impl Index<&[usize]> for Visualizer {
+impl<const D: usize> Index<&[usize]> for Visualizer<D> {
     type Output = u8;
     fn index(&self, index: &[usize]) -> &Self::Output {
         let idx = self.flat_index(index);
@@ -23,31 +25,51 @@ impl Index<&[usize]> for Visualizer {
     }
 }
 
-impl IndexMut<&[usize]> for Visualizer {
+impl<const D: usize> IndexMut<&[usize]> for Visualizer<D> {
     fn index_mut(&mut self, index: &[usize]) -> &mut Self::Output {
         let idx = self.flat_index(index);
         &mut self.pixel_buffer[idx]
     }
 }
 
-impl Visualizer {
-    pub fn write_to_file(&self, path: &str) {
-        match self.shape.len() {
-            1 => self.write_to_file_1d(path),
-            2 => self.write_to_file_2d(path),
-            3 => self.write_to_file_3d(path),
-            4 => self.write_to_file_4d(path),
-            _ => panic!("unsupported number of dimensions"),
+impl<const D: usize> From<NoiseBuffer<D>> for Visualizer<D> {
+    fn from(noisebuf: NoiseBuffer<D>) -> Self {
+        Self {
+            shape: noisebuf.shape,
+            offsets: noisebuf.offsets,
+            pixel_buffer: noisebuf.buffer.into_iter().map(norm_to_u8).collect(),
         }
     }
+}
 
-    fn write_to_file_1d(&self, path: &str) {
+impl<const D: usize> Visualizer<D> {
+    fn flat_index(&self, index: &[usize]) -> usize {
+        index
+            .iter()
+            .zip(&self.offsets)
+            .map(|(idx, offset)| idx * offset)
+            .sum()
+    }
+}
+
+impl Visualizer<1> {
+    pub fn new<G: Generator<1>>(shape: [usize; 1], generator: G) -> Self {
+        NoiseBuffer::<1>::new(shape, generator).into()
+    }
+
+    pub fn write_to_file(&self, path: &str) {
         let image =
             GrayImage::from_raw(self.shape[0] as u32, 1, self.pixel_buffer.clone()).unwrap();
         image.save(path).unwrap();
     }
+}
 
-    fn write_to_file_2d(&self, path: &str) {
+impl Visualizer<2> {
+    pub fn new<G: Generator<2>>(shape: [usize; 2], generator: G) -> Self {
+        NoiseBuffer::<2>::new(shape, generator).into()
+    }
+
+    pub fn write_to_file(&self, path: &str) {
         let image = GrayImage::from_raw(
             self.shape[1] as u32,
             self.shape[0] as u32,
@@ -56,8 +78,14 @@ impl Visualizer {
         .unwrap();
         image.save(path).unwrap();
     }
+}
 
-    fn write_to_file_3d(&self, path: &str) {
+impl Visualizer<3> {
+    pub fn new<G: Generator<3>>(shape: [usize; 3], generator: G) -> Self {
+        NoiseBuffer::<3>::new(shape, generator).into()
+    }
+
+    pub fn write_to_file(&self, path: &str) {
         let scale = 0.45;
         let center = (self.shape[0] as f64 * 0.5, self.shape[1] as f64 * 0.5);
         let mut buf = vec![0; self.shape[0] * self.shape[1]];
@@ -73,8 +101,14 @@ impl Visualizer {
         let image = GrayImage::from_raw(self.shape[1] as u32, self.shape[0] as u32, buf).unwrap();
         image.save(path).unwrap();
     }
+}
 
-    fn write_to_file_4d(&self, path: &str) {
+impl Visualizer<4> {
+    pub fn new<G: Generator<4>>(shape: [usize; 4], generator: G) -> Self {
+        NoiseBuffer::<4>::new(shape, generator).into()
+    }
+
+    pub fn write_to_file(&self, path: &str) {
         let file_out = OpenOptions::new()
             .write(true)
             .create(true)
@@ -108,24 +142,6 @@ impl Visualizer {
                     ColorType::Rgb8,
                 )
                 .unwrap();
-        }
-    }
-
-    fn flat_index(&self, index: &[usize]) -> usize {
-        index
-            .iter()
-            .zip(&self.offsets)
-            .map(|(idx, offset)| idx * offset)
-            .sum()
-    }
-}
-
-impl From<NoiseBuffer> for Visualizer {
-    fn from(noisebuf: NoiseBuffer) -> Self {
-        Self {
-            shape: noisebuf.shape,
-            offsets: noisebuf.offsets,
-            pixel_buffer: noisebuf.buffer.into_iter().map(norm_to_u8).collect(),
         }
     }
 }
