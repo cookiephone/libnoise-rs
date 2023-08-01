@@ -1,4 +1,4 @@
-use noise::{
+use libnoise::{
     generators, transforms,
     utils::{NoiseBuffer, Visualizer},
 };
