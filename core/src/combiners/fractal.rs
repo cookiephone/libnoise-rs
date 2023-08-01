@@ -54,8 +54,7 @@ where
         let mut amp = amplitude;
         let mut freq = frequency;
         for _ in 0..octaves {
-            let p = point.iter().map(|x| x * freq).collect::<Vec<f64>>();
-            noise += amp * generator(seed, p.try_into().unwrap());
+            noise += amp * generator(seed, point.map(|x| x * freq));
             freq *= lacunarity;
             amp *= persistence;
         }

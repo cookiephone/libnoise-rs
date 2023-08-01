@@ -10,6 +10,6 @@ where
             .iter_mut()
             .zip(translation)
             .for_each(|(x, dx)| *x += dx);
-        generator(seed, point).abs()
+        generator(seed, point)
     }
 }

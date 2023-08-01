@@ -3,7 +3,6 @@ where
     F: Fn(u64, [f64; D]) -> f64,
 {
     move |seed, mut point| {
-        point.iter_mut().for_each(|x| *x *= scale_factor);
-        generator(seed, point)
+        generator(seed, point.map(|x| x * scale_factor))
     }
 }
