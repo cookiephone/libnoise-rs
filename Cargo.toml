@@ -22,6 +22,15 @@ opensimplex2 = "*"
 name = "benchmark"
 harness = false
 
+[[example]]
+name = "fractal"
+
+[[example]]
+name = "simplex"
+
+[[example]]
+name = "value"
+
 [profile.dev]
 opt-level = 1
 

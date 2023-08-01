@@ -1,7 +1,7 @@
 use rand::{rngs::StdRng, seq::SliceRandom, Rng, SeedableRng};
 use std::sync::Once;
 
-use crate::generators::constants::PERMUTATION_TABLE_SIZE;
+use crate::sources::constants::PERMUTATION_TABLE_SIZE;
 
 pub(crate) struct StaticPermutationTable {
     pub(crate) table: Option<Vec<usize>>,
