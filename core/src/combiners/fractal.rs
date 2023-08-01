@@ -49,13 +49,13 @@ pub fn apply<F, const D: usize>(
 where
     F: Fn(u64, [f64; D]) -> f64,
 {
-    move |seed, mut point| {
+    move |seed, point| {
         let mut noise = 0.0;
         let mut amp = amplitude;
         let mut freq = frequency;
         for _ in 0..octaves {
-            point.iter_mut().for_each(|x| *x *= freq);
-            noise += amp * generator(seed, point);
+            let p = point.iter().map(|x| x * freq).collect::<Vec<f64>>();
+            noise += amp * generator(seed, p.try_into().unwrap());
             freq *= lacunarity;
             amp *= persistence;
         }
