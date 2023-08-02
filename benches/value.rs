@@ -5,7 +5,7 @@ use utils::{bench_noise1d, bench_noise2d, bench_noise3d, bench_noise4d, constant
 
 macro_rules! impl_generator {
     () => {
-        sources::Value::new(SEED)
+        sources::value(SEED)
     };
 }
 

@@ -1,11 +1,11 @@
 mod utils;
 use criterion::{criterion_group, criterion_main, Criterion, PlottingBackend};
-use libnoise::{combiners, sources, Generator};
+use libnoise::{sources, Generator};
 use utils::{bench_noise1d, bench_noise2d, bench_noise3d, bench_noise4d, constants::*};
 
 macro_rules! impl_generator {
     () => {
-        combiners::Fractal::new(sources::Value::new(SEED), 3, 0.013, 1.0, 2.0, 0.5)
+        sources::simplex(SEED).fractal(3, 0.013, 1.0, 2.0, 0.5)
     };
 }
 

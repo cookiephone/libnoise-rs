@@ -1,4 +1,4 @@
-use crate::{combiners, modifiers, transforms};
+use crate::adapters;
 use std::marker::Sized;
 
 pub trait Generator<const D: usize> {
@@ -11,11 +11,11 @@ pub trait Generator<const D: usize> {
         amplitude: f64,
         lacunarity: f64,
         persistencee: f64,
-    ) -> combiners::Fractal<D, Self>
+    ) -> adapters::Fractal<D, Self>
     where
         Self: Sized,
     {
-        combiners::Fractal::new(
+        adapters::Fractal::new(
             self,
             octaves,
             frequency,
@@ -25,66 +25,66 @@ pub trait Generator<const D: usize> {
         )
     }
 
-    fn scale(self, scale: [f64; D]) -> transforms::Scale<D, Self>
+    fn scale(self, scale: [f64; D]) -> adapters::Scale<D, Self>
     where
         Self: Sized,
     {
-        transforms::Scale::new(self, scale)
+        adapters::Scale::new(self, scale)
     }
 
-    fn translate(self, translation: [f64; D]) -> transforms::Translate<D, Self>
+    fn translate(self, translation: [f64; D]) -> adapters::Translate<D, Self>
     where
         Self: Sized,
     {
-        transforms::Translate::new(self, translation)
+        adapters::Translate::new(self, translation)
     }
 
-    fn rotate<const P: usize>(self, rotation: [f64; P]) -> transforms::Rotate<D, P, Self>
+    fn rotate<const P: usize>(self, rotation: [f64; P]) -> adapters::Rotate<D, P, Self>
     where
         Self: Sized,
     {
-        transforms::Rotate::new(self, rotation)
+        adapters::Rotate::new(self, rotation)
     }
 
-    fn abs(self) -> modifiers::Abs<D, Self>
+    fn abs(self) -> adapters::Abs<D, Self>
     where
         Self: Sized,
     {
-        modifiers::Abs::new(self)
+        adapters::Abs::new(self)
     }
 
-    fn add(self, offset: f64) -> modifiers::Add<D, Self>
+    fn add(self, offset: f64) -> adapters::Add<D, Self>
     where
         Self: Sized,
     {
-        modifiers::Add::new(self, offset)
+        adapters::Add::new(self, offset)
     }
 
-    fn clamp(self, min: f64, max: f64) -> modifiers::Clamp<D, Self>
+    fn clamp(self, min: f64, max: f64) -> adapters::Clamp<D, Self>
     where
         Self: Sized,
     {
-        modifiers::Clamp::new(self, min, max)
+        adapters::Clamp::new(self, min, max)
     }
 
-    fn lambda<L: Fn(f64) -> f64>(self, lambda: L) -> modifiers::Lambda<D, Self, L>
+    fn lambda<L: Fn(f64) -> f64>(self, lambda: L) -> adapters::Lambda<D, Self, L>
     where
         Self: Sized,
     {
-        modifiers::Lambda::new(self, lambda)
+        adapters::Lambda::new(self, lambda)
     }
 
-    fn mul(self, scale: f64) -> modifiers::Mul<D, Self>
+    fn mul(self, scale: f64) -> adapters::Mul<D, Self>
     where
         Self: Sized,
     {
-        modifiers::Mul::new(self, scale)
+        adapters::Mul::new(self, scale)
     }
 
-    fn neg(self) -> modifiers::Neg<D, Self>
+    fn neg(self) -> adapters::Neg<D, Self>
     where
         Self: Sized,
     {
-        modifiers::Neg::new(self)
+        adapters::Neg::new(self)
     }
 }
