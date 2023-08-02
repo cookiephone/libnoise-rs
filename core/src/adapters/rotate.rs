@@ -1,11 +1,12 @@
 use crate::generator::Generator;
 
-pub struct Rotate<const D: usize, const P: usize, G: Generator<D>> {
+#[derive(Clone)]
+pub struct Rotate<const P: usize, G> {
     generator: G,
     rotation: [f64; P],
 }
 
-impl<const D: usize, const P: usize, G: Generator<D>> Rotate<D, P, G> {
+impl<const P: usize, G> Rotate<P, G> {
     pub fn new(generator: G, rotation: [f64; P]) -> Self {
         Self {
             generator,
@@ -14,7 +15,7 @@ impl<const D: usize, const P: usize, G: Generator<D>> Rotate<D, P, G> {
     }
 }
 
-impl<G: Generator<2>> Generator<2> for Rotate<2, 1, G> {
+impl<G: Generator<2>> Generator<2> for Rotate<1, G> {
     fn sample(&self, point: [f64; 2]) -> f64 {
         let x = point[0];
         let y = point[1];
@@ -26,7 +27,7 @@ impl<G: Generator<2>> Generator<2> for Rotate<2, 1, G> {
     }
 }
 
-impl<G: Generator<3>> Generator<3> for Rotate<3, 3, G> {
+impl<G: Generator<3>> Generator<3> for Rotate<3, G> {
     fn sample(&self, point: [f64; 3]) -> f64 {
         let x = point[0];
         let y = point[1];
@@ -53,7 +54,7 @@ impl<G: Generator<3>> Generator<3> for Rotate<3, 3, G> {
     }
 }
 
-impl<G: Generator<4>> Generator<4> for Rotate<4, 6, G> {
+impl<G: Generator<4>> Generator<4> for Rotate<6, G> {
     fn sample(&self, point: [f64; 4]) -> f64 {
         let x = point[0];
         let y = point[1];

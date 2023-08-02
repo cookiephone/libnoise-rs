@@ -1,6 +1,7 @@
 use super::functional::{self, constants::PERMUTATION_TABLE_SIZE};
 use crate::{generator::Generator, utils::ptable::PermutationTable};
 
+#[derive(Clone)]
 pub struct Value {
     permutation_table: PermutationTable,
 }

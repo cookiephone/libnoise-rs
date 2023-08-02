@@ -1,5 +1,6 @@
 use rand::{rngs::StdRng, seq::SliceRandom, SeedableRng};
 
+#[derive(Clone)]
 pub(crate) struct PermutationTable {
     pub(crate) table: Vec<usize>,
 }

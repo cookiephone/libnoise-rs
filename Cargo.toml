@@ -27,7 +27,7 @@ name = "value"
 harness = false
 
 [[bench]]
-name = "fractal"
+name = "fbm"
 harness = false
 
 [[example]]
@@ -37,7 +37,7 @@ name = "simplex"
 name = "value"
 
 [[example]]
-name = "fractal"
+name = "fbm"
 
 [[example]]
 name = "chaining"
