@@ -4,7 +4,6 @@ fn main() {
     example_chaining();
 }
 
-
 fn example_chaining() {
     let generator = sources::simplex(42)
         .fractal(3, 0.013, 1.0, 2.0, 0.5)

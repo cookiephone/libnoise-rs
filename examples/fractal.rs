@@ -18,8 +18,7 @@ fn example_fractal_simplex_noise2d() {
 }
 
 fn example_fractal_simplex_noise3d() {
-    let generator = sources::simplex(42)
-        .fractal(3, 0.013, 1.0, 2.0, 0.5);
+    let generator = sources::simplex(42).fractal(3, 0.013, 1.0, 2.0, 0.5);
     Visualizer::<3>::new([200, 200, 200], generator).write_to_file("fractal_simplex_3d.png");
 }
 

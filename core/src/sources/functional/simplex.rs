@@ -9,7 +9,7 @@ pub(crate) fn noise1d(perm: &PermutationTable, point: [f64; 1]) -> f64 {
     let x0 = x - i0;
     let x1 = x0 - 1.0;
     // hashed gradient (-1 or 1) directly, safe because this permutation table cannot index out of bounds
-    let i0 = i0 as usize % PERMUTATION_TABLE_SIZE;
+    let i0 = i0.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
     let gi0 = unsafe { perm.hash1d(i0) % SIMPLEX_GRADIENT_LUT_1D_SIZE };
     let gi1 = unsafe { perm.hash1d(i0 + 1) % SIMPLEX_GRADIENT_LUT_1D_SIZE };
     // compute contributions, safe because gradient lookup table is known
@@ -43,8 +43,8 @@ pub(crate) fn noise2d(perm: &PermutationTable, point: [f64; 2]) -> f64 {
     let x2 = x0 - 1.0 + 2.0 * SIMPLEX_UNSKEW_FACTOR_2D;
     let y2 = y0 - 1.0 + 2.0 * SIMPLEX_UNSKEW_FACTOR_2D;
     // hashed gradient indices, safe because this permutation table cannot index out of bounds
-    let is = is as usize % PERMUTATION_TABLE_SIZE;
-    let js = js as usize % PERMUTATION_TABLE_SIZE;
+    let is = is.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
+    let js = js.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
     let gi0 = unsafe { perm.hash2d(is, js) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
     let gi1 = unsafe { perm.hash2d(is + i1, js + j1) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
     let gi2 = unsafe { perm.hash2d(is + 1, js + 1) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
@@ -89,9 +89,9 @@ pub(crate) fn noise3d(perm: &PermutationTable, point: [f64; 3]) -> f64 {
     let y3 = y0 - 1.0 + 3.0 * SIMPLEX_UNSKEW_FACTOR_3D;
     let z3 = z0 - 1.0 + 3.0 * SIMPLEX_UNSKEW_FACTOR_3D;
     // hashed gradient indices, safe because this permutation table cannot index out of bounds
-    let is = is as usize % PERMUTATION_TABLE_SIZE;
-    let js = js as usize % PERMUTATION_TABLE_SIZE;
-    let ks = ks as usize % PERMUTATION_TABLE_SIZE;
+    let is = is.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
+    let js = js.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
+    let ks = ks.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
     let gi0 = unsafe { perm.hash3d(is, js, ks) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
     let gi1 = unsafe { perm.hash3d(is + i1, js + j1, ks + k1) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
     let gi2 = unsafe { perm.hash3d(is + i2, js + j2, ks + k2) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
@@ -159,10 +159,10 @@ pub(crate) fn noise4d(perm: &PermutationTable, point: [f64; 4]) -> f64 {
     let z4 = z0 - 1.0 + 4.0 * SIMPLEX_UNSKEW_FACTOR_4D;
     let w4 = w0 - 1.0 + 4.0 * SIMPLEX_UNSKEW_FACTOR_4D;
     // hashed gradient indices, safe because this permutation table cannot index out of bounds
-    let is = is as usize % PERMUTATION_TABLE_SIZE;
-    let js = js as usize % PERMUTATION_TABLE_SIZE;
-    let ks = ks as usize % PERMUTATION_TABLE_SIZE;
-    let ls = ls as usize % PERMUTATION_TABLE_SIZE;
+    let is = is.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
+    let js = js.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
+    let ks = ks.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
+    let ls = ls.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
     let gi0 = unsafe { perm.hash4d(is, js, ks, ls) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
     let gi1 =
         unsafe { perm.hash4d(is + i1, js + j1, ks + k1, ls + l1) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;

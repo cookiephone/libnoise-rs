@@ -39,6 +39,13 @@ pub trait Generator<const D: usize> {
         transforms::Translate::new(self, translation)
     }
 
+    fn rotate<const P: usize>(self, rotation: [f64; P]) -> transforms::Rotate<D, P, Self>
+    where
+        Self: Sized,
+    {
+        transforms::Rotate::new(self, rotation)
+    }
+
     fn abs(self) -> modifiers::Abs<D, Self>
     where
         Self: Sized,
