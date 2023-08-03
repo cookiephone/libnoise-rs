@@ -7,7 +7,7 @@ pub(crate) fn tensor_indices(shape: &[usize]) -> impl Iterator<Item = Vec<usize>
         .multi_cartesian_product()
 }
 
-// this is significantly faster but not portable
+// this is significantly faster than fast_floor, but not portable
 /*
 fn floor_asm() {
     let mut x = black_box(69348.9253_f64);
