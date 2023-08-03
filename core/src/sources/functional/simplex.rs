@@ -1,10 +1,10 @@
 use super::constants::*;
-use crate::utils::{math::fast_floor, ptable::PermutationTable};
+use crate::utils::ptable::PermutationTable;
 
 pub(crate) fn noise1d(perm: &PermutationTable, point: [f64; 1]) -> f64 {
     let x = point[0];
     // no transformation into lattice space required, get cube origin
-    let i0 = fast_floor(x);
+    let i0 = x.floor();
     // input point relative the two simplex vertices
     let x0 = x - i0;
     let x1 = x0 - 1.0;
@@ -24,8 +24,8 @@ pub(crate) fn noise2d(perm: &PermutationTable, point: [f64; 2]) -> f64 {
     let y = point[1];
     // transform into lattice space and floor for cube origin
     let skew = (x + y) * SIMPLEX_SKEW_FACTOR_2D;
-    let is = fast_floor(x + skew);
-    let js = fast_floor(y + skew);
+    let is = (x + skew).floor();
+    let js = (y + skew).floor();
     // input point relative to unskewed cube (and simplex) origin in source space
     let unskew = (is + js) * SIMPLEX_UNSKEW_FACTOR_2D;
     let x0 = x - is + unskew;
@@ -62,9 +62,9 @@ pub(crate) fn noise3d(perm: &PermutationTable, point: [f64; 3]) -> f64 {
     let z = point[2];
     // transform into lattice space and floor for cube origin
     let skew = (x + y + z) * SIMPLEX_SKEW_FACTOR_3D;
-    let is = fast_floor(x + skew);
-    let js = fast_floor(y + skew);
-    let ks = fast_floor(z + skew);
+    let is = (x + skew).floor();
+    let js = (y + skew).floor();
+    let ks = (z + skew).floor();
     // input point relative to unskewed cube (and simplex) origin in source space
     let unskew = (is + js + ks) * SIMPLEX_UNSKEW_FACTOR_3D;
     let x0 = x - is + unskew;
@@ -112,10 +112,10 @@ pub(crate) fn noise4d(perm: &PermutationTable, point: [f64; 4]) -> f64 {
     let w = point[3];
     // transform into lattice space and floor for cube origin
     let skew = (x + y + z + w) * SIMPLEX_SKEW_FACTOR_4D;
-    let is = fast_floor(x + skew);
-    let js = fast_floor(y + skew);
-    let ks = fast_floor(z + skew);
-    let ls = fast_floor(w + skew);
+    let is = (x + skew).floor();
+    let js = (y + skew).floor();
+    let ks = (z + skew).floor();
+    let ls = (w + skew).floor();
     // input point relative to unskewed cube (and simplex) origin in source space
     let unskew = (is + js + ks + ls) * SIMPLEX_UNSKEW_FACTOR_4D;
     let x0 = x - is + unskew;

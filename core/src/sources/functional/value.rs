@@ -1,10 +1,10 @@
 use super::constants::PERMUTATION_TABLE_SIZE;
-use crate::utils::{math::fast_floor, ptable::PermutationTable};
+use crate::utils::ptable::PermutationTable;
 
 pub(crate) fn noise1d(perm: &PermutationTable, point: [f64; 1]) -> f64 {
     let x = point[0];
     // origin of hypercube in which input lies
-    let x0 = fast_floor(x) as usize;
+    let x0 = x.floor() as usize;
     // smoothed distance from hypercube origin
     let dxs = hermite_alpha(x - x0 as f64);
     // get values from hypercube corners
@@ -19,8 +19,8 @@ pub(crate) fn noise2d(perm: &PermutationTable, point: [f64; 2]) -> f64 {
     let x = point[0];
     let y = point[1];
     // origin of hypercube in which input lies
-    let x0 = fast_floor(x) as usize;
-    let y0 = fast_floor(y) as usize;
+    let x0 = x.floor() as usize;
+    let y0 = y.floor() as usize;
     // smoothed distance from hypercube origin
     let dxs = hermite_alpha(x - x0 as f64);
     let dys = hermite_alpha(y - y0 as f64);
@@ -41,9 +41,9 @@ pub(crate) fn noise3d(perm: &PermutationTable, point: [f64; 3]) -> f64 {
     let y = point[1];
     let z = point[2];
     // origin of hypercube in which input lies
-    let x0 = fast_floor(x) as usize;
-    let y0 = fast_floor(y) as usize;
-    let z0 = fast_floor(z) as usize;
+    let x0 = x.floor() as usize;
+    let y0 = y.floor() as usize;
+    let z0 = z.floor() as usize;
     // smoothed distance from hypercube origin
     let dxs = hermite_alpha(x - x0 as f64);
     let dys = hermite_alpha(y - y0 as f64);
@@ -74,10 +74,10 @@ pub(crate) fn noise4d(perm: &PermutationTable, point: [f64; 4]) -> f64 {
     let z = point[2];
     let w = point[3];
     // origin of hypercube in which input lies
-    let x0 = fast_floor(x) as usize;
-    let y0 = fast_floor(y) as usize;
-    let z0 = fast_floor(z) as usize;
-    let w0 = fast_floor(w) as usize;
+    let x0 = x.floor() as usize;
+    let y0 = y.floor() as usize;
+    let z0 = z.floor() as usize;
+    let w0 = w.floor() as usize;
     // smoothed distance from hypercube origin
     let dxs = hermite_alpha(x - x0 as f64);
     let dys = hermite_alpha(y - y0 as f64);
