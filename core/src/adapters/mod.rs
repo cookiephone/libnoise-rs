@@ -1,6 +1,7 @@
 mod abs;
 mod add;
 mod clamp;
+mod displace;
 mod fbm;
 mod lambda;
 mod mul;
@@ -11,6 +12,7 @@ mod translate;
 pub use abs::Abs;
 pub use add::Add;
 pub use clamp::Clamp;
+pub use displace::Displace;
 pub use fbm::Fbm;
 pub use lambda::Lambda;
 pub use mul::Mul;

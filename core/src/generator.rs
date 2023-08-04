@@ -11,7 +11,7 @@ pub trait Generator<const D: usize> {
         amplitude: f64,
         lacunarity: f64,
         persistencee: f64,
-    ) -> adapters::Fbm<D, Self>
+    ) -> adapters::Fbm<Self>
     where
         Self: Sized,
     {
@@ -67,8 +67,9 @@ pub trait Generator<const D: usize> {
         adapters::Clamp::new(self, min, max)
     }
 
-    fn lambda<L: Fn(f64) -> f64>(self, lambda: L) -> adapters::Lambda<Self, L>
+    fn lambda<L>(self, lambda: L) -> adapters::Lambda<Self, L>
     where
+        L: Fn(f64) -> f64,
         Self: Sized,
     {
         adapters::Lambda::new(self, lambda)
@@ -86,5 +87,37 @@ pub trait Generator<const D: usize> {
         Self: Sized,
     {
         adapters::Neg::new(self)
+    }
+
+    fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<0, Self, GA>
+    where
+        GA: Generator<D>,
+        Self: Sized,
+    {
+        adapters::Displace::new(self, displacement_generator)
+    }
+
+    fn displace_y<GA>(self, displacement_generator: GA) -> adapters::Displace<1, Self, GA>
+    where
+        GA: Generator<D>,
+        Self: Sized,
+    {
+        adapters::Displace::new(self, displacement_generator)
+    }
+
+    fn displace_z<GA>(self, displacement_generator: GA) -> adapters::Displace<2, Self, GA>
+    where
+        GA: Generator<D>,
+        Self: Sized,
+    {
+        adapters::Displace::new(self, displacement_generator)
+    }
+
+    fn displace_w<GA>(self, displacement_generator: GA) -> adapters::Displace<3, Self, GA>
+    where
+        GA: Generator<D>,
+        Self: Sized,
+    {
+        adapters::Displace::new(self, displacement_generator)
     }
 }

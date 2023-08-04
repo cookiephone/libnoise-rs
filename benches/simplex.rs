@@ -1,11 +1,11 @@
 mod utils;
 use criterion::{criterion_group, criterion_main, Criterion, PlottingBackend};
-use libnoise::sources;
+use libnoise::Source;
 use utils::{bench_noise1d, bench_noise2d, bench_noise3d, bench_noise4d, constants::*};
 
 macro_rules! impl_generator {
     () => {
-        sources::simplex(SEED)
+        Source::simplex(SEED)
     };
 }
 

@@ -1,7 +1,7 @@
 use crate::generator::Generator;
 
 #[derive(Clone)]
-pub struct Fbm<const D: usize, G> {
+pub struct Fbm<G> {
     generator: G,
     octaves: u32,
     frequency: f64,
@@ -11,7 +11,7 @@ pub struct Fbm<const D: usize, G> {
     normalization_factor: f64,
 }
 
-impl<const D: usize, G> Fbm<D, G> {
+impl<G> Fbm<G> {
     pub fn new(
         generator: G,
         octaves: u32,
@@ -33,19 +33,28 @@ impl<const D: usize, G> Fbm<D, G> {
     }
 }
 
-impl<const D: usize, G: Generator<D>> Generator<D> for Fbm<D, G> {
-    fn sample(&self, point: [f64; D]) -> f64 {
-        let mut noise = 0.0;
-        let mut amp = self.amplitude;
-        let mut freq = self.frequency;
-        for _ in 0..self.octaves {
-            noise += amp * self.generator.sample(point.map(|x| x * freq));
-            freq *= self.lacunarity;
-            amp *= self.persistence;
+macro_rules! impl_generator {
+    ($dim:literal, $adapter:ident) => {
+        impl<G: Generator<$dim>> Generator<$dim> for $adapter<G> {
+            fn sample(&self, point: [f64; $dim]) -> f64 {
+                let mut noise = 0.0;
+                let mut amp = self.amplitude;
+                let mut freq = self.frequency;
+                for _ in 0..self.octaves {
+                    noise += amp * self.generator.sample(point.map(|x| x * freq));
+                    freq *= self.lacunarity;
+                    amp *= self.persistence;
+                }
+                noise * self.normalization_factor
+            }
         }
-        noise * self.normalization_factor
-    }
+    };
 }
+
+impl_generator!(1, Fbm);
+impl_generator!(2, Fbm);
+impl_generator!(3, Fbm);
+impl_generator!(4, Fbm);
 
 fn compute_normalization_factor(octaves: u32, amplitude: f64, persistence: f64) -> f64 {
     1.0 / (0..octaves).fold(0.0, |acc, octave| {
