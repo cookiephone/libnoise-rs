@@ -1,7 +1,7 @@
 use crate::adapters;
 use std::marker::Sized;
 
-pub trait Generator<const D: usize> {
+pub trait Generator<const D: usize>: Sized {
     fn sample(&self, point: [f64; D]) -> f64;
 
     fn fbm(
@@ -11,10 +11,7 @@ pub trait Generator<const D: usize> {
         amplitude: f64,
         lacunarity: f64,
         persistencee: f64,
-    ) -> adapters::Fbm<Self>
-    where
-        Self: Sized,
-    {
+    ) -> adapters::Fbm<Self> {
         adapters::Fbm::new(
             self,
             octaves,
@@ -25,61 +22,61 @@ pub trait Generator<const D: usize> {
         )
     }
 
-    fn scale(self, scale: [f64; D]) -> adapters::Scale<D, Self>
-    where
-        Self: Sized,
-    {
+    fn scale(self, scale: [f64; D]) -> adapters::Scale<D, Self> {
         adapters::Scale::new(self, scale)
     }
 
-    fn translate(self, translation: [f64; D]) -> adapters::Translate<D, Self>
-    where
-        Self: Sized,
-    {
+    fn translate(self, translation: [f64; D]) -> adapters::Translate<D, Self> {
         adapters::Translate::new(self, translation)
     }
 
-    fn abs(self) -> adapters::Abs<Self>
-    where
-        Self: Sized,
-    {
+    fn abs(self) -> adapters::Abs<Self> {
         adapters::Abs::new(self)
     }
 
-    fn add(self, offset: f64) -> adapters::Add<Self>
-    where
-        Self: Sized,
-    {
+    fn add(self, offset: f64) -> adapters::Add<Self> {
         adapters::Add::new(self, offset)
     }
 
-    fn clamp(self, min: f64, max: f64) -> adapters::Clamp<Self>
-    where
-        Self: Sized,
-    {
+    fn clamp(self, min: f64, max: f64) -> adapters::Clamp<Self> {
         adapters::Clamp::new(self, min, max)
     }
 
     fn lambda<L>(self, lambda: L) -> adapters::Lambda<Self, L>
     where
         L: Fn(f64) -> f64,
-        Self: Sized,
     {
         adapters::Lambda::new(self, lambda)
     }
 
-    fn mul(self, scale: f64) -> adapters::Mul<Self>
-    where
-        Self: Sized,
-    {
+    fn mul(self, scale: f64) -> adapters::Mul<Self> {
         adapters::Mul::new(self, scale)
     }
 
-    fn neg(self) -> adapters::Neg<Self>
-    where
-        Self: Sized,
-    {
+    fn neg(self) -> adapters::Neg<Self> {
         adapters::Neg::new(self)
+    }
+
+    fn blend<G, GC>(self, other: G, control: GC) -> adapters::Blend<Self, G, GC>
+    where
+        G: Generator<D>,
+        GC: Generator<D>,
+    {
+        adapters::Blend::new(self, other, control)
+    }
+
+    fn min<G>(self, other: G) -> adapters::Min<Self, G>
+    where
+        G: Generator<D>,
+    {
+        adapters::Min::new(self, other)
+    }
+
+    fn max<G>(self, other: G) -> adapters::Max<Self, G>
+    where
+        G: Generator<D>,
+    {
+        adapters::Max::new(self, other)
     }
 }
 
@@ -87,24 +84,19 @@ pub trait Generator1D: Generator<1> {
     fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<0, Self, GA>
     where
         GA: Generator<1>,
-        Self: Sized,
     {
         adapters::Displace::new(self, displacement_generator)
     }
 }
 
 pub trait Generator2D: Generator<2> {
-    fn rotate(self, rotation: [f64; 1]) -> adapters::Rotate<1, Self>
-    where
-        Self: Sized,
-    {
+    fn rotate(self, rotation: [f64; 1]) -> adapters::Rotate<1, Self> {
         adapters::Rotate::new(self, rotation)
     }
 
     fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<0, Self, GA>
     where
         GA: Generator<2>,
-        Self: Sized,
     {
         adapters::Displace::new(self, displacement_generator)
     }
@@ -112,24 +104,19 @@ pub trait Generator2D: Generator<2> {
     fn displace_y<GA>(self, displacement_generator: GA) -> adapters::Displace<1, Self, GA>
     where
         GA: Generator<2>,
-        Self: Sized,
     {
         adapters::Displace::new(self, displacement_generator)
     }
 }
 
 pub trait Generator3D: Generator<3> {
-    fn rotate(self, rotation: [f64; 3]) -> adapters::Rotate<3, Self>
-    where
-        Self: Sized,
-    {
+    fn rotate(self, rotation: [f64; 3]) -> adapters::Rotate<3, Self> {
         adapters::Rotate::new(self, rotation)
     }
 
     fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<0, Self, GA>
     where
         GA: Generator<3>,
-        Self: Sized,
     {
         adapters::Displace::new(self, displacement_generator)
     }
@@ -137,7 +124,6 @@ pub trait Generator3D: Generator<3> {
     fn displace_y<GA>(self, displacement_generator: GA) -> adapters::Displace<1, Self, GA>
     where
         GA: Generator<3>,
-        Self: Sized,
     {
         adapters::Displace::new(self, displacement_generator)
     }
@@ -145,24 +131,19 @@ pub trait Generator3D: Generator<3> {
     fn displace_z<GA>(self, displacement_generator: GA) -> adapters::Displace<2, Self, GA>
     where
         GA: Generator<3>,
-        Self: Sized,
     {
         adapters::Displace::new(self, displacement_generator)
     }
 }
 
 pub trait Generator4D: Generator<4> {
-    fn rotate(self, rotation: [f64; 6]) -> adapters::Rotate<6, Self>
-    where
-        Self: Sized,
-    {
+    fn rotate(self, rotation: [f64; 6]) -> adapters::Rotate<6, Self> {
         adapters::Rotate::new(self, rotation)
     }
 
     fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<0, Self, GA>
     where
         GA: Generator<4>,
-        Self: Sized,
     {
         adapters::Displace::new(self, displacement_generator)
     }
@@ -170,7 +151,6 @@ pub trait Generator4D: Generator<4> {
     fn displace_y<GA>(self, displacement_generator: GA) -> adapters::Displace<1, Self, GA>
     where
         GA: Generator<4>,
-        Self: Sized,
     {
         adapters::Displace::new(self, displacement_generator)
     }
@@ -178,7 +158,6 @@ pub trait Generator4D: Generator<4> {
     fn displace_z<GA>(self, displacement_generator: GA) -> adapters::Displace<2, Self, GA>
     where
         GA: Generator<4>,
-        Self: Sized,
     {
         adapters::Displace::new(self, displacement_generator)
     }
@@ -186,7 +165,6 @@ pub trait Generator4D: Generator<4> {
     fn displace_w<GA>(self, displacement_generator: GA) -> adapters::Displace<3, Self, GA>
     where
         GA: Generator<4>,
-        Self: Sized,
     {
         adapters::Displace::new(self, displacement_generator)
     }
