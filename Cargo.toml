@@ -45,10 +45,19 @@ name = "chaining"
 [profile.dev]
 opt-level = 1
 
+[profile.bench]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+
 [profile.release]
 opt-level = 3
 lto = true
+codegen-units = 1
+strip = true
 
 [profile.release-with-debug]
 inherits = "release"
 debug = true
+strip = false
