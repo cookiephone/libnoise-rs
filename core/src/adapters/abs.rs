@@ -1,9 +1,14 @@
-use crate::generator::Generator;
+use crate::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
 pub struct Abs<G> {
     generator: G,
 }
+
+impl<G: Generator<1>> Generator1D for Abs<G> {}
+impl<G: Generator<2>> Generator2D for Abs<G> {}
+impl<G: Generator<3>> Generator3D for Abs<G> {}
+impl<G: Generator<4>> Generator4D for Abs<G> {}
 
 impl<G> Abs<G> {
     pub fn new(generator: G) -> Self {

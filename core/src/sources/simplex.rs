@@ -1,10 +1,18 @@
 use super::functional::{self, constants::PERMUTATION_TABLE_SIZE};
-use crate::{generator::Generator, utils::ptable::PermutationTable};
+use crate::{
+    generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D},
+    utils::ptable::PermutationTable,
+};
 
 #[derive(Clone)]
 pub struct Simplex<const D: usize> {
     permutation_table: PermutationTable,
 }
+
+impl Generator1D for Simplex<1> {}
+impl Generator2D for Simplex<2> {}
+impl Generator3D for Simplex<3> {}
+impl Generator4D for Simplex<4> {}
 
 impl<const D: usize> Simplex<D> {
     pub fn new(seed: u64) -> Self {

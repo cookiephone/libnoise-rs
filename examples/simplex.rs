@@ -1,4 +1,4 @@
-use libnoise::{utils::Visualizer, Generator, Source};
+use libnoise::prelude::*;
 
 fn main() {
     example_simplex_noise1d();

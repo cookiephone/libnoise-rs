@@ -1,6 +1,6 @@
 mod utils;
 use criterion::{criterion_group, criterion_main, Criterion, PlottingBackend};
-use libnoise::Source;
+use libnoise::prelude::*;
 use utils::{bench_noise1d, bench_noise2d, bench_noise3d, bench_noise4d, constants::*};
 
 macro_rules! impl_generator {

@@ -1,4 +1,4 @@
-use crate::generator::Generator;
+use crate::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
 pub struct Fbm<G> {
@@ -10,6 +10,11 @@ pub struct Fbm<G> {
     persistence: f64,
     normalization_factor: f64,
 }
+
+impl<G: Generator<1>> Generator1D for Fbm<G> {}
+impl<G: Generator<2>> Generator2D for Fbm<G> {}
+impl<G: Generator<3>> Generator3D for Fbm<G> {}
+impl<G: Generator<4>> Generator4D for Fbm<G> {}
 
 impl<G> Fbm<G> {
     pub fn new(

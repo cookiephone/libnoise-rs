@@ -1,10 +1,14 @@
-use crate::generator::Generator;
+use crate::generator::{Generator, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
 pub struct Rotate<const P: usize, G> {
     generator: G,
     rotation: [f64; P],
 }
+
+impl<G: Generator<2>> Generator2D for Rotate<1, G> {}
+impl<G: Generator<3>> Generator3D for Rotate<3, G> {}
+impl<G: Generator<4>> Generator4D for Rotate<6, G> {}
 
 impl<const P: usize, G> Rotate<P, G> {
     pub fn new(generator: G, rotation: [f64; P]) -> Self {
