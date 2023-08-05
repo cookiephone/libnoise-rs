@@ -1,4 +1,4 @@
-use super::{Simplex, Value};
+use crate::sources::{Simplex, Value};
 
 pub struct Source<const D: usize> {}
 
