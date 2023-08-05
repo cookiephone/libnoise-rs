@@ -1,25 +1,16 @@
 pub(crate) const PERMUTATION_TABLE_SIZE: usize = 256;
 
-pub(crate) const SIMPLEX_R_SQUARED: f64 = 0.5;
-
-pub(crate) const SIMPLEX_NORMALIZATION_FACTOR_1D: f64 = 13.591804446852795;
-pub(crate) const SIMPLEX_GRADIENT_LUT_1D_SIZE: usize = 16;
-pub(crate) const SIMPLEX_GRADIENT_LUT_1D: [f64; 16] = [
+pub(crate) const GRADIENT_LUT_1D_SIZE: usize = 16;
+pub(crate) const GRADIENT_LUT_1D: [f64; 16] = [
     -8.0, -7.0, -6.0, -5.0, -4.0, -3.0, -2.0, -1.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0,
 ];
 
-pub(crate) const SIMPLEX_SKEW_FACTOR_2D: f64 = 0.3660254037844386;
-pub(crate) const SIMPLEX_UNSKEW_FACTOR_2D: f64 = 0.21132486540518713;
-pub(crate) const SIMPLEX_NORMALIZATION_FACTOR_2D: f64 = 99.83685446303647;
-pub(crate) const SIMPLEX_GRADIENT_LUT_2D_SIZE: usize = 4;
-pub(crate) const SIMPLEX_GRADIENT_LUT_2D: [[f64; 2]; 4] =
+pub(crate) const MIDPOINT_GRADIENT_LUT_2D_SIZE: usize = 4;
+pub(crate) const MIDPOINT_GRADIENT_LUT_2D: [[f64; 2]; MIDPOINT_GRADIENT_LUT_2D_SIZE] =
     [[0.0, -1.0], [-1.0, 0.0], [0.0, 1.0], [1.0, 0.0]];
 
-pub(crate) const SIMPLEX_SKEW_FACTOR_3D: f64 = 0.3333333333333333;
-pub(crate) const SIMPLEX_UNSKEW_FACTOR_3D: f64 = 0.16666666666666666;
-pub(crate) const SIMPLEX_NORMALIZATION_FACTOR_3D: f64 = 76.88375854620836;
-pub(crate) const SIMPLEX_GRADIENT_LUT_3D_SIZE: usize = 12;
-pub(crate) const SIMPLEX_GRADIENT_LUT_3D: [[f64; 3]; 12] = [
+pub(crate) const MIDPOINT_GRADIENT_LUT_3D_SIZE: usize = 16;
+pub(crate) const MIDPOINT_GRADIENT_LUT_3D: [[f64; 3]; MIDPOINT_GRADIENT_LUT_3D_SIZE] = [
     [0.0, -1.0, -1.0],
     [-1.0, 0.0, -1.0],
     [-1.0, -1.0, 0.0],
@@ -32,23 +23,14 @@ pub(crate) const SIMPLEX_GRADIENT_LUT_3D: [[f64; 3]; 12] = [
     [0.0, 1.0, 1.0],
     [1.0, 0.0, 1.0],
     [1.0, 1.0, 0.0],
-];
-pub(crate) const SIMPLEX_TRAVERSAL_LUT_3D: [[usize; 6]; 8] = [
-    [0, 0, 1, 0, 1, 1], // 0: zyx
-    [0, 0, 0, 0, 0, 0], // 1: pad
-    [0, 1, 0, 0, 1, 1], // 2: yzx
-    [0, 1, 0, 1, 1, 0], // 3: yxz
-    [0, 0, 1, 1, 0, 1], // 4: zxy
-    [1, 0, 0, 1, 0, 1], // 5: xzy
-    [0, 0, 0, 0, 0, 0], // 6: pad
-    [1, 0, 0, 1, 1, 0], // 7: xyz
+    [0.0, -1.0, -1.0], // padded for size 16, see perlins paper "improving noise"
+    [0.0, -1.0, 1.0],  // padded for size 16, see perlins paper "improving noise"
+    [-1.0, 1.0, 0.0],  // padded for size 16, see perlins paper "improving noise"
+    [1.0, 1.0, 0.0],   // padded for size 16, see perlins paper "improving noise"
 ];
 
-pub(crate) const SIMPLEX_SKEW_FACTOR_4D: f64 = 0.30901699437494745;
-pub(crate) const SIMPLEX_UNSKEW_FACTOR_4D: f64 = 0.13819660112501053;
-pub(crate) const SIMPLEX_NORMALIZATION_FACTOR_4D: f64 = 62.795597150623436;
-pub(crate) const SIMPLEX_GRADIENT_LUT_4D_SIZE: usize = 32;
-pub(crate) const SIMPLEX_GRADIENT_LUT_4D: [[f64; 4]; 32] = [
+pub(crate) const MIDPOINT_GRADIENT_LUT_4D_SIZE: usize = 32;
+pub(crate) const MIDPOINT_GRADIENT_LUT_4D: [[f64; 4]; MIDPOINT_GRADIENT_LUT_4D_SIZE] = [
     [0.0, -1.0, -1.0, -1.0],
     [-1.0, 0.0, -1.0, -1.0],
     [-1.0, -1.0, 0.0, -1.0],
@@ -82,6 +64,64 @@ pub(crate) const SIMPLEX_GRADIENT_LUT_4D: [[f64; 4]; 32] = [
     [1.0, 1.0, 0.0, 1.0],
     [1.0, 1.0, 1.0, 0.0],
 ];
+
+pub(crate) const CORNERPOINT_GRADIENT_LUT_2D_SIZE: usize = 4;
+pub(crate) const CORNERPOINT_GRADIENT_LUT_2D: [[f64; 2]; CORNERPOINT_GRADIENT_LUT_2D_SIZE] =
+    [[-1.0, -1.0], [-1.0, 1.0], [1.0, -1.0], [1.0, 1.0]];
+
+pub(crate) const CORNERPOINT_GRADIENT_LUT_3D_SIZE: usize = 8;
+pub(crate) const CORNERPOINT_GRADIENT_LUT_3D: [[f64; 3]; CORNERPOINT_GRADIENT_LUT_3D_SIZE] = [
+    [-1.0, -1.0, -1.0],
+    [-1.0, -1.0, 1.0],
+    [-1.0, 1.0, -1.0],
+    [-1.0, 1.0, 1.0],
+    [1.0, -1.0, -1.0],
+    [1.0, -1.0, 1.0],
+    [1.0, 1.0, -1.0],
+    [1.0, 1.0, 1.0],
+];
+
+pub(crate) const CORNERPOINT_GRADIENT_LUT_4D_SIZE: usize = 16;
+pub(crate) const CORNERPOINT_GRADIENT_LUT_4D: [[f64; 4]; CORNERPOINT_GRADIENT_LUT_4D_SIZE] = [
+    [-1.0, -1.0, -1.0, -1.0],
+    [-1.0, -1.0, -1.0, 1.0],
+    [-1.0, -1.0, 1.0, -1.0],
+    [-1.0, -1.0, 1.0, 1.0],
+    [-1.0, 1.0, -1.0, -1.0],
+    [-1.0, 1.0, -1.0, 1.0],
+    [-1.0, 1.0, 1.0, -1.0],
+    [-1.0, 1.0, 1.0, 1.0],
+    [1.0, -1.0, -1.0, -1.0],
+    [1.0, -1.0, -1.0, 1.0],
+    [1.0, -1.0, 1.0, -1.0],
+    [1.0, -1.0, 1.0, 1.0],
+    [1.0, 1.0, -1.0, -1.0],
+    [1.0, 1.0, -1.0, 1.0],
+    [1.0, 1.0, 1.0, -1.0],
+    [1.0, 1.0, 1.0, 1.0],
+];
+
+pub(crate) const SIMPLEX_R_SQUARED: f64 = 0.5;
+pub(crate) const SIMPLEX_NORMALIZATION_FACTOR_1D: f64 = 13.591804446852795;
+pub(crate) const SIMPLEX_SKEW_FACTOR_2D: f64 = 0.3660254037844386;
+pub(crate) const SIMPLEX_UNSKEW_FACTOR_2D: f64 = 0.21132486540518713;
+pub(crate) const SIMPLEX_NORMALIZATION_FACTOR_2D: f64 = 99.83685446303647;
+pub(crate) const SIMPLEX_SKEW_FACTOR_3D: f64 = 0.3333333333333333;
+pub(crate) const SIMPLEX_UNSKEW_FACTOR_3D: f64 = 0.16666666666666666;
+pub(crate) const SIMPLEX_NORMALIZATION_FACTOR_3D: f64 = 76.88375854620836;
+pub(crate) const SIMPLEX_TRAVERSAL_LUT_3D: [[usize; 6]; 8] = [
+    [0, 0, 1, 0, 1, 1], // 0: zyx
+    [0, 0, 0, 0, 0, 0], // 1: pad
+    [0, 1, 0, 0, 1, 1], // 2: yzx
+    [0, 1, 0, 1, 1, 0], // 3: yxz
+    [0, 0, 1, 1, 0, 1], // 4: zxy
+    [1, 0, 0, 1, 0, 1], // 5: xzy
+    [0, 0, 0, 0, 0, 0], // 6: pad
+    [1, 0, 0, 1, 1, 0], // 7: xyz
+];
+pub(crate) const SIMPLEX_SKEW_FACTOR_4D: f64 = 0.30901699437494745;
+pub(crate) const SIMPLEX_UNSKEW_FACTOR_4D: f64 = 0.13819660112501053;
+pub(crate) const SIMPLEX_NORMALIZATION_FACTOR_4D: f64 = 62.795597150623436;
 pub(crate) const SIMPLEX_TRAVERSAL_LUT_4D: [[usize; 12]; 64] = [
     [0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1], // 00: wzyx
     [0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1], // 01: zwyx

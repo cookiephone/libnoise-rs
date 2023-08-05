@@ -8,11 +8,11 @@ pub(crate) fn noise1d(perm: &PermutationTable, point: [f64; 1]) -> f64 {
     // input point relative the two simplex vertices
     let x0 = x - i0;
     let x1 = x0 - 1.0;
-    // hashed gradient (-1 or 1) directly, safe because this permutation table cannot index out of bounds
+    // hashed gradient (-1 or 1) directly
     let i0 = i0.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
-    let gi0 = unsafe { perm.hash1d(i0) % SIMPLEX_GRADIENT_LUT_1D_SIZE };
-    let gi1 = unsafe { perm.hash1d(i0 + 1) % SIMPLEX_GRADIENT_LUT_1D_SIZE };
-    // compute contributions, safe because gradient lookup table is known
+    let gi0 = unsafe { perm.hash1d(i0) % GRADIENT_LUT_1D_SIZE };
+    let gi1 = unsafe { perm.hash1d(i0 + 1) % GRADIENT_LUT_1D_SIZE };
+    // compute contributions
     let n0 = unsafe { contribution1d(x0, gi0) };
     let n1 = unsafe { contribution1d(x1, gi1) };
     // combine contributions and scale to [-1, 1]
@@ -42,13 +42,13 @@ pub(crate) fn noise2d(perm: &PermutationTable, point: [f64; 2]) -> f64 {
     let y1 = y0 - j1 as f64 + SIMPLEX_UNSKEW_FACTOR_2D;
     let x2 = x0 - 1.0 + 2.0 * SIMPLEX_UNSKEW_FACTOR_2D;
     let y2 = y0 - 1.0 + 2.0 * SIMPLEX_UNSKEW_FACTOR_2D;
-    // hashed gradient indices, safe because this permutation table cannot index out of bounds
+    // hashed gradient indices
     let is = is.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
     let js = js.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
-    let gi0 = unsafe { perm.hash2d(is, js) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
-    let gi1 = unsafe { perm.hash2d(is + i1, js + j1) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
-    let gi2 = unsafe { perm.hash2d(is + 1, js + 1) } % SIMPLEX_GRADIENT_LUT_2D_SIZE;
-    // compute contributions, safe because gradient lookup table is known
+    let gi0 = unsafe { perm.hash2d(is, js) } % MIDPOINT_GRADIENT_LUT_2D_SIZE;
+    let gi1 = unsafe { perm.hash2d(is + i1, js + j1) } % MIDPOINT_GRADIENT_LUT_2D_SIZE;
+    let gi2 = unsafe { perm.hash2d(is + 1, js + 1) } % MIDPOINT_GRADIENT_LUT_2D_SIZE;
+    // compute contributions
     let n0 = unsafe { contribution2d(x0, y0, gi0) };
     let n1 = unsafe { contribution2d(x1, y1, gi1) };
     let n2 = unsafe { contribution2d(x2, y2, gi2) };
@@ -88,15 +88,15 @@ pub(crate) fn noise3d(perm: &PermutationTable, point: [f64; 3]) -> f64 {
     let x3 = x0 - 1.0 + 3.0 * SIMPLEX_UNSKEW_FACTOR_3D;
     let y3 = y0 - 1.0 + 3.0 * SIMPLEX_UNSKEW_FACTOR_3D;
     let z3 = z0 - 1.0 + 3.0 * SIMPLEX_UNSKEW_FACTOR_3D;
-    // hashed gradient indices, safe because this permutation table cannot index out of bounds
+    // hashed gradient indices
     let is = is.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
     let js = js.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
     let ks = ks.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
-    let gi0 = unsafe { perm.hash3d(is, js, ks) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
-    let gi1 = unsafe { perm.hash3d(is + i1, js + j1, ks + k1) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
-    let gi2 = unsafe { perm.hash3d(is + i2, js + j2, ks + k2) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
-    let gi3 = unsafe { perm.hash3d(is + 1, js + 1, ks + 1) } % SIMPLEX_GRADIENT_LUT_3D_SIZE;
-    // compute contributions, safe because gradient lookup table is known
+    let gi0 = unsafe { perm.hash3d(is, js, ks) } % MIDPOINT_GRADIENT_LUT_3D_SIZE;
+    let gi1 = unsafe { perm.hash3d(is + i1, js + j1, ks + k1) } % MIDPOINT_GRADIENT_LUT_3D_SIZE;
+    let gi2 = unsafe { perm.hash3d(is + i2, js + j2, ks + k2) } % MIDPOINT_GRADIENT_LUT_3D_SIZE;
+    let gi3 = unsafe { perm.hash3d(is + 1, js + 1, ks + 1) } % MIDPOINT_GRADIENT_LUT_3D_SIZE;
+    // compute contributions
     let n0 = unsafe { contribution3d(x0, y0, z0, gi0) };
     let n1 = unsafe { contribution3d(x1, y1, z1, gi1) };
     let n2 = unsafe { contribution3d(x2, y2, z2, gi2) };
@@ -158,20 +158,21 @@ pub(crate) fn noise4d(perm: &PermutationTable, point: [f64; 4]) -> f64 {
     let y4 = y0 - 1.0 + 4.0 * SIMPLEX_UNSKEW_FACTOR_4D;
     let z4 = z0 - 1.0 + 4.0 * SIMPLEX_UNSKEW_FACTOR_4D;
     let w4 = w0 - 1.0 + 4.0 * SIMPLEX_UNSKEW_FACTOR_4D;
-    // hashed gradient indices, safe because this permutation table cannot index out of bounds
+    // hashed gradient indices
     let is = is.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
     let js = js.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
     let ks = ks.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
     let ls = ls.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
-    let gi0 = unsafe { perm.hash4d(is, js, ks, ls) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
+    let gi0 = unsafe { perm.hash4d(is, js, ks, ls) } % MIDPOINT_GRADIENT_LUT_4D_SIZE;
     let gi1 =
-        unsafe { perm.hash4d(is + i1, js + j1, ks + k1, ls + l1) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
+        unsafe { perm.hash4d(is + i1, js + j1, ks + k1, ls + l1) } % MIDPOINT_GRADIENT_LUT_4D_SIZE;
     let gi2 =
-        unsafe { perm.hash4d(is + i2, js + j2, ks + k2, ls + l2) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
+        unsafe { perm.hash4d(is + i2, js + j2, ks + k2, ls + l2) } % MIDPOINT_GRADIENT_LUT_4D_SIZE;
     let gi3 =
-        unsafe { perm.hash4d(is + i3, js + j3, ks + k3, ls + l3) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
-    let gi4 = unsafe { perm.hash4d(is + 1, js + 1, ks + 1, ls + 1) } % SIMPLEX_GRADIENT_LUT_4D_SIZE;
-    // compute contributions, safe because gradient lookup table is known
+        unsafe { perm.hash4d(is + i3, js + j3, ks + k3, ls + l3) } % MIDPOINT_GRADIENT_LUT_4D_SIZE;
+    let gi4 =
+        unsafe { perm.hash4d(is + 1, js + 1, ks + 1, ls + 1) } % MIDPOINT_GRADIENT_LUT_4D_SIZE;
+    // compute contributions
     let n0 = unsafe { contribution4d(x0, y0, z0, w0, gi0) };
     let n1 = unsafe { contribution4d(x1, y1, z1, w1, gi1) };
     let n2 = unsafe { contribution4d(x2, y2, z2, w2, gi2) };
@@ -187,7 +188,7 @@ unsafe fn contribution1d(x: f64, gi: usize) -> f64 {
     } else {
         let mut t = SIMPLEX_R_SQUARED - x * x;
         t *= t;
-        t * t * SIMPLEX_GRADIENT_LUT_1D.get_unchecked(gi) * x
+        t * t * GRADIENT_LUT_1D.get_unchecked(gi) * x
     }
 }
 
@@ -196,7 +197,7 @@ unsafe fn contribution2d(x: f64, y: f64, gi: usize) -> f64 {
     if t <= 0.0 {
         0.0
     } else {
-        let gradient = SIMPLEX_GRADIENT_LUT_2D.get_unchecked(gi);
+        let gradient = MIDPOINT_GRADIENT_LUT_2D.get_unchecked(gi);
         t *= t;
         t * t * (gradient.get_unchecked(0) * x + gradient.get_unchecked(1) * y)
     }
@@ -207,7 +208,7 @@ unsafe fn contribution3d(x: f64, y: f64, z: f64, gi: usize) -> f64 {
     if t <= 0.0 {
         0.0
     } else {
-        let gradient = SIMPLEX_GRADIENT_LUT_3D.get_unchecked(gi);
+        let gradient = MIDPOINT_GRADIENT_LUT_3D.get_unchecked(gi);
         t *= t;
         t * t
             * (gradient.get_unchecked(0) * x
@@ -221,7 +222,7 @@ unsafe fn contribution4d(x: f64, y: f64, z: f64, w: f64, gi: usize) -> f64 {
     if t <= 0.0 {
         0.0
     } else {
-        let gradient = SIMPLEX_GRADIENT_LUT_4D.get_unchecked(gi);
+        let gradient = MIDPOINT_GRADIENT_LUT_4D.get_unchecked(gi);
         t *= t;
         t * t
             * (gradient.get_unchecked(0) * x

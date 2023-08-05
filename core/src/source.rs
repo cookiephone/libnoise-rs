@@ -1,4 +1,6 @@
-use crate::sources::{Constant, Custom1D, Custom2D, Custom3D, Custom4D, Simplex, Value};
+use crate::sources::{
+    Constant, Custom1D, Custom2D, Custom3D, Custom4D, ImprovedPerlin, Perlin, Simplex, Value,
+};
 
 pub struct Source<const D: usize> {}
 
@@ -13,6 +15,14 @@ impl<const D: usize> Source<D> {
 
     pub fn value(seed: u64) -> Value<D> {
         Value::new(seed)
+    }
+
+    pub fn perlin(seed: u64) -> Perlin<D> {
+        Perlin::new(seed)
+    }
+
+    pub fn improved_perlin(seed: u64) -> ImprovedPerlin<D> {
+        ImprovedPerlin::new(seed)
     }
 }
 

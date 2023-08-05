@@ -6,7 +6,7 @@ pub(crate) fn noise1d(perm: &PermutationTable, point: [f64; 1]) -> f64 {
     // origin of hypercube in which input lies
     let x0 = x.floor() as usize;
     // smoothed distance from hypercube origin
-    let dxs = hermite_alpha(x - x0 as f64);
+    let dxs = smoothstep_3(x - x0 as f64);
     // get values from hypercube corners
     let f0 = unsafe { perm.hash1d(x0) } as f64;
     let f1 = unsafe { perm.hash1d(x0 + 1) } as f64;
@@ -22,8 +22,8 @@ pub(crate) fn noise2d(perm: &PermutationTable, point: [f64; 2]) -> f64 {
     let x0 = x.floor() as usize;
     let y0 = y.floor() as usize;
     // smoothed distance from hypercube origin
-    let dxs = hermite_alpha(x - x0 as f64);
-    let dys = hermite_alpha(y - y0 as f64);
+    let dxs = smoothstep_3(x - x0 as f64);
+    let dys = smoothstep_3(y - y0 as f64);
     // get values from hypercube corners
     let f00 = unsafe { perm.hash2d(x0, y0) } as f64;
     let f01 = unsafe { perm.hash2d(x0, y0 + 1) } as f64;
@@ -45,9 +45,9 @@ pub(crate) fn noise3d(perm: &PermutationTable, point: [f64; 3]) -> f64 {
     let y0 = y.floor() as usize;
     let z0 = z.floor() as usize;
     // smoothed distance from hypercube origin
-    let dxs = hermite_alpha(x - x0 as f64);
-    let dys = hermite_alpha(y - y0 as f64);
-    let dzs = hermite_alpha(z - z0 as f64);
+    let dxs = smoothstep_3(x - x0 as f64);
+    let dys = smoothstep_3(y - y0 as f64);
+    let dzs = smoothstep_3(z - z0 as f64);
     // get values from hypercube corners
     let f000 = unsafe { perm.hash3d(x0, y0, z0) } as f64;
     let f001 = unsafe { perm.hash3d(x0, y0, z0 + 1) } as f64;
@@ -79,10 +79,10 @@ pub(crate) fn noise4d(perm: &PermutationTable, point: [f64; 4]) -> f64 {
     let z0 = z.floor() as usize;
     let w0 = w.floor() as usize;
     // smoothed distance from hypercube origin
-    let dxs = hermite_alpha(x - x0 as f64);
-    let dys = hermite_alpha(y - y0 as f64);
-    let dzs = hermite_alpha(z - z0 as f64);
-    let dws = hermite_alpha(w - w0 as f64);
+    let dxs = smoothstep_3(x - x0 as f64);
+    let dys = smoothstep_3(y - y0 as f64);
+    let dzs = smoothstep_3(z - z0 as f64);
+    let dws = smoothstep_3(w - w0 as f64);
     // get values from hypercube corners
     let f0000 = unsafe { perm.hash4d(x0, y0, z0, w0) } as f64;
     let f0001 = unsafe { perm.hash4d(x0, y0, z0, w0 + 1) } as f64;
@@ -123,8 +123,8 @@ fn normalize(x: f64) -> f64 {
     2.0 / PERMUTATION_TABLE_SIZE as f64 * x - 1.0
 }
 
-fn hermite_alpha(t: f64) -> f64 {
-    t * t * (3.0 - 2.0 * t)
+fn smoothstep_3(t: f64) -> f64 {
+    t * t * (t * (-2.0) + 3.0)
 }
 
 fn lerp(a: f64, b: f64, t: f64) -> f64 {
