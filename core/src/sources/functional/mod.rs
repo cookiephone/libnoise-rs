@@ -1,3 +1,4 @@
+pub(crate) mod checkerboard;
 pub(crate) mod constants;
 pub(crate) mod improved_perlin;
 pub(crate) mod perlin;

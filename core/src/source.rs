@@ -1,6 +1,6 @@
 use crate::sources::{
-    Constant, Custom1D, Custom2D, Custom3D, Custom4D, ImprovedPerlin, Perlin, Simplex, Value,
-    Worley,
+    Checkerboard, Constant, Custom1D, Custom2D, Custom3D, Custom4D, ImprovedPerlin, Perlin,
+    Simplex, Value, Worley,
 };
 
 pub struct Source<const D: usize> {}
@@ -28,6 +28,10 @@ impl<const D: usize> Source<D> {
 
     pub fn worley(seed: u64) -> Worley<D> {
         Worley::new(seed)
+    }
+
+    pub fn checkerboard() -> Checkerboard<D> {
+        Checkerboard::new()
     }
 }
 

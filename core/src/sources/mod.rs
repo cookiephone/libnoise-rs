@@ -1,3 +1,4 @@
+mod checkerboard;
 mod constant;
 mod custom;
 pub(crate) mod functional;
@@ -6,6 +7,7 @@ mod perlin;
 mod simplex;
 mod value;
 mod worley;
+pub use checkerboard::Checkerboard;
 pub use constant::Constant;
 pub use custom::{Custom1D, Custom2D, Custom3D, Custom4D};
 pub use improved_perlin::ImprovedPerlin;

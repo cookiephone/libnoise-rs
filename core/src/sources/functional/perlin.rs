@@ -10,8 +10,8 @@ pub(crate) fn noise1d(perm: &PermutationTable, point: [f64; 1]) -> f64 {
     let dxs = smoothstep_3(dx);
     // get sign from hashes
     let x0 = x0.rem_euclid(PERMUTATION_TABLE_SIZE);
-    let sign0 = (unsafe { perm.hash1d(x0) } % 2) as f64 * 2.0 - 1.0;
-    let sign1 = (unsafe { perm.hash1d(x0 + 1) } % 2) as f64 * 2.0 - 1.0;
+    let sign0 = ((unsafe { perm.hash1d(x0) } % 2) as f64).mul_add(2.0, -1.0);
+    let sign1 = ((unsafe { perm.hash1d(x0 + 1) } % 2) as f64).mul_add(2.0, -1.0);
     // compute contributions
     let n0 = sign0 * dx;
     let n1 = sign1 * (dx - 1.0);

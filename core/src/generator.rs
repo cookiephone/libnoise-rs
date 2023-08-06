@@ -8,18 +8,30 @@ pub trait Generator<const D: usize>: Sized {
         self,
         octaves: u32,
         frequency: f64,
-        amplitude: f64,
         lacunarity: f64,
-        persistencee: f64,
+        persistence: f64,
     ) -> adapters::Fbm<Self> {
-        adapters::Fbm::new(
-            self,
-            octaves,
-            frequency,
-            amplitude,
-            lacunarity,
-            persistencee,
-        )
+        adapters::Fbm::new(self, octaves, frequency, lacunarity, persistence)
+    }
+
+    fn billow(
+        self,
+        octaves: u32,
+        frequency: f64,
+        lacunarity: f64,
+        persistence: f64,
+    ) -> adapters::Billow<Self> {
+        adapters::Billow::new(self, octaves, frequency, lacunarity, persistence)
+    }
+
+    fn ridgedmulti(
+        self,
+        octaves: u32,
+        frequency: f64,
+        lacunarity: f64,
+        attenuation: f64,
+    ) -> adapters::RidgedMulti<Self> {
+        adapters::RidgedMulti::new(self, octaves, frequency, lacunarity, attenuation)
     }
 
     fn scale(self, scale: [f64; D]) -> adapters::Scale<D, Self> {
@@ -34,8 +46,20 @@ pub trait Generator<const D: usize>: Sized {
         adapters::Abs::new(self)
     }
 
+    fn exp(self) -> adapters::Exp<Self> {
+        adapters::Exp::new(self)
+    }
+
     fn add(self, offset: f64) -> adapters::Add<Self> {
         adapters::Add::new(self, offset)
+    }
+
+    fn powi(self, exponent: i32) -> adapters::Pow<Self, i32> {
+        adapters::Pow::new(self, exponent)
+    }
+
+    fn powf(self, exponent: f64) -> adapters::Pow<Self, f64> {
+        adapters::Pow::new(self, exponent)
     }
 
     fn clamp(self, min: f64, max: f64) -> adapters::Clamp<Self> {

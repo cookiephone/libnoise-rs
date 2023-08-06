@@ -1,7 +1,7 @@
 use crate::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
-pub struct Fbm<G> {
+pub struct Billow<G> {
     generator: G,
     octaves: u32,
     frequency: f64,
@@ -10,12 +10,12 @@ pub struct Fbm<G> {
     normalization_factor: f64,
 }
 
-impl<G: Generator<1>> Generator1D for Fbm<G> {}
-impl<G: Generator<2>> Generator2D for Fbm<G> {}
-impl<G: Generator<3>> Generator3D for Fbm<G> {}
-impl<G: Generator<4>> Generator4D for Fbm<G> {}
+impl<G: Generator<1>> Generator1D for Billow<G> {}
+impl<G: Generator<2>> Generator2D for Billow<G> {}
+impl<G: Generator<3>> Generator3D for Billow<G> {}
+impl<G: Generator<4>> Generator4D for Billow<G> {}
 
-impl<G> Fbm<G> {
+impl<G> Billow<G> {
     pub fn new(
         generator: G,
         octaves: u32,
@@ -37,13 +37,18 @@ impl<G> Fbm<G> {
 
 macro_rules! impl_generator {
     ($dim:literal) => {
-        impl<G: Generator<$dim>> Generator<$dim> for Fbm<G> {
+        impl<G: Generator<$dim>> Generator<$dim> for Billow<G> {
             fn sample(&self, point: [f64; $dim]) -> f64 {
                 let mut noise = 0.0;
                 let mut amp = 1.0;
                 let mut freq = self.frequency;
                 for _ in 0..self.octaves {
-                    noise += amp * self.generator.sample(point.map(|x| x * freq));
+                    noise += amp
+                        * self
+                            .generator
+                            .sample(point.map(|x| x * freq))
+                            .abs()
+                            .mul_add(2.0, -1.0);
                     freq *= self.lacunarity;
                     amp *= self.persistence;
                 }

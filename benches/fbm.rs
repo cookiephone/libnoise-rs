@@ -5,7 +5,7 @@ use utils::{bench_noise1d, bench_noise2d, bench_noise3d, bench_noise4d, constant
 
 macro_rules! impl_generator {
     () => {
-        Source::simplex(SEED).fbm(3, 0.013, 1.0, 2.0, 0.5)
+        Source::simplex(SEED).fbm(3, 0.013, 2.0, 0.5)
     };
 }
 
