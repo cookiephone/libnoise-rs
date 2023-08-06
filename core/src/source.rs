@@ -1,5 +1,6 @@
 use crate::sources::{
     Constant, Custom1D, Custom2D, Custom3D, Custom4D, ImprovedPerlin, Perlin, Simplex, Value,
+    Worley,
 };
 
 pub struct Source<const D: usize> {}
@@ -23,6 +24,10 @@ impl<const D: usize> Source<D> {
 
     pub fn improved_perlin(seed: u64) -> ImprovedPerlin<D> {
         ImprovedPerlin::new(seed)
+    }
+
+    pub fn worley(seed: u64) -> Worley<D> {
+        Worley::new(seed)
     }
 }
 
