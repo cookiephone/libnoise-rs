@@ -1,6 +1,5 @@
 use crate::generator::Generator;
-
-use super::math::tensor_indices;
+use itertools::Itertools;
 use std::ops::{Index, IndexMut};
 
 pub struct NoiseBuffer<const D: usize> {
@@ -41,12 +40,19 @@ impl<const D: usize> NoiseBuffer<D> {
             .map(|(idx, offset)| idx * offset)
             .sum()
     }
+
+    pub(crate) fn tensor_indices(&self) -> impl Iterator<Item = Vec<usize>> {
+        self.shape
+            .iter()
+            .map(|&dim_size| 0..dim_size)
+            .multi_cartesian_product()
+    }
 }
 
 impl NoiseBuffer<1> {
     pub fn new<G: Generator<1>>(shape: [usize; 1], generator: G) -> Self {
         let mut noisebuf = Self::new_empty(shape);
-        for point in tensor_indices(&shape) {
+        for point in noisebuf.tensor_indices() {
             noisebuf[&point] = generator.sample([point[0] as f64]);
         }
         noisebuf
@@ -56,7 +62,7 @@ impl NoiseBuffer<1> {
 impl NoiseBuffer<2> {
     pub fn new<G: Generator<2>>(shape: [usize; 2], generator: G) -> Self {
         let mut noisebuf = Self::new_empty(shape);
-        for point in tensor_indices(&shape) {
+        for point in noisebuf.tensor_indices() {
             noisebuf[&point] = generator.sample([point[0] as f64, point[1] as f64]);
         }
         noisebuf
@@ -66,7 +72,7 @@ impl NoiseBuffer<2> {
 impl NoiseBuffer<3> {
     pub fn new<G: Generator<3>>(shape: [usize; 3], generator: G) -> Self {
         let mut noisebuf = Self::new_empty(shape);
-        for point in tensor_indices(&shape) {
+        for point in noisebuf.tensor_indices() {
             noisebuf[&point] =
                 generator.sample([point[0] as f64, point[1] as f64, point[2] as f64]);
         }
@@ -77,7 +83,7 @@ impl NoiseBuffer<3> {
 impl NoiseBuffer<4> {
     pub fn new<G: Generator<4>>(shape: [usize; 4], generator: G) -> Self {
         let mut noisebuf = Self::new_empty(shape);
-        for point in tensor_indices(&shape) {
+        for point in noisebuf.tensor_indices() {
             noisebuf[&point] = generator.sample([
                 point[0] as f64,
                 point[1] as f64,

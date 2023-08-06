@@ -4,10 +4,11 @@ use crate::utils::ptable::PermutationTable;
 pub(crate) fn noise1d(perm: &PermutationTable, point: [f64; 1]) -> f64 {
     let x = point[0];
     // origin of hypercube in which input lies
-    let x0 = x.floor() as usize;
+    let mut x0 = x.floor() as usize;
     // smoothed distance from hypercube origin
     let dxs = smoothstep_3(x - x0 as f64);
     // get values from hypercube corners
+    x0 = x0.rem_euclid(PERMUTATION_TABLE_SIZE);
     let f0 = unsafe { perm.hash1d(x0) } as f64;
     let f1 = unsafe { perm.hash1d(x0 + 1) } as f64;
     // interpolate values from hypercube corners
@@ -19,12 +20,14 @@ pub(crate) fn noise2d(perm: &PermutationTable, point: [f64; 2]) -> f64 {
     let x = point[0];
     let y = point[1];
     // origin of hypercube in which input lies
-    let x0 = x.floor() as usize;
-    let y0 = y.floor() as usize;
+    let mut x0 = x.floor() as usize;
+    let mut y0 = y.floor() as usize;
     // smoothed distance from hypercube origin
     let dxs = smoothstep_3(x - x0 as f64);
     let dys = smoothstep_3(y - y0 as f64);
     // get values from hypercube corners
+    x0 = x0.rem_euclid(PERMUTATION_TABLE_SIZE);
+    y0 = y0.rem_euclid(PERMUTATION_TABLE_SIZE);
     let f00 = unsafe { perm.hash2d(x0, y0) } as f64;
     let f01 = unsafe { perm.hash2d(x0, y0 + 1) } as f64;
     let f10 = unsafe { perm.hash2d(x0 + 1, y0) } as f64;
@@ -41,14 +44,17 @@ pub(crate) fn noise3d(perm: &PermutationTable, point: [f64; 3]) -> f64 {
     let y = point[1];
     let z = point[2];
     // origin of hypercube in which input lies
-    let x0 = x.floor() as usize;
-    let y0 = y.floor() as usize;
-    let z0 = z.floor() as usize;
+    let mut x0 = x.floor() as usize;
+    let mut y0 = y.floor() as usize;
+    let mut z0 = z.floor() as usize;
     // smoothed distance from hypercube origin
     let dxs = smoothstep_3(x - x0 as f64);
     let dys = smoothstep_3(y - y0 as f64);
     let dzs = smoothstep_3(z - z0 as f64);
     // get values from hypercube corners
+    x0 = x0.rem_euclid(PERMUTATION_TABLE_SIZE);
+    y0 = y0.rem_euclid(PERMUTATION_TABLE_SIZE);
+    z0 = z0.rem_euclid(PERMUTATION_TABLE_SIZE);
     let f000 = unsafe { perm.hash3d(x0, y0, z0) } as f64;
     let f001 = unsafe { perm.hash3d(x0, y0, z0 + 1) } as f64;
     let f010 = unsafe { perm.hash3d(x0, y0 + 1, z0) } as f64;
@@ -74,16 +80,20 @@ pub(crate) fn noise4d(perm: &PermutationTable, point: [f64; 4]) -> f64 {
     let z = point[2];
     let w = point[3];
     // origin of hypercube in which input lies
-    let x0 = x.floor() as usize;
-    let y0 = y.floor() as usize;
-    let z0 = z.floor() as usize;
-    let w0 = w.floor() as usize;
+    let mut x0 = x.floor() as usize;
+    let mut y0 = y.floor() as usize;
+    let mut z0 = z.floor() as usize;
+    let mut w0 = w.floor() as usize;
     // smoothed distance from hypercube origin
     let dxs = smoothstep_3(x - x0 as f64);
     let dys = smoothstep_3(y - y0 as f64);
     let dzs = smoothstep_3(z - z0 as f64);
     let dws = smoothstep_3(w - w0 as f64);
     // get values from hypercube corners
+    x0 = x0.rem_euclid(PERMUTATION_TABLE_SIZE);
+    y0 = y0.rem_euclid(PERMUTATION_TABLE_SIZE);
+    z0 = z0.rem_euclid(PERMUTATION_TABLE_SIZE);
+    w0 = w0.rem_euclid(PERMUTATION_TABLE_SIZE);
     let f0000 = unsafe { perm.hash4d(x0, y0, z0, w0) } as f64;
     let f0001 = unsafe { perm.hash4d(x0, y0, z0, w0 + 1) } as f64;
     let f0010 = unsafe { perm.hash4d(x0, y0, z0 + 1, w0) } as f64;

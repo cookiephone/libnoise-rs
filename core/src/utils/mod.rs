@@ -1,4 +1,3 @@
-pub(crate) mod math;
 mod noisebuf;
 pub(crate) mod ptable;
 mod visualizer;

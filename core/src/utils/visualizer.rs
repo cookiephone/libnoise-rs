@@ -1,14 +1,13 @@
-use std::{
-    fs::OpenOptions,
-    ops::{Index, IndexMut},
-};
-
+use super::NoiseBuffer;
 use crate::generator::Generator;
-
-use super::{math::tensor_indices, NoiseBuffer};
 use image::{
     codecs::gif::{GifEncoder, Repeat},
     ColorType, GrayImage,
+};
+use itertools::Itertools;
+use std::{
+    fs::OpenOptions,
+    ops::{Index, IndexMut},
 };
 
 pub struct Visualizer<const D: usize> {
@@ -171,4 +170,11 @@ fn xyz_screen_to_buff_indices(
     } else {
         Some((x as usize, y as usize, z))
     }
+}
+
+fn tensor_indices(shape: &[usize]) -> impl Iterator<Item = Vec<usize>> {
+    shape
+        .iter()
+        .map(|&dim_size| 0..dim_size)
+        .multi_cartesian_product()
 }

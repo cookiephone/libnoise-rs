@@ -5,15 +5,15 @@ use utils::{bench_noise1d, bench_noise2d, bench_noise3d, bench_noise4d, constant
 
 macro_rules! impl_generator {
     () => {
-        Source::value(42)
+        Source::checkerboard()
     };
 }
 
 fn bench(c: &mut Criterion) {
-    bench_noise1d(c, "value_1d", SHAPE_1D, SCALE, &impl_generator!());
-    bench_noise2d(c, "value_2d", SHAPE_2D, SCALE, &impl_generator!());
-    bench_noise3d(c, "value_3d", SHAPE_3D, SCALE, &impl_generator!());
-    bench_noise4d(c, "value_4d", SHAPE_4D, SCALE, &impl_generator!());
+    bench_noise1d(c, "checkerboard_1d", SHAPE_1D, SCALE, &impl_generator!());
+    bench_noise2d(c, "checkerboard_2d", SHAPE_2D, SCALE, &impl_generator!());
+    bench_noise3d(c, "checkerboard_3d", SHAPE_3D, SCALE, &impl_generator!());
+    bench_noise4d(c, "checkerboard_4d", SHAPE_4D, SCALE, &impl_generator!());
 }
 
 criterion_group! {
