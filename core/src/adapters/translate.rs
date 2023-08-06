@@ -12,6 +12,7 @@ impl<G: Generator<3>> Generator3D for Translate<3, G> {}
 impl<G: Generator<4>> Generator4D for Translate<4, G> {}
 
 impl<const D: usize, G> Translate<D, G> {
+    #[inline]
     pub fn new(generator: G, translation: [f64; D]) -> Self {
         Self {
             generator,
@@ -21,6 +22,7 @@ impl<const D: usize, G> Translate<D, G> {
 }
 
 impl<const D: usize, G: Generator<D>> Generator<D> for Translate<D, G> {
+    #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         self.generator
             .sample(std::array::from_fn(|i| point[i] + self.translation[i]))

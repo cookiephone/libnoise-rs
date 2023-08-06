@@ -11,12 +11,14 @@ impl<G: Generator<3>> Generator3D for Exp<G> {}
 impl<G: Generator<4>> Generator4D for Exp<G> {}
 
 impl<G> Exp<G> {
+    #[inline]
     pub fn new(generator: G) -> Self {
         Self { generator }
     }
 }
 
 impl<const D: usize, G: Generator<D>> Generator<D> for Exp<G> {
+    #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         self.generator.sample(point).exp()
     }

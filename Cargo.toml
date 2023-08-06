@@ -19,6 +19,30 @@ opensimplex_noise_rs = "*"
 opensimplex2 = "*"
 
 [[bench]]
+name = "billow"
+harness = false
+
+[[bench]]
+name = "checkerboard"
+harness = false
+
+[[bench]]
+name = "fbm"
+harness = false
+
+[[bench]]
+name = "improved_perlin"
+harness = false
+
+[[bench]]
+name = "perlin"
+harness = false
+
+[[bench]]
+name = "ridgedmulti"
+harness = false
+
+[[bench]]
 name = "simplex"
 harness = false
 
@@ -27,20 +51,41 @@ name = "value"
 harness = false
 
 [[bench]]
-name = "fbm"
+name = "worley"
 harness = false
 
 [[example]]
-name = "simplex"
-
-[[example]]
-name = "value"
-
-[[example]]
-name = "fbm"
+name = "billow"
 
 [[example]]
 name = "chaining"
+
+[[example]]
+name = "checkerboard"
+
+[[example]]
+name = "custom"
+
+[[example]]
+name = "fbm"
+
+[[example]]
+name = "improved_perlin"
+
+[[example]]
+name = "perlin"
+
+[[example]]
+name = "ridgedmulti"
+
+[[example]]
+name = "simplex"
+
+[[example]]
+name = "value"
+
+[[example]]
+name = "worley"
 
 [profile.dev]
 opt-level = 1

@@ -174,10 +174,12 @@ pub(crate) fn noise4d(perm: &PermutationTable, point: [f64; 4]) -> f64 {
     lerp(zn0, zn1, dws) * 0.6664701256514842
 }
 
+#[inline]
 fn smoothstep_3(t: f64) -> f64 {
     t * t * (t * (-2.0) + 3.0)
 }
 
+#[inline]
 fn lerp(a: f64, b: f64, t: f64) -> f64 {
     a + t * (b - a)
 }

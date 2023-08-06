@@ -13,6 +13,7 @@ impl<GA: Generator<3>, GB: Generator<3>, GC: Generator<3>> Generator3D for Blend
 impl<GA: Generator<4>, GB: Generator<4>, GC: Generator<4>> Generator4D for Blend<GA, GB, GC> {}
 
 impl<GA, GB, GC> Blend<GA, GB, GC> {
+    #[inline]
     pub fn new(generator_a: GA, generator_b: GB, generator_control: GC) -> Self {
         Self {
             generator_a,
@@ -28,6 +29,7 @@ where
     GB: Generator<D>,
     GC: Generator<D>,
 {
+    #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         let a = self.generator_a.sample(point);
         let b = self.generator_b.sample(point);

@@ -16,6 +16,7 @@ impl<G: Generator<3>> Generator3D for RidgedMulti<G> {}
 impl<G: Generator<4>> Generator4D for RidgedMulti<G> {}
 
 impl<G> RidgedMulti<G> {
+    #[inline]
     pub fn new(
         generator: G,
         octaves: u32,
@@ -61,6 +62,7 @@ impl_generator!(2);
 impl_generator!(3);
 impl_generator!(4);
 
+#[inline]
 fn compute_normalization_factor(octaves: u32, attenuation: f64) -> f64 {
     1.0 / (0..octaves).fold(0.0, |acc, octave| {
         acc + (1.0 / attenuation).powi(octave as i32)

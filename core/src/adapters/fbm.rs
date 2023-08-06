@@ -16,6 +16,7 @@ impl<G: Generator<3>> Generator3D for Fbm<G> {}
 impl<G: Generator<4>> Generator4D for Fbm<G> {}
 
 impl<G> Fbm<G> {
+    #[inline]
     pub fn new(
         generator: G,
         octaves: u32,
@@ -58,6 +59,7 @@ impl_generator!(2);
 impl_generator!(3);
 impl_generator!(4);
 
+#[inline]
 fn compute_normalization_factor(octaves: u32, persistence: f64) -> f64 {
     1.0 / (0..octaves).fold(0.0, |acc, octave| acc + persistence.powi(octave as i32))
 }

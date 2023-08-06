@@ -12,6 +12,7 @@ impl<const A: usize, G: Generator<3>, GA: Generator<3>> Generator3D for Displace
 impl<const A: usize, G: Generator<4>, GA: Generator<4>> Generator4D for Displace<A, G, GA> {}
 
 impl<const A: usize, G, GA> Displace<A, G, GA> {
+    #[inline]
     pub fn new(generator: G, displacement_generator: GA) -> Self {
         Self {
             generator,
@@ -25,6 +26,7 @@ where
     G: Generator<D>,
     GA: Generator<D>,
 {
+    #[inline]
     fn sample(&self, mut point: [f64; D]) -> f64 {
         point[A] += self.displacement_generator.sample(point);
         self.generator.sample(point)

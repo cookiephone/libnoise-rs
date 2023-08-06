@@ -17,6 +17,7 @@ impl<G: Generator<3>> Generator3D for Pow<G, f64> {}
 impl<G: Generator<4>> Generator4D for Pow<G, f64> {}
 
 impl<G, T> Pow<G, T> {
+    #[inline]
     pub fn new(generator: G, exponent: T) -> Self {
         Self {
             generator,
@@ -26,12 +27,14 @@ impl<G, T> Pow<G, T> {
 }
 
 impl<const D: usize, G: Generator<D>> Generator<D> for Pow<G, i32> {
+    #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         self.generator.sample(point).powi(self.exponent)
     }
 }
 
 impl<const D: usize, G: Generator<D>> Generator<D> for Pow<G, f64> {
+    #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         self.generator.sample(point).powf(self.exponent)
     }

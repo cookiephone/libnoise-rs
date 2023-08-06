@@ -12,12 +12,14 @@ impl<G: Generator<3>> Generator3D for Add<G> {}
 impl<G: Generator<4>> Generator4D for Add<G> {}
 
 impl<G> Add<G> {
+    #[inline]
     pub fn new(generator: G, offset: f64) -> Self {
         Self { generator, offset }
     }
 }
 
 impl<const D: usize, G: Generator<D>> Generator<D> for Add<G> {
+    #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         self.generator.sample(point) + self.offset
     }

@@ -10,12 +10,14 @@ macro_rules! impl_custom_noise {
         impl<N: Fn([f64; $dim]) -> f64> $generatorname for $name<N> {}
 
         impl<N: Fn([f64; $dim]) -> f64> $name<N> {
+            #[inline]
             pub fn new(noise: N) -> Self {
                 Self { noise }
             }
         }
 
         impl<N: Fn([f64; $dim]) -> f64> Generator<$dim> for $name<N> {
+            #[inline]
             fn sample(&self, point: [f64; $dim]) -> f64 {
                 (self.noise)(point)
             }

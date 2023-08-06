@@ -11,6 +11,7 @@ impl<G: Generator<3>> Generator3D for Rotate<3, G> {}
 impl<G: Generator<4>> Generator4D for Rotate<6, G> {}
 
 impl<const P: usize, G> Rotate<P, G> {
+    #[inline]
     pub fn new(generator: G, rotation: [f64; P]) -> Self {
         Self {
             generator,

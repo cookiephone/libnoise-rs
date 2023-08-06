@@ -13,6 +13,7 @@ impl<G: Generator<3>> Generator3D for Clamp<G> {}
 impl<G: Generator<4>> Generator4D for Clamp<G> {}
 
 impl<G> Clamp<G> {
+    #[inline]
     pub fn new(generator: G, min: f64, max: f64) -> Self {
         Self {
             generator,
@@ -23,6 +24,7 @@ impl<G> Clamp<G> {
 }
 
 impl<const D: usize, G: Generator<D>> Generator<D> for Clamp<G> {
+    #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         self.generator.sample(point).clamp(self.min, self.max)
     }

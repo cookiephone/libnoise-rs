@@ -1,3 +1,4 @@
+use super::math::{Vec2, Vec3, Vec4};
 use rand::{rngs::StdRng, seq::SliceRandom, SeedableRng};
 
 #[derive(Clone)]
@@ -17,23 +18,43 @@ impl PermutationTable {
         Self { table }
     }
 
-    unsafe fn get(&self, i: usize) -> usize {
+    #[inline]
+    pub(crate) unsafe fn get(&self, i: usize) -> usize {
         *self.table.get_unchecked(i)
     }
 
+    #[inline]
     pub(crate) unsafe fn hash1d(&self, i: usize) -> usize {
         self.get(i)
     }
 
+    #[inline]
     pub(crate) unsafe fn hash2d(&self, i: usize, j: usize) -> usize {
         self.get(i + self.get(j))
     }
 
+    #[inline]
     pub(crate) unsafe fn hash3d(&self, i: usize, j: usize, k: usize) -> usize {
         self.get(i + self.get(j + self.get(k)))
     }
 
+    #[inline]
     pub(crate) unsafe fn hash4d(&self, i: usize, j: usize, k: usize, l: usize) -> usize {
         self.get(i + self.get(j + self.get(k + self.get(l))))
+    }
+
+    #[inline]
+    pub(crate) unsafe fn hash2d_vec(&self, value: Vec2<usize>) -> usize {
+        self.get(value.y + self.get(value.x))
+    }
+
+    #[inline]
+    pub(crate) unsafe fn hash3d_vec(&self, value: Vec3<usize>) -> usize {
+        self.get(value.z + self.get(value.y + self.get(value.x)))
+    }
+
+    #[inline]
+    pub(crate) unsafe fn hash4d_vec(&self, value: Vec4<usize>) -> usize {
+        self.get(value.w + self.get(value.z + self.get(value.y + self.get(value.x))))
     }
 }
