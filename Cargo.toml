@@ -7,16 +7,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-core = { path = "core" }
+libnoise_core = { path = "libnoise_core" }
 
 [dev-dependencies]
 criterion = "*"
 plotters = "*"
 itertools = "*"
-num = "*"
-image = "*"
-opensimplex_noise_rs = "*"
-opensimplex2 = "*"
+proptest = "*"
 
 [[bench]]
 name = "billow"
