@@ -105,6 +105,21 @@ pub trait Generator<const D: usize>: Sized {
     }
 
     #[inline]
+    fn select<G, GC>(
+        self,
+        other: G,
+        control: GC,
+        selection_min: f64,
+        selection_max: f64,
+    ) -> adapters::Select<Self, G, GC>
+    where
+        G: Generator<D>,
+        GC: Generator<D>,
+    {
+        adapters::Select::new(self, other, control, selection_min, selection_max)
+    }
+
+    #[inline]
     fn min<G>(self, other: G) -> adapters::Min<Self, G>
     where
         G: Generator<D>,
