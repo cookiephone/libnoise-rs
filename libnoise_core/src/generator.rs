@@ -73,6 +73,30 @@ pub trait Generator<const D: usize>: Sized {
     }
 
     #[inline]
+    fn power<G>(self, other: G) -> adapters::Power<Self, G>
+    where
+        G: Generator<D>,
+    {
+        adapters::Power::new(self, other)
+    }
+
+    #[inline]
+    fn product<G>(self, other: G) -> adapters::Product<Self, G>
+    where
+        G: Generator<D>,
+    {
+        adapters::Product::new(self, other)
+    }
+
+    #[inline]
+    fn sum<G>(self, other: G) -> adapters::Sum<Self, G>
+    where
+        G: Generator<D>,
+    {
+        adapters::Sum::new(self, other)
+    }
+
+    #[inline]
     fn clamp(self, min: f64, max: f64) -> adapters::Clamp<Self> {
         adapters::Clamp::new(self, min, max)
     }
