@@ -17,7 +17,10 @@ impl<G> Neg<G> {
     }
 }
 
-impl<const D: usize, G: Generator<D>> Generator<D> for Neg<G> {
+impl<const D: usize, G> Generator<D> for Neg<G>
+where
+    G: Generator<D>,
+{
     #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         -self.generator.sample(point)

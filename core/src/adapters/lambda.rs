@@ -18,7 +18,11 @@ impl<G, L> Lambda<G, L> {
     }
 }
 
-impl<const D: usize, G: Generator<D>, L: Copy + Fn(f64) -> f64> Generator<D> for Lambda<G, L> {
+impl<const D: usize, G, L> Generator<D> for Lambda<G, L>
+where
+    G: Generator<D>,
+    L: Copy + Fn(f64) -> f64,
+{
     #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         (self.lambda)(self.generator.sample(point))

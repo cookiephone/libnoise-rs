@@ -18,7 +18,10 @@ impl<const D: usize, G> Scale<D, G> {
     }
 }
 
-impl<const D: usize, G: Generator<D>> Generator<D> for Scale<D, G> {
+impl<const D: usize, G> Generator<D> for Scale<D, G>
+where
+    G: Generator<D>,
+{
     #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         self.generator

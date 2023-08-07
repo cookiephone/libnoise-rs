@@ -26,14 +26,20 @@ impl<G, T> Pow<G, T> {
     }
 }
 
-impl<const D: usize, G: Generator<D>> Generator<D> for Pow<G, i32> {
+impl<const D: usize, G> Generator<D> for Pow<G, i32>
+where
+    G: Generator<D>,
+{
     #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         self.generator.sample(point).powi(self.exponent)
     }
 }
 
-impl<const D: usize, G: Generator<D>> Generator<D> for Pow<G, f64> {
+impl<const D: usize, G: Generator<D>> Generator<D> for Pow<G, f64>
+where
+    G: Generator<D>,
+{
     #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         self.generator.sample(point).powf(self.exponent)

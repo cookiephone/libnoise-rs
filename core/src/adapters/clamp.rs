@@ -23,7 +23,10 @@ impl<G> Clamp<G> {
     }
 }
 
-impl<const D: usize, G: Generator<D>> Generator<D> for Clamp<G> {
+impl<const D: usize, G> Generator<D> for Clamp<G>
+where
+    G: Generator<D>,
+{
     #[inline]
     fn sample(&self, point: [f64; D]) -> f64 {
         self.generator.sample(point).clamp(self.min, self.max)
