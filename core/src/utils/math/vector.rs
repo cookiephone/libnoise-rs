@@ -72,27 +72,13 @@ macro_rules! impl_vector {
             }
 
             #[inline]
-            pub(crate) fn floor_clone(self) -> Self where T: Float {
-                let mut result = self.clone();
-                result.floor();
-                result
+            pub(crate) fn floor(self) -> Self where T: Float {
+                Self { $($x: self.$x.floor()),+ }
             }
 
             #[inline]
-            pub(crate) fn floor(&mut self) where T: Float {
-                $(self.$x = self.$x.floor();)+
-            }
-
-            #[inline]
-            pub(crate) fn rem_euclid(&mut self, rhs: T) where T: Euclid {
-                $(self.$x = self.$x.rem_euclid(&rhs);)+
-            }
-
-            #[inline]
-            pub(crate) fn rem_euclid_clone(self, rhs: T) -> Self where T: Euclid + Clone {
-                let mut result = self.clone();
-                result.rem_euclid(rhs);
-                result
+            pub(crate) fn rem_euclid(self, rhs: T) -> Self where T: Euclid {
+                Self { $($x: self.$x.rem_euclid(&rhs)),+ }
             }
 
             #[inline]
