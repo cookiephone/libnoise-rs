@@ -1,7 +1,4 @@
-use num_traits::{
-    identities::Zero,
-    Euclid, Float, Pow,
-};
+use num_traits::{identities::Zero, Euclid, Float, Pow};
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 pub(crate) trait NumCast<T>: Sized {
@@ -35,7 +32,7 @@ macro_rules! permit_cast_to_all_primitive_numeric_types_for {
         permit_cast!($t1 as usize);
         permit_cast!($t1 as f32);
         permit_cast!($t1 as f64);
-    }
+    };
 }
 
 permit_cast_to_all_primitive_numeric_types_for!(i8);
@@ -72,6 +69,11 @@ macro_rules! impl_vector {
             }
 
             #[inline]
+            pub(crate) fn map<F>(self, f: F) -> Self where F: Fn(T) -> T {
+                Self { $($x: f(self.$x)),+ }
+            }
+
+            #[inline]
             pub(crate) fn floor(self) -> Self where T: Float {
                 Self { $($x: self.$x.floor()),+ }
             }
@@ -79,6 +81,13 @@ macro_rules! impl_vector {
             #[inline]
             pub(crate) fn rem_euclid(self, rhs: T) -> Self where T: Euclid {
                 Self { $($x: self.$x.rem_euclid(&rhs)),+ }
+            }
+
+            #[inline]
+            pub(crate) fn sum(self) -> T where T: Pow<i32, Output = T> + Zero + AddAssign {
+                let mut result = T::zero();
+                $(result += self.$x;)+
+                result
             }
 
             #[inline]

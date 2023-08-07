@@ -30,17 +30,17 @@ impl PermutationTable {
 
     #[inline]
     pub(crate) unsafe fn hash2d(&self, i: usize, j: usize) -> usize {
-        self.get(i + self.get(j))
+        self.get(j + self.get(i))
     }
 
     #[inline]
     pub(crate) unsafe fn hash3d(&self, i: usize, j: usize, k: usize) -> usize {
-        self.get(i + self.get(j + self.get(k)))
+        self.get(k + self.get(j + self.get(i)))
     }
 
     #[inline]
     pub(crate) unsafe fn hash4d(&self, i: usize, j: usize, k: usize, l: usize) -> usize {
-        self.get(i + self.get(j + self.get(k + self.get(l))))
+        self.get(l + self.get(k + self.get(j + self.get(i))))
     }
 
     #[inline]

@@ -1,5 +1,8 @@
 use super::constants::PERMUTATION_TABLE_SIZE;
-use crate::utils::{math::{Vec2, Vec3, Vec4}, ptable::PermutationTable};
+use crate::utils::{
+    math::{Vec2, Vec3, Vec4},
+    ptable::PermutationTable,
+};
 
 pub(crate) fn noise1d(perm: &PermutationTable, point: [f64; 1]) -> f64 {
     let x = point[0];
