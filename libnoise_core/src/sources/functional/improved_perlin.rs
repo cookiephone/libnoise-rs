@@ -7,12 +7,12 @@ use crate::utils::{
 pub(crate) fn noise1d(perm: &PermutationTable, point: [f64; 1]) -> f64 {
     let x = point[0];
     // origin of hypercube in which input lies
-    let x0 = x.floor() as usize;
+    let x0 = x.floor();
     // smoothed distance from hypercube origin
-    let dx = x - x0 as f64;
+    let dx = x - x0;
     let dxs = smoothstep_5(dx);
     // get sign from hashes
-    let x0 = x0.rem_euclid(PERMUTATION_TABLE_SIZE);
+    let x0 = x0.rem_euclid(PERMUTATION_TABLE_SIZE as f64) as usize;
     let sign0 = ((unsafe { perm.hash1d(x0) } % 2) as f64).mul_add(2.0, -1.0);
     let sign1 = ((unsafe { perm.hash1d(x0 + 1) } % 2) as f64).mul_add(2.0, -1.0);
     // compute contributions
