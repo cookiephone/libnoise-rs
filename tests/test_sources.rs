@@ -77,7 +77,7 @@ proptest! {
     #[test]
     fn test_custom_1d(point in strategy_array_float_numeric!()) {
         let closure = |p: [f64; 1]| p.iter().sum();
-        let n = Source::<1>::custom1d(closure).sample(point);
+        let n = Source::<1>::custom(closure).sample(point);
         let expected = closure(point);
         prop_assert_eq!(expected, n, "expected {}, instead: {}", expected, n);
     }
@@ -85,7 +85,7 @@ proptest! {
     #[test]
     fn test_custom_2d(point in strategy_array_float_numeric!()) {
         let closure = |p: [f64; 2]| p.iter().sum();
-        let n = Source::<2>::custom2d(closure).sample(point);
+        let n = Source::<2>::custom(closure).sample(point);
         let expected = closure(point);
         prop_assert_eq!(expected, n, "expected {}, instead: {}", expected, n);
     }
@@ -93,7 +93,7 @@ proptest! {
     #[test]
     fn test_custom_3d(point in strategy_array_float_numeric!()) {
         let closure = |p: [f64; 3]| p.iter().sum();
-        let n = Source::<3>::custom3d(closure).sample(point);
+        let n = Source::<3>::custom(closure).sample(point);
         let expected = closure(point);
         prop_assert_eq!(expected, n, "expected {}, instead: {}", expected, n);
     }
@@ -101,7 +101,7 @@ proptest! {
     #[test]
     fn test_custom_4d(point in strategy_array_float_numeric!()) {
         let closure = |p: [f64; 4]| p.iter().sum();
-        let n = Source::<4>::custom4d(closure).sample(point);
+        let n = Source::<4>::custom(closure).sample(point);
         let expected = closure(point);
         prop_assert_eq!(expected, n, "expected {}, instead: {}", expected, n);
     }

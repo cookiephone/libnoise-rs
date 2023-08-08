@@ -1,6 +1,5 @@
 use crate::core::sources::{
-    Checkerboard, Constant, Custom1D, Custom2D, Custom3D, Custom4D, ImprovedPerlin, Perlin,
-    Simplex, Value, Worley,
+    Checkerboard, Constant, Custom, ImprovedPerlin, Perlin, Simplex, Value, Worley,
 };
 
 pub struct Source<const D: usize> {}
@@ -33,28 +32,8 @@ impl<const D: usize> Source<D> {
     pub fn checkerboard() -> Checkerboard<D> {
         Checkerboard::new()
     }
-}
 
-impl Source<1> {
-    pub fn custom1d<N: Fn([f64; 1]) -> f64>(noise: N) -> Custom1D<N> {
-        Custom1D::new(noise)
-    }
-}
-
-impl Source<2> {
-    pub fn custom2d<N: Fn([f64; 2]) -> f64>(noise: N) -> Custom2D<N> {
-        Custom2D::new(noise)
-    }
-}
-
-impl Source<3> {
-    pub fn custom3d<N: Fn([f64; 3]) -> f64>(noise: N) -> Custom3D<N> {
-        Custom3D::new(noise)
-    }
-}
-
-impl Source<4> {
-    pub fn custom4d<N: Fn([f64; 4]) -> f64>(noise: N) -> Custom4D<N> {
-        Custom4D::new(noise)
+    pub fn custom<F: Fn([f64; D]) -> f64>(f: F) -> Custom<D, F> {
+        Custom::new(f)
     }
 }

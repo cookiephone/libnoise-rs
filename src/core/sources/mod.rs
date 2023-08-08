@@ -9,7 +9,7 @@ mod value;
 mod worley;
 pub use checkerboard::Checkerboard;
 pub use constant::Constant;
-pub use custom::{Custom1D, Custom2D, Custom3D, Custom4D};
+pub use custom::Custom;
 pub use improved_perlin::ImprovedPerlin;
 pub use perlin::Perlin;
 pub use simplex::Simplex;
