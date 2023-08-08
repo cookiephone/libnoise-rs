@@ -774,7 +774,7 @@ pub trait Generator<const D: usize>: Sized {
     }
 }
 
-/// A trait representing the specialization of [`Generator<D>`] for one-dimensional input spaces.
+/// A trait representing the specialization of [`Generator<D>`] for 1-dimensional input spaces.
 ///
 /// Anything implementing this trait must also implement [`Generator<1>`]. This trait exists
 /// for two reasons: The first is to provide functions that either only make sense for specific
@@ -813,7 +813,7 @@ pub trait Generator1D: Generator<1> {
     }
 }
 
-/// A trait representing the specialization of [`Generator<D>`] for two-dimensional input spaces.
+/// A trait representing the specialization of [`Generator<D>`] for 2-dimensional input spaces.
 ///
 /// Anything implementing this trait must also implement [`Generator<2>`]. This trait exists
 /// for two reasons: The first is to provide functions that either only make sense for specific
@@ -912,7 +912,7 @@ pub trait Generator2D: Generator<2> {
     }
 }
 
-/// A trait representing the specialization of [`Generator<D>`] for three-dimensional input spaces.
+/// A trait representing the specialization of [`Generator<D>`] for 3-dimensional input spaces.
 ///
 /// Anything implementing this trait must also implement [`Generator<3>`]. This trait exists
 /// for two reasons: The first is to provide functions that either only make sense for specific
@@ -1044,7 +1044,7 @@ pub trait Generator3D: Generator<3> {
     }
 }
 
-/// A trait representing the specialization of [`Generator<D>`] for four-dimensional input spaces.
+/// A trait representing the specialization of [`Generator<D>`] for 4-dimensional input spaces.
 ///
 /// Anything implementing this trait must also implement [`Generator<4>`]. This trait exists
 /// for two reasons: The first is to provide functions that either only make sense for specific
