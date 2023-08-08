@@ -1,7 +1,12 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
-pub struct Select<GA, GB, GC> {
+pub struct Select<const D: usize, GA, GB, GC>
+where
+    GA: Generator<D>,
+    GB: Generator<D>,
+    GC: Generator<D>,
+{
     generator_a: GA,
     generator_b: GB,
     generator_control: GC,
@@ -9,12 +14,17 @@ pub struct Select<GA, GB, GC> {
     selection_max: f64,
 }
 
-impl<GA: Generator<1>, GB: Generator<1>, GC: Generator<1>> Generator1D for Select<GA, GB, GC> {}
-impl<GA: Generator<2>, GB: Generator<2>, GC: Generator<2>> Generator2D for Select<GA, GB, GC> {}
-impl<GA: Generator<3>, GB: Generator<3>, GC: Generator<3>> Generator3D for Select<GA, GB, GC> {}
-impl<GA: Generator<4>, GB: Generator<4>, GC: Generator<4>> Generator4D for Select<GA, GB, GC> {}
+impl<GA: Generator<1>, GB: Generator<1>, GC: Generator<1>> Generator1D for Select<1, GA, GB, GC> {}
+impl<GA: Generator<2>, GB: Generator<2>, GC: Generator<2>> Generator2D for Select<2, GA, GB, GC> {}
+impl<GA: Generator<3>, GB: Generator<3>, GC: Generator<3>> Generator3D for Select<3, GA, GB, GC> {}
+impl<GA: Generator<4>, GB: Generator<4>, GC: Generator<4>> Generator4D for Select<4, GA, GB, GC> {}
 
-impl<GA, GB, GC> Select<GA, GB, GC> {
+impl<const D: usize, GA, GB, GC> Select<D, GA, GB, GC>
+where
+    GA: Generator<D>,
+    GB: Generator<D>,
+    GC: Generator<D>,
+{
     #[inline]
     pub fn new(
         generator_a: GA,
@@ -33,7 +43,7 @@ impl<GA, GB, GC> Select<GA, GB, GC> {
     }
 }
 
-impl<const D: usize, GA, GB, GC> Generator<D> for Select<GA, GB, GC>
+impl<const D: usize, GA, GB, GC> Generator<D> for Select<D, GA, GB, GC>
 where
     GA: Generator<D>,
     GB: Generator<D>,

@@ -1,7 +1,10 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
-pub struct Translate<const D: usize, G> {
+pub struct Translate<const D: usize, G>
+where
+    G: Generator<D>,
+{
     generator: G,
     translation: [f64; D],
 }
@@ -11,7 +14,10 @@ impl<G: Generator<2>> Generator2D for Translate<2, G> {}
 impl<G: Generator<3>> Generator3D for Translate<3, G> {}
 impl<G: Generator<4>> Generator4D for Translate<4, G> {}
 
-impl<const D: usize, G> Translate<D, G> {
+impl<const D: usize, G> Translate<D, G>
+where
+    G: Generator<D>,
+{
     #[inline]
     pub fn new(generator: G, translation: [f64; D]) -> Self {
         Self {

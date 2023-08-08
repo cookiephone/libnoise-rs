@@ -1,22 +1,28 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
-pub struct Pow<G, T> {
+pub struct Pow<const D: usize, G, T>
+where
+    G: Generator<D>,
+{
     generator: G,
     exponent: T,
 }
 
-impl<G: Generator<1>> Generator1D for Pow<G, i32> {}
-impl<G: Generator<2>> Generator2D for Pow<G, i32> {}
-impl<G: Generator<3>> Generator3D for Pow<G, i32> {}
-impl<G: Generator<4>> Generator4D for Pow<G, i32> {}
+impl<G: Generator<1>> Generator1D for Pow<1, G, i32> {}
+impl<G: Generator<2>> Generator2D for Pow<2, G, i32> {}
+impl<G: Generator<3>> Generator3D for Pow<3, G, i32> {}
+impl<G: Generator<4>> Generator4D for Pow<4, G, i32> {}
 
-impl<G: Generator<1>> Generator1D for Pow<G, f64> {}
-impl<G: Generator<2>> Generator2D for Pow<G, f64> {}
-impl<G: Generator<3>> Generator3D for Pow<G, f64> {}
-impl<G: Generator<4>> Generator4D for Pow<G, f64> {}
+impl<G: Generator<1>> Generator1D for Pow<1, G, f64> {}
+impl<G: Generator<2>> Generator2D for Pow<2, G, f64> {}
+impl<G: Generator<3>> Generator3D for Pow<3, G, f64> {}
+impl<G: Generator<4>> Generator4D for Pow<4, G, f64> {}
 
-impl<G, T> Pow<G, T> {
+impl<const D: usize, G, T> Pow<D, G, T>
+where
+    G: Generator<D>,
+{
     #[inline]
     pub fn new(generator: G, exponent: T) -> Self {
         Self {
@@ -26,7 +32,7 @@ impl<G, T> Pow<G, T> {
     }
 }
 
-impl<const D: usize, G> Generator<D> for Pow<G, i32>
+impl<const D: usize, G> Generator<D> for Pow<D, G, i32>
 where
     G: Generator<D>,
 {
@@ -36,7 +42,7 @@ where
     }
 }
 
-impl<const D: usize, G: Generator<D>> Generator<D> for Pow<G, f64>
+impl<const D: usize, G: Generator<D>> Generator<D> for Pow<D, G, f64>
 where
     G: Generator<D>,
 {

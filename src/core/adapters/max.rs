@@ -1,17 +1,25 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
-pub struct Max<GA, GB> {
+pub struct Max<const D: usize, GA, GB>
+where
+    GA: Generator<D>,
+    GB: Generator<D>,
+{
     generator_a: GA,
     generator_b: GB,
 }
 
-impl<GA: Generator<1>, GB: Generator<1>> Generator1D for Max<GA, GB> {}
-impl<GA: Generator<2>, GB: Generator<2>> Generator2D for Max<GA, GB> {}
-impl<GA: Generator<3>, GB: Generator<3>> Generator3D for Max<GA, GB> {}
-impl<GA: Generator<4>, GB: Generator<4>> Generator4D for Max<GA, GB> {}
+impl<GA: Generator<1>, GB: Generator<1>> Generator1D for Max<1, GA, GB> {}
+impl<GA: Generator<2>, GB: Generator<2>> Generator2D for Max<2, GA, GB> {}
+impl<GA: Generator<3>, GB: Generator<3>> Generator3D for Max<3, GA, GB> {}
+impl<GA: Generator<4>, GB: Generator<4>> Generator4D for Max<4, GA, GB> {}
 
-impl<GA, GB> Max<GA, GB> {
+impl<const D: usize, GA, GB> Max<D, GA, GB>
+where
+    GA: Generator<D>,
+    GB: Generator<D>,
+{
     #[inline]
     pub fn new(generator_a: GA, generator_b: GB) -> Self {
         Self {
@@ -21,7 +29,7 @@ impl<GA, GB> Max<GA, GB> {
     }
 }
 
-impl<const D: usize, GA, GB> Generator<D> for Max<GA, GB>
+impl<const D: usize, GA, GB> Generator<D> for Max<D, GA, GB>
 where
     GA: Generator<D>,
     GB: Generator<D>,

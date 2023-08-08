@@ -1,7 +1,10 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
-pub struct Fbm<G> {
+pub struct Fbm<const D: usize, G>
+where
+    G: Generator<D>,
+{
     generator: G,
     octaves: u32,
     frequency: f64,
@@ -10,12 +13,15 @@ pub struct Fbm<G> {
     normalization_factor: f64,
 }
 
-impl<G: Generator<1>> Generator1D for Fbm<G> {}
-impl<G: Generator<2>> Generator2D for Fbm<G> {}
-impl<G: Generator<3>> Generator3D for Fbm<G> {}
-impl<G: Generator<4>> Generator4D for Fbm<G> {}
+impl<G: Generator<1>> Generator1D for Fbm<1, G> {}
+impl<G: Generator<2>> Generator2D for Fbm<2, G> {}
+impl<G: Generator<3>> Generator3D for Fbm<3, G> {}
+impl<G: Generator<4>> Generator4D for Fbm<4, G> {}
 
-impl<G> Fbm<G> {
+impl<const D: usize, G> Fbm<D, G>
+where
+    G: Generator<D>,
+{
     #[inline]
     pub fn new(
         generator: G,
@@ -38,7 +44,7 @@ impl<G> Fbm<G> {
 
 macro_rules! impl_generator {
     ($dim:literal) => {
-        impl<G: Generator<$dim>> Generator<$dim> for Fbm<G> {
+        impl<G: Generator<$dim>> Generator<$dim> for Fbm<$dim, G> {
             fn sample(&self, point: [f64; $dim]) -> f64 {
                 let mut noise = 0.0;
                 let mut amp = 1.0;

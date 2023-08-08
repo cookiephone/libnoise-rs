@@ -1,20 +1,29 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
-pub struct Clamp<G> {
+pub struct Clamp<const D: usize, G>
+where
+    G: Generator<D>,
+{
     generator: G,
     min: f64,
     max: f64,
 }
 
-impl<G: Generator<1>> Generator1D for Clamp<G> {}
-impl<G: Generator<2>> Generator2D for Clamp<G> {}
-impl<G: Generator<3>> Generator3D for Clamp<G> {}
-impl<G: Generator<4>> Generator4D for Clamp<G> {}
+impl<G: Generator<1>> Generator1D for Clamp<1, G> {}
+impl<G: Generator<2>> Generator2D for Clamp<2, G> {}
+impl<G: Generator<3>> Generator3D for Clamp<3, G> {}
+impl<G: Generator<4>> Generator4D for Clamp<4, G> {}
 
-impl<G> Clamp<G> {
+impl<const D: usize, G> Clamp<D, G>
+where
+    G: Generator<D>,
+{
     #[inline]
-    pub fn new(generator: G, min: f64, max: f64) -> Self {
+    pub fn new(generator: G, min: f64, max: f64) -> Self
+    where
+        G: Generator<D>,
+    {
         Self {
             generator,
             min,
@@ -23,7 +32,7 @@ impl<G> Clamp<G> {
     }
 }
 
-impl<const D: usize, G> Generator<D> for Clamp<G>
+impl<const D: usize, G> Generator<D> for Clamp<D, G>
 where
     G: Generator<D>,
 {

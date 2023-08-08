@@ -1,17 +1,21 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
-pub struct Product<GA, GB> {
+pub struct Product<const D: usize, GA, GB> {
     generator_a: GA,
     generator_b: GB,
 }
 
-impl<GA: Generator<1>, GB: Generator<1>> Generator1D for Product<GA, GB> {}
-impl<GA: Generator<2>, GB: Generator<2>> Generator2D for Product<GA, GB> {}
-impl<GA: Generator<3>, GB: Generator<3>> Generator3D for Product<GA, GB> {}
-impl<GA: Generator<4>, GB: Generator<4>> Generator4D for Product<GA, GB> {}
+impl<GA: Generator<1>, GB: Generator<1>> Generator1D for Product<1, GA, GB> {}
+impl<GA: Generator<2>, GB: Generator<2>> Generator2D for Product<2, GA, GB> {}
+impl<GA: Generator<3>, GB: Generator<3>> Generator3D for Product<3, GA, GB> {}
+impl<GA: Generator<4>, GB: Generator<4>> Generator4D for Product<4, GA, GB> {}
 
-impl<GA, GB> Product<GA, GB> {
+impl<const D: usize, GA, GB> Product<D, GA, GB>
+where
+    GA: Generator<D>,
+    GB: Generator<D>,
+{
     #[inline]
     pub fn new(generator_a: GA, generator_b: GB) -> Self {
         Self {
@@ -21,7 +25,7 @@ impl<GA, GB> Product<GA, GB> {
     }
 }
 
-impl<const D: usize, GA, GB> Generator<D> for Product<GA, GB>
+impl<const D: usize, GA, GB> Generator<D> for Product<D, GA, GB>
 where
     GA: Generator<D>,
     GB: Generator<D>,

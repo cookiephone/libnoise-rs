@@ -1,16 +1,22 @@
 use crate::core::generator::{Generator, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
-pub struct Rotate<const P: usize, G> {
+pub struct Rotate<const D: usize, const P: usize, G>
+where
+    G: Generator<D>,
+{
     generator: G,
     rotation: [f64; P],
 }
 
-impl<G: Generator<2>> Generator2D for Rotate<1, G> {}
-impl<G: Generator<3>> Generator3D for Rotate<3, G> {}
-impl<G: Generator<4>> Generator4D for Rotate<6, G> {}
+impl<G: Generator<2>> Generator2D for Rotate<2, 1, G> {}
+impl<G: Generator<3>> Generator3D for Rotate<3, 3, G> {}
+impl<G: Generator<4>> Generator4D for Rotate<4, 6, G> {}
 
-impl<const P: usize, G> Rotate<P, G> {
+impl<const D: usize, const P: usize, G> Rotate<D, P, G>
+where
+    G: Generator<D>,
+{
     #[inline]
     pub fn new(generator: G, rotation: [f64; P]) -> Self {
         Self {
@@ -20,7 +26,7 @@ impl<const P: usize, G> Rotate<P, G> {
     }
 }
 
-impl<G: Generator<2>> Generator<2> for Rotate<1, G> {
+impl<G: Generator<2>> Generator<2> for Rotate<2, 1, G> {
     fn sample(&self, point: [f64; 2]) -> f64 {
         let x = point[0];
         let y = point[1];
@@ -32,7 +38,7 @@ impl<G: Generator<2>> Generator<2> for Rotate<1, G> {
     }
 }
 
-impl<G: Generator<3>> Generator<3> for Rotate<3, G> {
+impl<G: Generator<3>> Generator<3> for Rotate<3, 3, G> {
     fn sample(&self, point: [f64; 3]) -> f64 {
         let x = point[0];
         let y = point[1];
@@ -59,7 +65,7 @@ impl<G: Generator<3>> Generator<3> for Rotate<3, G> {
     }
 }
 
-impl<G: Generator<4>> Generator<4> for Rotate<6, G> {
+impl<G: Generator<4>> Generator<4> for Rotate<4, 6, G> {
     fn sample(&self, point: [f64; 4]) -> f64 {
         let x = point[0];
         let y = point[1];
@@ -77,7 +83,7 @@ impl<G: Generator<4>> Generator<4> for Rotate<6, G> {
         let cos_epsilon = self.rotation[4].cos();
         let sin_digamma = self.rotation[5].sin();
         let cos_digamma = self.rotation[5].cos();
-        // i am too lazy to simplify this
+        // i am too lazy to simplify this, i cannot verify correctness easily either
         let x1 = cos_alpha * cos_beta * cos_gamma;
         let y1 = -cos_epsilon * sin_alpha * cos_delta
             - cos_epsilon * cos_alpha * sin_beta * sin_delta

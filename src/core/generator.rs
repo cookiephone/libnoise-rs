@@ -12,6 +12,48 @@ use std::marker::Sized;
 ///
 /// The constant generic `D` represents the dimensionality of the input space, and can typically be
 /// inferred without explicitly specifiying it when working with generators.
+///
+/// # Generator creation
+///
+/// A source implements [`Generator<D>`] and requires no further generators as argument to be created,
+/// though they may be parameterized by e.g. a seed. For more on sources, see [`Source`]. Here a simple
+/// generator for simplex noise is created. Note how the constant generic parameter `D` represents the
+/// dimensionality of the input is inferred:
+///
+/// [`Source`]: crate::Source
+///
+/// ```
+/// # use libnoise::{Source, Generator};
+/// let generator = Source::simplex(42);        // create a generator
+/// let value = generator.sample([0.2, 0.5]);   // sample the generator at [0.2, 0.5]
+/// ```
+///
+/// Given a generator, it is possible to use adapters to transform the input and/or output in various
+/// ways:
+///
+/// ```
+/// # use libnoise::{Source, Generator, Generator4D};
+/// // create a complex generator by chaining adapters
+/// let generator = Source::simplex(42)     // create a simplex noise generator
+///     .fbm(3, 0.013, 2.0, 0.5)            // apply fractal brownian motion
+///     .abs()                              // generate the absolute value of outputs
+///     .mul(2.0)                           // multiply outputs by 2.0
+///     .lambda(|x| 1.0 - x.exp() / 2.8)    // apply a closure to the output
+///     .displace_x(                        // displace the input x-coordinate...
+///         Source::worley(43)              // ...by a worley noise generator
+///         .scale([0.005; 4])              // ...with inputs scaled by 0.005
+///         .fbm(3, 1.0, 2.0, 0.5)          // ...with fractal brownian motion
+///         .mul(5.0))                      // ...multiplied by 5.0
+///     .blend(                             // blend the output with noise
+///         Source::worley(45)              // ...by a worley noise generator
+///                 .scale([0.033; 4]),     // ...scaled by 0.033
+///         Source::perlin(45)              // ...and blending controlled by perlin noise
+///                 .scale([0.033; 4])      // ...scaled by 0.033
+///                 .add(0.3));             // ...and adding 0.3
+///
+/// // sample the generator at [0.2, 0.5, 0.3, 0.7]
+/// let value = generator.sample([0.2, 0.5, 0.3, 0.7]);
+/// ```
 pub trait Generator<const D: usize>: Sized {
     /// Samples the generator at a given `point` and returns the resulting value.
     ///
@@ -108,7 +150,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, -Source::simplex(42).sample(point))
     /// ```
     #[inline]
-    fn neg(self) -> adapters::Neg<Self> {
+    fn neg(self) -> adapters::Neg<D, Self> {
         adapters::Neg::new(self)
     }
 
@@ -133,7 +175,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point).abs())
     /// ```
     #[inline]
-    fn abs(self) -> adapters::Abs<Self> {
+    fn abs(self) -> adapters::Abs<D, Self> {
         adapters::Abs::new(self)
     }
 
@@ -159,7 +201,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point).exp())
     /// ```
     #[inline]
-    fn exp(self) -> adapters::Exp<Self> {
+    fn exp(self) -> adapters::Exp<D, Self> {
         adapters::Exp::new(self)
     }
 
@@ -184,7 +226,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point) + 1.5)
     /// ```
     #[inline]
-    fn add(self, offset: f64) -> adapters::Add<Self> {
+    fn add(self, offset: f64) -> adapters::Add<D, Self> {
         adapters::Add::new(self, offset)
     }
 
@@ -209,7 +251,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point) * 1.5)
     /// ```
     #[inline]
-    fn mul(self, scale: f64) -> adapters::Mul<Self> {
+    fn mul(self, scale: f64) -> adapters::Mul<D, Self> {
         adapters::Mul::new(self, scale)
     }
 
@@ -236,7 +278,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point).powi(2))
     /// ```
     #[inline]
-    fn powi(self, exponent: i32) -> adapters::Pow<Self, i32> {
+    fn powi(self, exponent: i32) -> adapters::Pow<D, Self, i32> {
         adapters::Pow::new(self, exponent)
     }
 
@@ -263,7 +305,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point).powf(1.5))
     /// ```
     #[inline]
-    fn powf(self, exponent: f64) -> adapters::Pow<Self, f64> {
+    fn powf(self, exponent: f64) -> adapters::Pow<D, Self, f64> {
         adapters::Pow::new(self, exponent)
     }
 
@@ -290,7 +332,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point).clamp(-0.5, 0.5))
     /// ```
     #[inline]
-    fn clamp(self, min: f64, max: f64) -> adapters::Clamp<Self> {
+    fn clamp(self, min: f64, max: f64) -> adapters::Clamp<D, Self> {
         adapters::Clamp::new(self, min, max)
     }
 
@@ -316,7 +358,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, closure(Source::simplex(42).sample(point)))
     /// ```
     #[inline]
-    fn lambda<L>(self, lambda: L) -> adapters::Lambda<Self, L>
+    fn lambda<L>(self, lambda: L) -> adapters::Lambda<D, Self, L>
     where
         L: Fn(f64) -> f64,
     {
@@ -345,7 +387,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point) + Source::simplex(43).sample(point))
     /// ```
     #[inline]
-    fn sum<G>(self, other: G) -> adapters::Sum<Self, G>
+    fn sum<G>(self, other: G) -> adapters::Sum<D, Self, G>
     where
         G: Generator<D>,
     {
@@ -374,7 +416,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point) * Source::simplex(43).sample(point))
     /// ```
     #[inline]
-    fn product<G>(self, other: G) -> adapters::Product<Self, G>
+    fn product<G>(self, other: G) -> adapters::Product<D, Self, G>
     where
         G: Generator<D>,
     {
@@ -403,7 +445,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point).min(Source::simplex(43).sample(point)))
     /// ```
     #[inline]
-    fn min<G>(self, other: G) -> adapters::Min<Self, G>
+    fn min<G>(self, other: G) -> adapters::Min<D, Self, G>
     where
         G: Generator<D>,
     {
@@ -432,7 +474,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point).max(Source::simplex(43).sample(point)))
     /// ```
     #[inline]
-    fn max<G>(self, other: G) -> adapters::Max<Self, G>
+    fn max<G>(self, other: G) -> adapters::Max<D, Self, G>
     where
         G: Generator<D>,
     {
@@ -462,7 +504,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert_eq!(value, Source::simplex(42).sample(point).powf(Source::simplex(43).sample(point)))
     /// ```
     #[inline]
-    fn power<G>(self, other: G) -> adapters::Power<Self, G>
+    fn power<G>(self, other: G) -> adapters::Power<D, Self, G>
     where
         G: Generator<D>,
     {
@@ -530,7 +572,7 @@ pub trait Generator<const D: usize>: Sized {
         frequency: f64,
         lacunarity: f64,
         persistence: f64,
-    ) -> adapters::Fbm<Self> {
+    ) -> adapters::Fbm<D, Self> {
         adapters::Fbm::new(self, octaves, frequency, lacunarity, persistence)
     }
 
@@ -596,7 +638,7 @@ pub trait Generator<const D: usize>: Sized {
         frequency: f64,
         lacunarity: f64,
         persistence: f64,
-    ) -> adapters::Billow<Self> {
+    ) -> adapters::Billow<D, Self> {
         adapters::Billow::new(self, octaves, frequency, lacunarity, persistence)
     }
 
@@ -675,7 +717,7 @@ pub trait Generator<const D: usize>: Sized {
         frequency: f64,
         lacunarity: f64,
         attenuation: f64,
-    ) -> adapters::RidgedMulti<Self> {
+    ) -> adapters::RidgedMulti<D, Self> {
         adapters::RidgedMulti::new(self, octaves, frequency, lacunarity, attenuation)
     }
 
@@ -718,7 +760,7 @@ pub trait Generator<const D: usize>: Sized {
     /// assert!(value - expected < f64::EPSILON);
     /// ```
     #[inline]
-    fn blend<G, GC>(self, other: G, control: GC) -> adapters::Blend<Self, G, GC>
+    fn blend<G, GC>(self, other: G, control: GC) -> adapters::Blend<D, Self, G, GC>
     where
         G: Generator<D>,
         GC: Generator<D>,
@@ -765,7 +807,7 @@ pub trait Generator<const D: usize>: Sized {
         control: GC,
         selection_min: f64,
         selection_max: f64,
-    ) -> adapters::Select<Self, G, GC>
+    ) -> adapters::Select<D, Self, G, GC>
     where
         G: Generator<D>,
         GC: Generator<D>,
@@ -805,7 +847,7 @@ pub trait Generator1D: Generator<1> {
     /// assert_eq!(value, Source::simplex(42).sample(point))
     /// ```
     #[inline]
-    fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<0, Self, GA>
+    fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<1, 0, Self, GA>
     where
         GA: Generator<1>,
     {
@@ -845,7 +887,7 @@ pub trait Generator2D: Generator<2> {
     /// let value = generator.sample(point);    // sample the generator
     /// ```
     #[inline]
-    fn rotate(self, rotation: [f64; 1]) -> adapters::Rotate<1, Self> {
+    fn rotate(self, rotation: [f64; 1]) -> adapters::Rotate<2, 1, Self> {
         adapters::Rotate::new(self, rotation)
     }
 
@@ -873,7 +915,7 @@ pub trait Generator2D: Generator<2> {
     /// assert_eq!(value, Source::simplex(42).sample(point))
     /// ```
     #[inline]
-    fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<0, Self, GA>
+    fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<2, 0, Self, GA>
     where
         GA: Generator<2>,
     {
@@ -904,7 +946,7 @@ pub trait Generator2D: Generator<2> {
     /// assert_eq!(value, Source::simplex(42).sample(point))
     /// ```
     #[inline]
-    fn displace_y<GA>(self, displacement_generator: GA) -> adapters::Displace<1, Self, GA>
+    fn displace_y<GA>(self, displacement_generator: GA) -> adapters::Displace<2, 1, Self, GA>
     where
         GA: Generator<2>,
     {
@@ -946,7 +988,7 @@ pub trait Generator3D: Generator<3> {
     /// let value = generator.sample(point);    // sample the generator
     /// ```
     #[inline]
-    fn rotate(self, rotation: [f64; 3]) -> adapters::Rotate<3, Self> {
+    fn rotate(self, rotation: [f64; 3]) -> adapters::Rotate<3, 3, Self> {
         adapters::Rotate::new(self, rotation)
     }
 
@@ -974,7 +1016,7 @@ pub trait Generator3D: Generator<3> {
     /// assert_eq!(value, Source::simplex(42).sample(point))
     /// ```
     #[inline]
-    fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<0, Self, GA>
+    fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<3, 0, Self, GA>
     where
         GA: Generator<3>,
     {
@@ -1005,7 +1047,7 @@ pub trait Generator3D: Generator<3> {
     /// assert_eq!(value, Source::simplex(42).sample(point))
     /// ```
     #[inline]
-    fn displace_y<GA>(self, displacement_generator: GA) -> adapters::Displace<1, Self, GA>
+    fn displace_y<GA>(self, displacement_generator: GA) -> adapters::Displace<3, 1, Self, GA>
     where
         GA: Generator<3>,
     {
@@ -1036,7 +1078,7 @@ pub trait Generator3D: Generator<3> {
     /// assert_eq!(value, Source::simplex(42).sample(point))
     /// ```
     #[inline]
-    fn displace_z<GA>(self, displacement_generator: GA) -> adapters::Displace<2, Self, GA>
+    fn displace_z<GA>(self, displacement_generator: GA) -> adapters::Displace<3, 2, Self, GA>
     where
         GA: Generator<3>,
     {
@@ -1081,7 +1123,7 @@ pub trait Generator4D: Generator<4> {
     /// let value = generator.sample(point);            // sample the generator
     /// ```
     #[inline]
-    fn rotate(self, rotation: [f64; 6]) -> adapters::Rotate<6, Self> {
+    fn rotate(self, rotation: [f64; 6]) -> adapters::Rotate<4, 6, Self> {
         adapters::Rotate::new(self, rotation)
     }
 
@@ -1109,7 +1151,7 @@ pub trait Generator4D: Generator<4> {
     /// assert_eq!(value, Source::simplex(42).sample(point))
     /// ```
     #[inline]
-    fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<0, Self, GA>
+    fn displace_x<GA>(self, displacement_generator: GA) -> adapters::Displace<4, 0, Self, GA>
     where
         GA: Generator<4>,
     {
@@ -1140,7 +1182,7 @@ pub trait Generator4D: Generator<4> {
     /// assert_eq!(value, Source::simplex(42).sample(point))
     /// ```
     #[inline]
-    fn displace_y<GA>(self, displacement_generator: GA) -> adapters::Displace<1, Self, GA>
+    fn displace_y<GA>(self, displacement_generator: GA) -> adapters::Displace<4, 1, Self, GA>
     where
         GA: Generator<4>,
     {
@@ -1171,7 +1213,7 @@ pub trait Generator4D: Generator<4> {
     /// assert_eq!(value, Source::simplex(42).sample(point))
     /// ```
     #[inline]
-    fn displace_z<GA>(self, displacement_generator: GA) -> adapters::Displace<2, Self, GA>
+    fn displace_z<GA>(self, displacement_generator: GA) -> adapters::Displace<4, 2, Self, GA>
     where
         GA: Generator<4>,
     {
@@ -1202,7 +1244,7 @@ pub trait Generator4D: Generator<4> {
     /// assert_eq!(value, Source::simplex(42).sample(point))
     /// ```
     #[inline]
-    fn displace_w<GA>(self, displacement_generator: GA) -> adapters::Displace<3, Self, GA>
+    fn displace_w<GA>(self, displacement_generator: GA) -> adapters::Displace<4, 3, Self, GA>
     where
         GA: Generator<4>,
     {

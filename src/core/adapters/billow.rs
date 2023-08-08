@@ -1,7 +1,10 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
 #[derive(Clone)]
-pub struct Billow<G> {
+pub struct Billow<const D: usize, G>
+where
+    G: Generator<D>,
+{
     generator: G,
     octaves: u32,
     frequency: f64,
@@ -10,12 +13,15 @@ pub struct Billow<G> {
     normalization_factor: f64,
 }
 
-impl<G: Generator<1>> Generator1D for Billow<G> {}
-impl<G: Generator<2>> Generator2D for Billow<G> {}
-impl<G: Generator<3>> Generator3D for Billow<G> {}
-impl<G: Generator<4>> Generator4D for Billow<G> {}
+impl<G: Generator<1>> Generator1D for Billow<1, G> {}
+impl<G: Generator<2>> Generator2D for Billow<2, G> {}
+impl<G: Generator<3>> Generator3D for Billow<3, G> {}
+impl<G: Generator<4>> Generator4D for Billow<4, G> {}
 
-impl<G> Billow<G> {
+impl<const D: usize, G> Billow<D, G>
+where
+    G: Generator<D>,
+{
     #[inline]
     pub fn new(
         generator: G,
@@ -38,7 +44,7 @@ impl<G> Billow<G> {
 
 macro_rules! impl_generator {
     ($dim:literal) => {
-        impl<G: Generator<$dim>> Generator<$dim> for Billow<G> {
+        impl<G: Generator<$dim>> Generator<$dim> for Billow<$dim, G> {
             fn sample(&self, point: [f64; $dim]) -> f64 {
                 let mut noise = 0.0;
                 let mut amp = 1.0;
