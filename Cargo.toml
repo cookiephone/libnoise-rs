@@ -1,19 +1,25 @@
-[workspace]
-members = ["."]
-
 [package]
 name = "libnoise"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-libnoise_core = { path = "libnoise_core" }
+num-traits = "*"
+rand = "*"
+itertools = "*"
+image = "*"
 
 [dev-dependencies]
 criterion = "*"
 plotters = "*"
 itertools = "*"
 proptest = "*"
+
+[[test]]
+name = "test_sources"
+
+[[test]]
+name = "test_adapters"
 
 [[bench]]
 name = "billow"

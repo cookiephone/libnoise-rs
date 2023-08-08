@@ -1,3 +1,11 @@
-pub use crate::utils::Visualizer;
-pub use crate::Source;
-pub use crate::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
+//! Re-exports of useful members.
+//!
+//! This module simplifies the importing of common items by re-exporting them.
+//! To achieve this, import the module contents:
+//!
+//! ```
+//! use libnoise::prelude::*;
+//! ```
+
+#[doc(no_inline)]
+pub use crate::*;

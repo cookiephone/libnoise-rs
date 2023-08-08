@@ -1,0 +1,51 @@
+use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
+
+#[derive(Clone)]
+pub struct Select<GA, GB, GC> {
+    generator_a: GA,
+    generator_b: GB,
+    generator_control: GC,
+    selection_min: f64,
+    selection_max: f64,
+}
+
+impl<GA: Generator<1>, GB: Generator<1>, GC: Generator<1>> Generator1D for Select<GA, GB, GC> {}
+impl<GA: Generator<2>, GB: Generator<2>, GC: Generator<2>> Generator2D for Select<GA, GB, GC> {}
+impl<GA: Generator<3>, GB: Generator<3>, GC: Generator<3>> Generator3D for Select<GA, GB, GC> {}
+impl<GA: Generator<4>, GB: Generator<4>, GC: Generator<4>> Generator4D for Select<GA, GB, GC> {}
+
+impl<GA, GB, GC> Select<GA, GB, GC> {
+    #[inline]
+    pub fn new(
+        generator_a: GA,
+        generator_b: GB,
+        generator_control: GC,
+        selection_min: f64,
+        selection_max: f64,
+    ) -> Self {
+        Self {
+            generator_a,
+            generator_b,
+            generator_control,
+            selection_min,
+            selection_max,
+        }
+    }
+}
+
+impl<const D: usize, GA, GB, GC> Generator<D> for Select<GA, GB, GC>
+where
+    GA: Generator<D>,
+    GB: Generator<D>,
+    GC: Generator<D>,
+{
+    #[inline]
+    fn sample(&self, point: [f64; D]) -> f64 {
+        match self.generator_control.sample(point) {
+            t if self.selection_min <= t && t <= self.selection_max => {
+                self.generator_a.sample(point)
+            }
+            _ => self.generator_b.sample(point),
+        }
+    }
+}

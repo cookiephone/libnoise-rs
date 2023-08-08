@@ -780,7 +780,7 @@ proptest! {
         let expected = value;
         prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
     }
-    
+
     // =================================================================
     // test adapter: select
     // =================================================================
