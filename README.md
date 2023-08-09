@@ -4,6 +4,8 @@
 ![lint](https://github.com/cookiephone/libnoise-rs/actions/workflows/lint.yaml/badge.svg)
 ![test](https://github.com/cookiephone/libnoise-rs/actions/workflows/test.yaml/badge.svg)
 [![codecov](https://coveralls.io/repos/github/cookiephone/libnoise-rs/badge.svg?branch=master)](https://coveralls.io/github/cookiephone/libnoise-rs?branch=master)
+[![docs.rs](https://img.shields.io/docsrs/libnoise)](https://docs.rs/libnoise)
+[![Crates.io](https://img.shields.io/crates/v/libnoise)](https://crates.io/crates/libnoise)
 
 A simple, performant, and customizable procedural noise generation library
 inspired by [libnoise for C++](https://libnoise.sourceforge.net/) featuring:
@@ -23,7 +25,7 @@ by applying a variety of operations which modify and combine generators.
 With a focus on customizability, the library allows users to create custom
 generators and modifiers.
 
-Most immediately relevant documentation can be found in `Source` and
+Most immediately relevant [documentation](https://docs.rs/libnoise) can be found in `Source` and
 `Generator` docs.
 
 ## Usage
