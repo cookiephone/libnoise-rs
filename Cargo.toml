@@ -15,6 +15,7 @@ include = ["LICENSE.md", "README.md"]
 
 [lib]
 name = "libnoise"
+path = "src/lib.rs"
 
 [features]
 dev-tools = ["dep:criterion"]
