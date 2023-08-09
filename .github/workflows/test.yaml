@@ -34,3 +34,8 @@ jobs:
         with:
           command: tarpaulin
           args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --engine llvm
+      - name: run doctests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --doc
