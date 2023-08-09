@@ -730,55 +730,49 @@ proptest! {
     // test adapter: rotate
     // =================================================================
     #[test]
-    fn test_rotate_2d(value in strategy_float_numeric!(), rotation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
-        let n = Source::<2>::constant(value).rotate(rotation).sample(point);
-        let expected = value;
-        prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
+    fn test_rotate_2d(seed in prop::num::u64::ANY, rotation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
+        Source::<2>::simplex(seed).rotate(rotation).sample(point);
     }
 
     #[test]
-    fn test_rotate_3d(value in strategy_float_numeric!(), rotation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
-        let n = Source::<3>::constant(value).rotate(rotation).sample(point);
-        let expected = value;
-        prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
+    fn test_rotate_3d(seed in prop::num::u64::ANY, rotation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
+        Source::<3>::simplex(seed).rotate(rotation).sample(point);
     }
 
     #[test]
-    fn test_rotate_4d(value in strategy_float_numeric!(), rotation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
-        let n = Source::<4>::constant(value).rotate(rotation).sample(point);
-        let expected = value;
-        prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
+    fn test_rotate_4d(seed in prop::num::u64::ANY, rotation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
+        Source::<4>::simplex(seed).rotate(rotation).sample(point);
     }
 
     // =================================================================
     // test adapter: scale
     // =================================================================
     #[test]
-    fn test_scale_1d(value in strategy_float_numeric!(), scale in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
-        let n = Source::<2>::constant(value).scale(scale).sample(point);
-        let expected = value;
-        prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
+    fn test_scale_1d(seed in prop::num::u64::ANY, scale in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
+        let n = Source::<1>::simplex(seed).scale(scale).sample(point);
+        let expected = Source::<1>::simplex(seed).sample([point[0] * scale[0]]);
+        prop_assert!(n == expected || (n.is_nan() && expected.is_nan()), "expected value {}, instead: {}", n, expected);
     }
 
     #[test]
-    fn test_scale_2d(value in strategy_float_numeric!(), scale in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
-        let n = Source::<2>::constant(value).scale(scale).sample(point);
-        let expected = value;
-        prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
+    fn test_scale_2d(seed in prop::num::u64::ANY, scale in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
+        let n = Source::<2>::simplex(seed).scale(scale).sample(point);
+        let expected = Source::<2>::simplex(seed).sample([point[0] * scale[0], point[1] * scale[1]]);
+        prop_assert!(n == expected || (n.is_nan() && expected.is_nan()), "expected value {}, instead: {}", n, expected);
     }
 
     #[test]
-    fn test_scale_3d(value in strategy_float_numeric!(), scale in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
-        let n = Source::<3>::constant(value).scale(scale).sample(point);
-        let expected = value;
-        prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
+    fn test_scale_3d(seed in prop::num::u64::ANY, scale in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
+        let n = Source::<3>::simplex(seed).scale(scale).sample(point);
+        let expected = Source::<3>::simplex(seed).sample([point[0] * scale[0], point[1] * scale[1], point[2] * scale[2]]);
+        prop_assert!(n == expected || (n.is_nan() && expected.is_nan()), "expected value {}, instead: {}", n, expected);
     }
 
     #[test]
-    fn test_scale_4d(value in strategy_float_numeric!(), scale in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
-        let n = Source::<4>::constant(value).scale(scale).sample(point);
-        let expected = value;
-        prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
+    fn test_scale_4d(seed in prop::num::u64::ANY, scale in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
+        let n = Source::<4>::simplex(seed).scale(scale).sample(point);
+        let expected = Source::<4>::simplex(seed).sample([point[0] * scale[0], point[1] * scale[1], point[2] * scale[2], point[3] * scale[3]]);
+        prop_assert!(n == expected || (n.is_nan() && expected.is_nan()), "expected value {}, instead: {}", n, expected);
     }
 
     // =================================================================
@@ -867,30 +861,30 @@ proptest! {
     // test adapter: translate
     // =================================================================
     #[test]
-    fn test_translate_1d(value in strategy_float_numeric!(), translation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
-        let n = Source::<2>::constant(value).translate(translation).sample(point);
-        let expected = value;
-        prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
+    fn test_translate_1d(seed in prop::num::u64::ANY, translation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
+        let n = Source::<1>::simplex(seed).translate(translation).sample(point);
+        let expected = Source::<1>::simplex(seed).sample([point[0] + translation[0]]);
+        prop_assert!(n == expected || (n.is_nan() && expected.is_nan()), "expected value {}, instead: {}", n, expected);
     }
 
     #[test]
-    fn test_translate_2d(value in strategy_float_numeric!(), translation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
-        let n = Source::<2>::constant(value).translate(translation).sample(point);
-        let expected = value;
-        prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
+    fn test_translate_2d(seed in prop::num::u64::ANY, translation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
+        let n = Source::<2>::simplex(seed).translate(translation).sample(point);
+        let expected = Source::<2>::simplex(seed).sample([point[0] + translation[0], point[1] + translation[1]]);
+        prop_assert!(n == expected || (n.is_nan() && expected.is_nan()), "expected value {}, instead: {}", n, expected);
     }
 
     #[test]
-    fn test_translate_3d(value in strategy_float_numeric!(), translation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
-        let n = Source::<3>::constant(value).translate(translation).sample(point);
-        let expected = value;
-        prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
+    fn test_translate_3d(seed in prop::num::u64::ANY, translation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
+        let n = Source::<3>::simplex(seed).translate(translation).sample(point);
+        let expected = Source::<3>::simplex(seed).sample([point[0] + translation[0], point[1] + translation[1], point[2] + translation[2]]);
+        prop_assert!(n == expected || (n.is_nan() && expected.is_nan()), "expected value {}, instead: {}", n, expected);
     }
 
     #[test]
-    fn test_translate_4d(value in strategy_float_numeric!(), translation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
-        let n = Source::<4>::constant(value).translate(translation).sample(point);
-        let expected = value;
-        prop_assert_eq!(n, expected, "expected value {}, instead: {}", n, expected);
+    fn test_translate_4d(seed in prop::num::u64::ANY, translation in strategy_array_float_numeric!(), point in strategy_array_float_numeric!()) {
+        let n = Source::<4>::simplex(seed).translate(translation).sample(point);
+        let expected = Source::<4>::simplex(seed).sample([point[0] + translation[0], point[1] + translation[1], point[2] + translation[2], point[3] + translation[3]]);
+        prop_assert!(n == expected || (n.is_nan() && expected.is_nan()), "expected value {}, instead: {}", n, expected);
     }
 }

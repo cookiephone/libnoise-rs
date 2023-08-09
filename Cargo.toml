@@ -3,13 +3,18 @@ name = "libnoise"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+dev-tools = ["dep:criterion"]
+
 [dependencies]
 num-traits = "*"
 rand = "*"
 itertools = "*"
 image = "*"
+criterion = { version = "*", optional = true }
 
 [dev-dependencies]
+libnoise = { path = ".", features = ["dev-tools"] }
 criterion = "*"
 plotters = "*"
 itertools = "*"

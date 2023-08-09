@@ -1,8 +1,8 @@
-use super::inputgen::cartesian_lattice_points;
+use crate::Generator;
 use criterion::{black_box, Criterion};
-use libnoise::Generator;
+use itertools::Itertools;
 
-pub(crate) fn bench_noise1d<G: Generator<1>>(
+pub fn bench_noise1d<G: Generator<1>>(
     c: &mut Criterion,
     id: &str,
     shape: &[usize],
@@ -14,7 +14,7 @@ pub(crate) fn bench_noise1d<G: Generator<1>>(
     });
 }
 
-pub(crate) fn bench_noise2d<G: Generator<2>>(
+pub fn bench_noise2d<G: Generator<2>>(
     c: &mut Criterion,
     id: &str,
     shape: &[usize],
@@ -26,7 +26,7 @@ pub(crate) fn bench_noise2d<G: Generator<2>>(
     });
 }
 
-pub(crate) fn bench_noise3d<G: Generator<3>>(
+pub fn bench_noise3d<G: Generator<3>>(
     c: &mut Criterion,
     id: &str,
     shape: &[usize],
@@ -38,7 +38,7 @@ pub(crate) fn bench_noise3d<G: Generator<3>>(
     });
 }
 
-pub(crate) fn bench_noise4d<G: Generator<4>>(
+pub fn bench_noise4d<G: Generator<4>>(
     c: &mut Criterion,
     id: &str,
     shape: &[usize],
@@ -54,4 +54,20 @@ fn noise_bencher<const D: usize, G: Generator<D>>(generator: &G, shape: &[usize]
     for point in cartesian_lattice_points(shape, scale) {
         black_box(generator.sample(black_box(point.try_into().unwrap())));
     }
+}
+
+fn tensor_indices(shape: &[usize]) -> impl Iterator<Item = Vec<usize>> {
+    shape
+        .iter()
+        .map(|&dim_size| 0..dim_size)
+        .multi_cartesian_product()
+}
+
+fn cartesian_lattice_points(shape: &[usize], scale: f64) -> impl Iterator<Item = Vec<f64>> {
+    tensor_indices(shape).map(move |point| {
+        point
+            .iter()
+            .map(|&component| component as f64 * scale)
+            .collect()
+    })
 }
