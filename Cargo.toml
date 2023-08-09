@@ -11,11 +11,6 @@ homepage = "https://github.com/cookiephone/libnoise-rs"
 description = "A simple, performant, and customizable procedural noise generation library."
 keywords = ["noise", "procedural", "perlin", "simplex", "worley"]
 categories = ["algorithms", "mathematics", "game-development", "graphics"]
-include = ["LICENSE.md", "README.md"]
-
-[lib]
-name = "libnoise"
-path = "src/lib.rs"
 
 [features]
 dev-tools = ["dep:criterion"]
@@ -60,6 +55,9 @@ name = "test_sources"
 
 [[test]]
 name = "test_adapters"
+
+[[test]]
+name = "test_utils"
 
 [[bench]]
 name = "billow"
