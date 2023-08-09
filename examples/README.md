@@ -1,10 +1,5 @@
 # Examples
 
-<style>
-    img {
-        max-width: 400px;
-    }
-</style>
 <table>
     <thead>
         <tr>
