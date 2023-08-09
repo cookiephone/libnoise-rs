@@ -40,7 +40,7 @@ use std::{
 /// // create a visualizer and use it to visualize the output of the generator
 /// let path = "output.png";
 /// # let tmp_dir = TempDir::new("libnoise").unwrap();
-/// # let mut path = &tmp_dir.path().join(path).into_os_string().into_string().unwrap();
+/// # let path = &tmp_dir.path().join(path).into_os_string().into_string().unwrap();
 /// Visualizer::<3>::new([30, 20, 25], &generator).write_to_file(path);
 /// ```
 ///
@@ -59,7 +59,7 @@ use std::{
 /// // create a visualizer and use it to visualize the output of the generator
 /// let path = "output.png";
 /// # let tmp_dir = TempDir::new("libnoise").unwrap();
-/// # let mut path = &tmp_dir.path().join(path).into_os_string().into_string().unwrap();
+/// # let path = &tmp_dir.path().join(path).into_os_string().into_string().unwrap();
 /// Visualizer::from(buf).write_to_file(path);
 /// ```
 pub struct Visualizer<const D: usize> {
