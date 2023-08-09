@@ -4,6 +4,24 @@ use crate::core::{
     utils::ptable::PermutationTable,
 };
 
+/// A generator which produces n-dimensional value noise.
+///
+/// For details, see the documentation of [`value()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`value()`] implemented by [`Source`], should be used to
+/// create a value noise generator.
+///
+/// # Direct usage of this struct
+/// 
+/// Direct instantiation of this struct:
+/// 
+/// ```
+/// # use libnoise::{Value, Generator};
+/// let generator = Value::new(42);
+/// let value = generator.sample([0.2, 0.5]);
+/// ```
+/// 
+/// [`value()`]: crate::Source::value
+/// [`Source`]: crate::Source
 #[derive(Clone)]
 pub struct Value<const D: usize> {
     permutation_table: PermutationTable,
@@ -15,6 +33,7 @@ impl Generator3D for Value<3> {}
 impl Generator4D for Value<4> {}
 
 impl<const D: usize> Value<D> {
+    /// Create a new value noise generator.
     #[inline]
     pub fn new(seed: u64) -> Self {
         let permutation_table = PermutationTable::new(seed, PERMUTATION_TABLE_SIZE, true);

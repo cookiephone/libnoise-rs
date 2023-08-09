@@ -4,6 +4,24 @@ use crate::core::{
     utils::ptable::PermutationTable,
 };
 
+/// A generator which produces n-dimensional improved perlin noise.
+///
+/// For details, see the documentation of [`improved_perlin()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`improved_perlin()`] implemented by [`Source`], should be used to
+/// create an improved perlin noise generator.
+///
+/// # Direct usage of this struct
+/// 
+/// Direct instantiation of this struct:
+/// 
+/// ```
+/// # use libnoise::{ImprovedPerlin, Generator};
+/// let generator = ImprovedPerlin::new(42);
+/// let value = generator.sample([0.2, 0.5]);
+/// ```
+/// 
+/// [`improved_perlin()`]: crate::Source::improved_perlin
+/// [`Source`]: crate::Source
 #[derive(Clone)]
 pub struct ImprovedPerlin<const D: usize> {
     permutation_table: PermutationTable,
@@ -15,6 +33,7 @@ impl Generator3D for ImprovedPerlin<3> {}
 impl Generator4D for ImprovedPerlin<4> {}
 
 impl<const D: usize> ImprovedPerlin<D> {
+    /// Create a new improved perlin noise generator.
     #[inline]
     pub fn new(seed: u64) -> Self {
         let permutation_table = PermutationTable::new(seed, PERMUTATION_TABLE_SIZE, true);

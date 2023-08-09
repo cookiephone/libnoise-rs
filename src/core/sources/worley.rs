@@ -4,6 +4,24 @@ use crate::core::{
     utils::ptable::PermutationTable,
 };
 
+/// A generator which produces n-dimensional worley noise.
+///
+/// For details, see the documentation of [`worley()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`worley()`] implemented by [`Source`], should be used to
+/// create a worley noise generator.
+///
+/// # Direct usage of this struct
+/// 
+/// Direct instantiation of this struct:
+/// 
+/// ```
+/// # use libnoise::{Worley, Generator};
+/// let generator = Worley::new(42);
+/// let value = generator.sample([0.2, 0.5]);
+/// ```
+/// 
+/// [`worley()`]: crate::Source::worley
+/// [`Source`]: crate::Source
 #[derive(Clone)]
 pub struct Worley<const D: usize> {
     permutation_table: PermutationTable,
@@ -15,6 +33,7 @@ impl Generator3D for Worley<3> {}
 impl Generator4D for Worley<4> {}
 
 impl<const D: usize> Worley<D> {
+    /// Create a new worley noise generator.
     #[inline]
     pub fn new(seed: u64) -> Self {
         let permutation_table = PermutationTable::new(seed, PERMUTATION_TABLE_SIZE, true);
