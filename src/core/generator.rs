@@ -37,19 +37,19 @@ use std::marker::Sized;
 /// let generator = Source::simplex(42)     // create a simplex noise generator
 ///     .fbm(3, 0.013, 2.0, 0.5)            // apply fractal brownian motion
 ///     .abs()                              // generate the absolute value of outputs
-///     .mul(2.0)                           // multiply outputs by 2.0
-///     .lambda(|x| 1.0 - x.exp() / 2.8)    // apply a closure to the output
-///     .displace_x(                        // displace the input x-coordinate...
-///         Source::worley(43)              // ...by a worley noise generator
-///         .scale([0.005; 4])              // ...with inputs scaled by 0.005
-///         .fbm(3, 1.0, 2.0, 0.5)          // ...with fractal brownian motion
-///         .mul(5.0))                      // ...multiplied by 5.0
-///     .blend(                             // blend the output with noise
-///         Source::worley(45)              // ...by a worley noise generator
-///                 .scale([0.033; 4]),     // ...scaled by 0.033
+///     .mul(2.0)                           // multiply the outputs by 2.0
+///     .lambda(|x| 1.0 - x.exp() / 2.8)    // apply a closure to the outputs
+///     .displace_x(                        // displace the input x-coordinate with...
+///         Source::worley(43)              // ...a worley noise generator
+///             .scale([0.005; 4])          // ...with its inputs scaled by 0.005
+///             .fbm(3, 1.0, 2.0, 0.5)      // ...and fractal brownian motion applied
+///             .mul(5.0))                  // ...multiplied by 5.0
+///     .blend(                             // blend the output with...
+///         Source::worley(45)              // ...a worley noise generator
+///             .scale([0.033; 4]),         // ...scaled by 0.033
 ///         Source::perlin(45)              // ...and blending controlled by perlin noise
-///                 .scale([0.033; 4])      // ...scaled by 0.033
-///                 .add(0.3));             // ...and adding 0.3
+///             .scale([0.033; 4])          // ...scaled by 0.033
+///             .add(0.3));                 // ...and 0.3 added
 ///
 /// // sample the generator at [0.2, 0.5, 0.3, 0.7]
 /// let value = generator.sample([0.2, 0.5, 0.3, 0.7]);
