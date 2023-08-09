@@ -40,7 +40,6 @@ use crate::core::sources::{
 pub struct Source<const D: usize>;
 
 impl<const D: usize> Source<D> {
-
     /// Create a generator which produces the supplied value for every input point.
     ///
     /// The created generator returns `value` for every input.
@@ -53,7 +52,7 @@ impl<const D: usize> Source<D> {
     /// # use libnoise::{Source, Generator};
     /// // create the generator
     /// let generator = Source::constant(6.9);
-    /// 
+    ///
     /// assert_eq!(generator.sample([0.4, 0.5]), generator.sample([0.7, 0.3]))
     /// ```
     pub fn constant(value: f64) -> Constant<D> {
@@ -68,7 +67,7 @@ impl<const D: usize> Source<D> {
     /// solely derived from the value of `seed`. The actual noise value is determined from the
     /// relative position of the input point in the simplex it resides in as well as the gradients
     /// assigned to the simplex corners.
-    /// 
+    ///
     /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
     /// <strong>Note:</strong>
     /// Simplex noise is expected to return a value in the range [-1, 1]. However, for sufficiently
@@ -96,7 +95,7 @@ impl<const D: usize> Source<D> {
     /// solely derived from the value of `seed`. the value for the input point is determined by
     /// smoothed interpolating the values of the corners of the hypercube in which the input lies
     /// accordingly.
-    /// 
+    ///
     /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
     /// <strong>Note:</strong>
     /// Value noise is expected to return a value in the range [-1, 1].
@@ -123,7 +122,7 @@ impl<const D: usize> Source<D> {
     /// derived from the value of `seed`. The actual noise value is determined from the relative
     /// position of the input point in the hypercube it resides in as well as the gradients assigned
     /// to the hypercube corners.
-    /// 
+    ///
     /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
     /// <strong>Note:</strong>
     /// Perlin noise is expected to return a value in the range [-1, 1].
@@ -150,7 +149,7 @@ impl<const D: usize> Source<D> {
     /// is solely derived from the value of `seed`. The actual noise value is determined from the
     /// relative position of the input point in the hypercube it resides in as well as the gradients
     /// assigned to the hypercube corners.
-    /// 
+    ///
     /// The changes to normal perlin noise are twofold: First, the smoothing function used for
     /// interpolation is replaced by a C2-continuous function. Second, the set of possible gradients
     /// for lattice points is modified to make the noise output appear more natural.
@@ -159,7 +158,7 @@ impl<const D: usize> Source<D> {
     /// <strong>Note:</strong>
     /// Improved perlin noise is expected to return a value in the range [-1, 1].
     /// </p>
-    /// 
+    ///
     /// # Examples
     ///
     /// Basic usage:
@@ -185,7 +184,7 @@ impl<const D: usize> Source<D> {
     /// <strong>Note:</strong>
     /// Worley noise is expected to return a value in the range [-1, 1].
     /// </p>
-    /// 
+    ///
     /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
     /// <strong>Note:</strong>
     /// This implementation employs an optimization which in rare cases causes the results to deviate
@@ -193,7 +192,7 @@ impl<const D: usize> Source<D> {
     /// adjacent hypercubes are considered. This optimization reduces the time necessary to compute
     /// this noise significantly without introducing noticeable artifacts in the output.
     /// </p>
-    /// 
+    ///
     /// # Examples
     ///
     /// Basic usage:
@@ -213,7 +212,7 @@ impl<const D: usize> Source<D> {
     /// is divided into a grid lattice wherein each hypercube is assigned either -1 or 1 such that
     /// no two adjacent hypercubes are assigned the same value. The noise value is determined by
     /// returning the value assigned to the hypercube in which the input point lies.
-    /// 
+    ///
     /// # Examples
     ///
     /// Basic usage:
@@ -232,7 +231,7 @@ impl<const D: usize> Source<D> {
     /// The created generator returns n-dimensional values by executing the provided closure `f`
     /// for the input point and producing the result. This allows usage of adapters and other
     /// library functionality without being restricted to a specific source.
-    /// 
+    ///
     /// # Examples
     ///
     /// Basic usage:

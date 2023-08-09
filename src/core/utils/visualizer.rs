@@ -52,7 +52,7 @@ impl<const D: usize> Visualizer<D> {
 }
 
 impl Visualizer<1> {
-    pub fn new<G: Generator<1>>(shape: [usize; 1], generator: G) -> Self {
+    pub fn new<G: Generator<1>>(shape: [usize; 1], generator: &G) -> Self {
         NoiseBuffer::<1>::new(shape, generator).into()
     }
 
@@ -64,7 +64,7 @@ impl Visualizer<1> {
 }
 
 impl Visualizer<2> {
-    pub fn new<G: Generator<2>>(shape: [usize; 2], generator: G) -> Self {
+    pub fn new<G: Generator<2>>(shape: [usize; 2], generator: &G) -> Self {
         NoiseBuffer::<2>::new(shape, generator).into()
     }
 
@@ -80,7 +80,7 @@ impl Visualizer<2> {
 }
 
 impl Visualizer<3> {
-    pub fn new<G: Generator<3>>(shape: [usize; 3], generator: G) -> Self {
+    pub fn new<G: Generator<3>>(shape: [usize; 3], generator: &G) -> Self {
         NoiseBuffer::<3>::new(shape, generator).into()
     }
 
@@ -103,7 +103,7 @@ impl Visualizer<3> {
 }
 
 impl Visualizer<4> {
-    pub fn new<G: Generator<4>>(shape: [usize; 4], generator: G) -> Self {
+    pub fn new<G: Generator<4>>(shape: [usize; 4], generator: &G) -> Self {
         NoiseBuffer::<4>::new(shape, generator).into()
     }
 

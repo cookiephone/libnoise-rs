@@ -599,13 +599,13 @@ pub trait Generator<const D: usize>: Sized {
     /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
     /// <strong>Note:</strong>
     /// The initial amplitude is not a parameter because the result of the generator is normalized.
-    /// </p> 
+    /// </p>
     ///
     /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
     /// <strong>Note:</strong>
     /// Typically, a desireable value for `lacunarity` is 2 while a desireable value for `persistence` lies
     /// somewhere between 0 and 1.
-    /// </p> 
+    /// </p>
     ///
     /// [`fbm()`]: Generator::fbm
     ///
