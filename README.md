@@ -6,7 +6,17 @@
 [![codecov](https://coveralls.io/repos/github/cookiephone/libnoise-rs/badge.svg?branch=master)](https://coveralls.io/github/cookiephone/libnoise-rs?branch=master)
 
 A simple, performant, and customizable procedural noise generation library
-inspired by [libnoise for C++](https://libnoise.sourceforge.net/).
+inspired by [libnoise for C++](https://libnoise.sourceforge.net/) featuring:
+
+-   Easy coherent noise generation through sources provided via `Source`
+-   Modular generator creation by chaining adapters to modify and combine
+    generator inputs and outputs, and the ability to flexibly create
+    custom generators and adapters, all through the `Generator` trait
+-   Efficient and cache friendly sampling of generators through
+    `NoiseBuffer` and much of the generator complexity resolving at
+    compile time
+-   Easy visualization of generator outputs for debugging through
+    `Visualizer`
 
 Libnoise provides utilities to generate coherent noise and customize them
 by applying a variety of operations which modify and combine generators.
@@ -16,7 +26,7 @@ generators and modifiers.
 Most immediately relevant documentation can be found in `Source` and
 `Generator` docs.
 
-# Quickstart
+## Usage
 
 To get started easily, create a source generator using one of the many
 sources found in `Source`, and apply adapters documented in `Generator`.
@@ -64,3 +74,9 @@ It is common to interpret the 3rd or 4th dimension as time, allowing us to
 produce space-time noise such as:
 
 ![image](https://raw.githubusercontent.com/cookiephone/libnoise-rs/master/images/doc_image_001_f7049b4.gif)
+
+# License
+
+Libnoise is distributed under the terms of the MIT license.
+
+See [LICENSE-MIT](LICENSE.md) for details.
