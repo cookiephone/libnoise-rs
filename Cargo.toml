@@ -5,6 +5,7 @@ authors = ["Contributors to the libnoise-rs Repository"]
 edition = "2021"
 license = "MIT"
 readme = "README.md"
+documentation = "https://docs.rs/libnoise"
 repository = "https://github.com/cookiephone/libnoise-rs"
 homepage = "https://github.com/cookiephone/libnoise-rs"
 description = "A simple, performant, and customizable procedural noise generation library."
