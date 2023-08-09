@@ -745,7 +745,8 @@ pub trait Generator<const D: usize>: Sized {
     ///
     /// <p style="background:rgba(255,181,77,0.16);padding:0.75em;">
     /// <strong>Warning:</strong>
-    /// This adapter assumes that the control generator produces values in the [-1, 1] range.
+    /// This adapter assumes that the control generator produces values in the [-1, 1] range. The
+    /// generator created by this adapter will not produce correct results, if this contract is violated.
     /// </p>
     ///
     /// # Examples
