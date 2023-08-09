@@ -1,5 +1,12 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// A generator clamping results of the underlying generator to a given interval.
+///
+/// For details, see the documentation of [`clamp()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`clamp()`] implemented by [`Generator`], should be used
+/// to create [`Clamp`].
+///
+/// [`clamp()`]: Generator::clamp
 #[derive(Clone)]
 pub struct Clamp<const D: usize, G>
 where

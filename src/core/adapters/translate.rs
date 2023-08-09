@@ -1,5 +1,12 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// A generator which translates input points before passing them to the underlying generator.
+///
+/// For details, see the documentation of [`translate()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`translate()`] implemented by [`Generator`], should be used
+/// to create [`Translate`].
+///
+/// [`translate()`]: Generator::translate
 #[derive(Clone)]
 pub struct Translate<const D: usize, G>
 where

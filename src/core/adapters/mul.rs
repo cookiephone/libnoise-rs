@@ -1,5 +1,12 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// A generator multiplying `scale` to results of the underlying generator.
+///
+/// For details, see the documentation of [`mul()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`mul()`] implemented by [`Generator`], should be used
+/// to create [`Mul`].
+///
+/// [`mul()`]: Generator::mul
 #[derive(Clone)]
 pub struct Mul<const D: usize, G>
 where

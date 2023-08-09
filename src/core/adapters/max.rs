@@ -1,5 +1,13 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// A generator producing the maximum of results of the underlying generator and results of
+/// a given other generator.
+///
+/// For details, see the documentation of [`max()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`max()`] implemented by [`Generator`], should be used
+/// to create [`Max`].
+///
+/// [`max()`]: Generator::max
 #[derive(Clone)]
 pub struct Max<const D: usize, GA, GB>
 where

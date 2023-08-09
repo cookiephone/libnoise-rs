@@ -1,7 +1,16 @@
 [package]
 name = "libnoise"
 version = "0.1.0"
+authors = ["Contributors to the libnoise-rs Repository"]
 edition = "2021"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/cookiephone/libnoise-rs"
+homepage = "https://github.com/cookiephone/libnoise-rs"
+description = "A simple, performant, and customizable procedural noise generation library."
+keywords = ["noise", "procedural", "perlin", "simplex", "worley"]
+categories = ["algorithms", "mathematics", "game-development", "graphics"]
+include = ["LICENSE.md", "README.md"]
 
 [features]
 dev-tools = ["dep:criterion"]

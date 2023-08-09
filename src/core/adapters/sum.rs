@@ -1,5 +1,13 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// A generator adding results of the underlying generator to results of a given other
+/// generator.
+///
+/// For details, see the documentation of [`sum()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`sum()`] implemented by [`Generator`], should be used
+/// to create [`Sum`].
+///
+/// [`sum()`]: Generator::sum
 #[derive(Clone)]
 pub struct Sum<const D: usize, GA, GB>
 where

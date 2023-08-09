@@ -1,5 +1,13 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// A generator raising results of the underlying generator to the power of `exponent`.
+///
+/// For details, see the documentation of [`powi()`] and [`powf()`]. Typically, this
+/// struct is not meant to be used directly. Instead, [`powi()`] or [`powf()`]
+/// implemented by [`Generator`], should be used to create [`Pow`].
+///
+/// [`powi()`]: Generator::powi
+/// [`powf()`]: Generator::powf
 #[derive(Clone)]
 pub struct Pow<const D: usize, G, T>
 where

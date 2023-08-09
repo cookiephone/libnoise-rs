@@ -1,5 +1,12 @@
 use crate::core::generator::{Generator, Generator2D, Generator3D, Generator4D};
 
+/// A generator which rotates input points before passing them to the underlying generator.
+///
+/// For details, see the documentation of [`rotate()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`rotate()`] implemented by [`Rotate`], should be used
+/// to create [`Rotate`].
+///
+/// [`rotate()`]: Generator2D::rotate
 #[derive(Clone)]
 pub struct Rotate<const D: usize, const P: usize, G>
 where

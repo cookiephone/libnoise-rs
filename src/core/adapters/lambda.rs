@@ -1,5 +1,12 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// A generator applying the supplied closure to results of the underlying generator.
+///
+/// For details, see the documentation of [`lambda()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`lambda()`] implemented by [`Generator`], should be used
+/// to create [`Lambda`].
+///
+/// [`lambda()`]: Generator::lambda
 #[derive(Clone)]
 pub struct Lambda<const D: usize, G, L>
 where

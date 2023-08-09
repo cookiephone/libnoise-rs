@@ -1,5 +1,13 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// A generator producing the maximum of results of the underlying generator and results of
+/// a given other generator.
+///
+/// For details, see the documentation of [`displace_x()`] and analogously for other axes.
+/// Typically, this struct is not meant to be used directly. Instead, [`displace_x()`]
+/// implemented by [`Generator`], should be used to create [`Displace`].
+///
+/// [`displace_x()`]: Generator2D::displace_x
 #[derive(Clone)]
 pub struct Displace<const D: usize, const A: usize, G, GA>
 where

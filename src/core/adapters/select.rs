@@ -1,5 +1,14 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// Create a generator selecting the result of either the underlying generator or that of a given
+/// other generator based on whether the value supplied by a control-generator lies within the
+/// provided interval.
+///
+/// For details, see the documentation of [`select()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`select()`] implemented by [`Generator`], should be used
+/// to create [`Select`].
+///
+/// [`select()`]: Generator::select
 #[derive(Clone)]
 pub struct Select<const D: usize, GA, GB, GC>
 where

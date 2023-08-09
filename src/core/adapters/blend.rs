@@ -1,5 +1,13 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// A generator blending the underlying generator with a given other generator based on the
+/// value supplied by a control-generator.
+///
+/// For details, see the documentation of [`blend()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`blend()`] implemented by [`Generator`], should be used
+/// to create [`Blend`].
+///
+/// [`blend()`]: Generator::blend
 #[derive(Clone)]
 pub struct Blend<const D: usize, GA, GB, GC>
 where

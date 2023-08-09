@@ -1,5 +1,12 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// A generator applying fractal brownian motion on the underlying generator.
+///
+/// For details, see the documentation of [`fbm()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`fbm()`] implemented by [`Generator`], should be used
+/// to create [`Fbm`].
+///
+/// [`fbm()`]: Generator::fbm
 #[derive(Clone)]
 pub struct Fbm<const D: usize, G>
 where

@@ -1,5 +1,13 @@
 use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D};
 
+/// A generator producing the minimum of results of the underlying generator and results of
+/// a given other generator.
+///
+/// For details, see the documentation of [`min()`]. Typically, this struct is not meant
+/// to be used directly. Instead, [`min()`] implemented by [`Generator`], should be used
+/// to create [`Min`].
+///
+/// [`min()`]: Generator::min
 #[derive(Clone)]
 pub struct Min<const D: usize, GA, GB>
 where
