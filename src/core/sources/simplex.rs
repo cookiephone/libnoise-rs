@@ -22,7 +22,7 @@ use crate::core::{
 ///
 /// [`simplex()`]: crate::Source::simplex
 /// [`Source`]: crate::Source
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Simplex<const D: usize> {
     permutation_table: PermutationTable,
 }

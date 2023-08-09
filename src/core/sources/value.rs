@@ -22,7 +22,7 @@ use crate::core::{
 ///
 /// [`value()`]: crate::Source::value
 /// [`Source`]: crate::Source
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Value<const D: usize> {
     permutation_table: PermutationTable,
 }

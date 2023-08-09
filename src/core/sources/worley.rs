@@ -22,7 +22,7 @@ use crate::core::{
 ///
 /// [`worley()`]: crate::Source::worley
 /// [`Source`]: crate::Source
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Worley<const D: usize> {
     permutation_table: PermutationTable,
 }

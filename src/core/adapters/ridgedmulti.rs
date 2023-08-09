@@ -8,7 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`fbm()`]: Generator:fbm
 /// [`ridgedmulti()`]: Generator::ridgedmulti
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct RidgedMulti<const D: usize, G>
 where
     G: Generator<D>,

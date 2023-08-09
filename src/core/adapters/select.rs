@@ -9,7 +9,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// to create [`Select`].
 ///
 /// [`select()`]: Generator::select
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Select<const D: usize, GA, GB, GC>
 where
     GA: Generator<D>,

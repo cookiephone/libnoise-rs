@@ -8,7 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// to create [`Product`].
 ///
 /// [`product()`]: Generator::product
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Product<const D: usize, GA, GB> {
     generator_a: GA,
     generator_b: GB,

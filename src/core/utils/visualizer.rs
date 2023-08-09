@@ -62,6 +62,7 @@ use std::{
 /// # let path = &tmp_dir.path().join(path).into_os_string().into_string().unwrap();
 /// Visualizer::from(buf).write_to_file(path);
 /// ```
+#[derive(Clone, Debug)]
 pub struct Visualizer<const D: usize> {
     /// Stores the length of the underlying n-dimensional array along each dimension.
     shape: [usize; D],

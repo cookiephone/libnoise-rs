@@ -8,7 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// to create [`Max`].
 ///
 /// [`max()`]: Generator::max
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Max<const D: usize, GA, GB>
 where
     GA: Generator<D>,

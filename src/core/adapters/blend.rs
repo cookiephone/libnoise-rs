@@ -8,7 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// to create [`Blend`].
 ///
 /// [`blend()`]: Generator::blend
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Blend<const D: usize, GA, GB, GC>
 where
     GA: Generator<D>,

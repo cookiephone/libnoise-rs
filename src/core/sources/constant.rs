@@ -18,7 +18,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`constant()`]: crate::Source::constant
 /// [`Source`]: crate::Source
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Constant<const D: usize> {
     value: f64,
 }

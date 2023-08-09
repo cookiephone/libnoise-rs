@@ -8,7 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// implemented by [`Generator`], should be used to create [`Displace`].
 ///
 /// [`displace_x()`]: Generator2D::displace_x
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Displace<const D: usize, const A: usize, G, GA>
 where
     G: Generator<D>,

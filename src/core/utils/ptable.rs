@@ -1,7 +1,7 @@
 use super::math::{Vec2, Vec3, Vec4};
 use rand::{rngs::StdRng, seq::SliceRandom, SeedableRng};
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub(crate) struct PermutationTable {
     pub(crate) table: Vec<usize>,
 }

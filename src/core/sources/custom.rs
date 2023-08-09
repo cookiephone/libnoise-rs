@@ -18,7 +18,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`custom()`]: crate::Source::custom
 /// [`Source`]: crate::Source
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Custom<const D: usize, N> {
     noise: N,
 }

@@ -42,6 +42,7 @@ use std::ops::{Index, IndexMut};
 /// [`scale()`]: Generator::scale
 /// [`translate()`]: Generator::translate
 /// [`rotate()`]: crate::Generator2D::rotate
+#[derive(Clone, Debug)]
 pub struct NoiseBuffer<const D: usize> {
     /// Stores the length of the n-dimensional array along each dimension.
     pub shape: [usize; D],

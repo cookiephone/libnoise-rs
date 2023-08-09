@@ -7,7 +7,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// to create [`Neg`].
 ///
 /// [`neg()`]: Generator::neg
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Neg<const D: usize, G> {
     generator: G,
 }

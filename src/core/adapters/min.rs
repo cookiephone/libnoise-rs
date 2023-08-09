@@ -8,7 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// to create [`Min`].
 ///
 /// [`min()`]: Generator::min
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Min<const D: usize, GA, GB>
 where
     GA: Generator<D>,

@@ -28,7 +28,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// [`checkerboard()`]: crate::Source::checkerboard
 /// [`Source`]: crate::Source
 /// [`new()`]: Checkerboard::new
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Checkerboard<const D: usize>;
 
 impl Generator1D for Checkerboard<1> {}

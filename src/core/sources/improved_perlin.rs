@@ -22,7 +22,7 @@ use crate::core::{
 ///
 /// [`improved_perlin()`]: crate::Source::improved_perlin
 /// [`Source`]: crate::Source
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ImprovedPerlin<const D: usize> {
     permutation_table: PermutationTable,
 }

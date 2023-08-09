@@ -7,7 +7,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// to create [`Clamp`].
 ///
 /// [`clamp()`]: Generator::clamp
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Clamp<const D: usize, G>
 where
     G: Generator<D>,

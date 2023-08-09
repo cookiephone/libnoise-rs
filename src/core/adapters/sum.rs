@@ -8,7 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// to create [`Sum`].
 ///
 /// [`sum()`]: Generator::sum
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Sum<const D: usize, GA, GB>
 where
     GA: Generator<D>,

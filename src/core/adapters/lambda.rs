@@ -7,7 +7,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// to create [`Lambda`].
 ///
 /// [`lambda()`]: Generator::lambda
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct Lambda<const D: usize, G, L>
 where
     G: Generator<D>,
