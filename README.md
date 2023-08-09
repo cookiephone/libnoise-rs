@@ -75,7 +75,11 @@ produce space-time noise such as:
 
 ![image](https://raw.githubusercontent.com/cookiephone/libnoise-rs/master/images/doc_image_001_f7049b4.gif)
 
-# License
+## Contributing
+
+Contributors and feature suggestions are welcome!
+
+## License
 
 Libnoise is distributed under the terms of the MIT license.
 
