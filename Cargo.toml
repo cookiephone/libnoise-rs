@@ -14,6 +14,27 @@ criterion = "*"
 plotters = "*"
 itertools = "*"
 proptest = "*"
+tempdir = "*"
+
+[profile.dev]
+opt-level = 1
+
+[profile.bench]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+
+[profile.release-with-debug]
+inherits = "release"
+debug = true
+strip = false
 
 [[test]]
 name = "test_sources"
@@ -89,23 +110,3 @@ name = "value"
 
 [[example]]
 name = "worley"
-
-[profile.dev]
-opt-level = 1
-
-[profile.bench]
-opt-level = 3
-lto = true
-codegen-units = 1
-strip = true
-
-[profile.release]
-opt-level = 3
-lto = true
-codegen-units = 1
-strip = true
-
-[profile.release-with-debug]
-inherits = "release"
-debug = true
-strip = false
