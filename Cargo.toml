@@ -16,19 +16,19 @@ categories = ["algorithms", "mathematics", "game-development", "graphics"]
 dev-tools = ["dep:criterion"]
 
 [dependencies]
-num-traits = "*"
-rand = "*"
-itertools = "*"
-image = "*"
-criterion = { version = "*", optional = true }
+num-traits = "0.2.16"
+rand = "0.8.5"
+itertools = "0.10.5"
+image = "0.24.6"
+criterion = { version = "0.5.1", optional = true }
 
 [dev-dependencies]
 libnoise = { path = ".", features = ["dev-tools"] }
-criterion = "*"
-plotters = "*"
-itertools = "*"
-proptest = "*"
-tempdir = "*"
+criterion = "0.5.1"
+plotters = "0.3.5"
+itertools = "0.10.5"
+proptest = "1.2.0"
+tempdir = "0.3.7"
 
 [profile.dev]
 opt-level = 1
