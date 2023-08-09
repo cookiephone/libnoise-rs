@@ -8,20 +8,48 @@ pub struct NoiseBuffer<const D: usize> {
     pub buffer: Vec<f64>,
 }
 
-impl<const D: usize> Index<&[usize]> for NoiseBuffer<D> {
-    type Output = f64;
-    fn index(&self, index: &[usize]) -> &Self::Output {
-        let idx = self.flat_index(index);
-        &self.buffer[idx]
-    }
+macro_rules! impl_indexing {
+    ($dim:literal) => {
+        impl Index<[usize; $dim]> for NoiseBuffer<$dim> {
+            type Output = f64;
+            fn index(&self, index: [usize; $dim]) -> &Self::Output {
+                let idx = self.flat_index(index);
+                &self.buffer[idx]
+            }
+        }
+        
+        impl IndexMut<[usize; $dim]> for NoiseBuffer<$dim> {
+            fn index_mut(&mut self, index: [usize; $dim]) -> &mut Self::Output {
+                let idx = self.flat_index(index);
+                &mut self.buffer[idx]
+            }
+        }
+    };
 }
 
-impl<const D: usize> IndexMut<&[usize]> for NoiseBuffer<D> {
-    fn index_mut(&mut self, index: &[usize]) -> &mut Self::Output {
-        let idx = self.flat_index(index);
-        &mut self.buffer[idx]
-    }
+macro_rules! impl_new {
+    ($dim:literal) => {
+        impl NoiseBuffer<$dim> {
+            pub fn new<G: Generator<$dim>>(shape: [usize; $dim], generator: G) -> Self {
+                let mut noisebuf = Self::new_empty(shape);
+                for point in noisebuf.tensor_indices() {
+                    noisebuf[point] = generator.sample(point.map(|x| x as f64));
+                }
+                noisebuf
+            }
+        }
+    };
 }
+
+impl_indexing!(1);
+impl_indexing!(2);
+impl_indexing!(3);
+impl_indexing!(4);
+
+impl_new!(1);
+impl_new!(2);
+impl_new!(3);
+impl_new!(4);
 
 impl<const D: usize> NoiseBuffer<D> {
     fn new_empty(shape: [usize; D]) -> Self {
@@ -33,7 +61,7 @@ impl<const D: usize> NoiseBuffer<D> {
         }
     }
 
-    fn flat_index(&self, index: &[usize]) -> usize {
+    fn flat_index(&self, index: [usize; D]) -> usize {
         index
             .iter()
             .zip(&self.offsets)
@@ -41,57 +69,12 @@ impl<const D: usize> NoiseBuffer<D> {
             .sum()
     }
 
-    pub(crate) fn tensor_indices(&self) -> impl Iterator<Item = Vec<usize>> {
+    pub(crate) fn tensor_indices(&self) -> impl Iterator<Item = [usize; D]> {
         self.shape
             .iter()
             .map(|&dim_size| 0..dim_size)
             .multi_cartesian_product()
-    }
-}
-
-impl NoiseBuffer<1> {
-    pub fn new<G: Generator<1>>(shape: [usize; 1], generator: G) -> Self {
-        let mut noisebuf = Self::new_empty(shape);
-        for point in noisebuf.tensor_indices() {
-            noisebuf[&point] = generator.sample([point[0] as f64]);
-        }
-        noisebuf
-    }
-}
-
-impl NoiseBuffer<2> {
-    pub fn new<G: Generator<2>>(shape: [usize; 2], generator: G) -> Self {
-        let mut noisebuf = Self::new_empty(shape);
-        for point in noisebuf.tensor_indices() {
-            noisebuf[&point] = generator.sample([point[0] as f64, point[1] as f64]);
-        }
-        noisebuf
-    }
-}
-
-impl NoiseBuffer<3> {
-    pub fn new<G: Generator<3>>(shape: [usize; 3], generator: G) -> Self {
-        let mut noisebuf = Self::new_empty(shape);
-        for point in noisebuf.tensor_indices() {
-            noisebuf[&point] =
-                generator.sample([point[0] as f64, point[1] as f64, point[2] as f64]);
-        }
-        noisebuf
-    }
-}
-
-impl NoiseBuffer<4> {
-    pub fn new<G: Generator<4>>(shape: [usize; 4], generator: G) -> Self {
-        let mut noisebuf = Self::new_empty(shape);
-        for point in noisebuf.tensor_indices() {
-            noisebuf[&point] = generator.sample([
-                point[0] as f64,
-                point[1] as f64,
-                point[2] as f64,
-                point[3] as f64,
-            ]);
-        }
-        noisebuf
+            .map(|point| point.try_into().unwrap())
     }
 }
 
