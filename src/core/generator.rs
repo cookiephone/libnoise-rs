@@ -13,7 +13,7 @@ use std::marker::Sized;
 /// The constant generic `D` represents the dimensionality of the input space, and can typically be
 /// inferred without explicitly specifiying it when working with generators.
 ///
-/// # Generator creation
+/// # Creating generators
 ///
 /// A source implements [`Generator<D>`] and requires no further generators as argument to be created,
 /// though they may be parameterized by e.g. a seed. For more on sources, see [`Source`]. Here a simple
@@ -526,10 +526,16 @@ pub trait Generator<const D: usize>: Sized {
     /// of the frequency and amplitude, as octaves are increase. The result is the normalized sum of
     /// samples from each octave.
     ///
-    /// Note: The initial amplitude is not a parameter because the result of the generator is normalized.
+    /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
+    /// <strong>Note:</strong>
+    /// The initial amplitude is not a parameter because the result of the generator is normalized.
+    /// </p>
     ///
-    /// Note: Typically, a desireable value for `lacunarity` is 2 while a desireable value for `persistence`
+    /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
+    /// <strong>Note:</strong>
+    /// Typically, a desireable value for `lacunarity` is 2 while a desireable value for `persistence`
     /// lies somewhere between 0 and 1.
+    /// </p>
     ///
     /// # Examples
     ///
@@ -590,10 +596,16 @@ pub trait Generator<const D: usize>: Sized {
     /// created by this adapter will not produce correct results, if this contract is violated.
     /// </p>
     ///
-    /// Note: The initial amplitude is not a parameter because the result of the generator is normalized.
+    /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
+    /// <strong>Note:</strong>
+    /// The initial amplitude is not a parameter because the result of the generator is normalized.
+    /// </p> 
     ///
-    /// Note: Typically, a desireable value for `lacunarity` is 2 while a desireable value for `persistence`
-    /// lies somewhere between 0 and 1.
+    /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
+    /// <strong>Note:</strong>
+    /// Typically, a desireable value for `lacunarity` is 2 while a desireable value for `persistence` lies
+    /// somewhere between 0 and 1.
+    /// </p> 
     ///
     /// [`fbm()`]: Generator::fbm
     ///
