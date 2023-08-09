@@ -10,21 +10,21 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// # Direct usage of this struct
 ///
 /// [`Checkerboard`] is a unit struct and thus can be used directly:
-/// 
+///
 /// ```
 /// # use libnoise::{Checkerboard, Generator};
 /// let value = Checkerboard.sample([0.2, 0.5]);
 /// ```
-/// 
+///
 /// Alternatively, for the sake of a unified API, the function [`new()`] is provided:
-/// 
+///
 /// ```
 /// // create
 /// # use libnoise::{Checkerboard, Generator};
 /// let generator = Checkerboard::new();
 /// let value = generator.sample([0.2, 0.5]);
 /// ```
-/// 
+///
 /// [`checkerboard()`]: crate::Source::checkerboard
 /// [`Source`]: crate::Source
 /// [`new()`]: Checkerboard::new

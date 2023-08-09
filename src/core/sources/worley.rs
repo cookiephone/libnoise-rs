@@ -11,15 +11,15 @@ use crate::core::{
 /// create a worley noise generator.
 ///
 /// # Direct usage of this struct
-/// 
+///
 /// Direct instantiation of this struct:
-/// 
+///
 /// ```
 /// # use libnoise::{Worley, Generator};
 /// let generator = Worley::new(42);
 /// let value = generator.sample([0.2, 0.5]);
 /// ```
-/// 
+///
 /// [`worley()`]: crate::Source::worley
 /// [`Source`]: crate::Source
 #[derive(Clone)]

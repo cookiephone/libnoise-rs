@@ -11,15 +11,15 @@ use crate::core::{
 /// create an improved perlin noise generator.
 ///
 /// # Direct usage of this struct
-/// 
+///
 /// Direct instantiation of this struct:
-/// 
+///
 /// ```
 /// # use libnoise::{ImprovedPerlin, Generator};
 /// let generator = ImprovedPerlin::new(42);
 /// let value = generator.sample([0.2, 0.5]);
 /// ```
-/// 
+///
 /// [`improved_perlin()`]: crate::Source::improved_perlin
 /// [`Source`]: crate::Source
 #[derive(Clone)]

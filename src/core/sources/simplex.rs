@@ -11,15 +11,15 @@ use crate::core::{
 /// create a simplex noise generator.
 ///
 /// # Direct usage of this struct
-/// 
+///
 /// Direct instantiation of this struct:
-/// 
+///
 /// ```
 /// # use libnoise::{Simplex, Generator};
 /// let generator = Simplex::new(42);
 /// let value = generator.sample([0.2, 0.5]);
 /// ```
-/// 
+///
 /// [`simplex()`]: crate::Source::simplex
 /// [`Source`]: crate::Source
 #[derive(Clone)]

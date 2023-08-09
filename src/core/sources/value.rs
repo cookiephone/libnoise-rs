@@ -11,15 +11,15 @@ use crate::core::{
 /// create a value noise generator.
 ///
 /// # Direct usage of this struct
-/// 
+///
 /// Direct instantiation of this struct:
-/// 
+///
 /// ```
 /// # use libnoise::{Value, Generator};
 /// let generator = Value::new(42);
 /// let value = generator.sample([0.2, 0.5]);
 /// ```
-/// 
+///
 /// [`value()`]: crate::Source::value
 /// [`Source`]: crate::Source
 #[derive(Clone)]

@@ -15,22 +15,22 @@ use std::{
 /// This struct represents a simple way to quickly visualize the output of a [`Generator`] by
 /// building a [`NoiseBuffer`] of a given size, populating it with data, and creating an PNG or
 /// GIF file visualizing said data.
-/// 
+///
 /// In the 1D case, the visualization is a grayscale band of one pixel in height and with the
 /// provided length. In the 2D case, the visualization is an image of the provided dimensions.
 /// In the 3D case, the visualization is an image providing an isometric view on a cube
 /// representing the buffer. In the 4D case, the visualization is equivalent to the 3D case,
 /// except the result is an animation with the 4th dimension mapping to time.
-/// 
+///
 /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
 /// <strong>Note:</strong>
 /// This struct is meant to be used to get an idea of what a generator is doing. Especially the
 /// 1D, 3D, and 4D cases are not suited for usage besides debugging, as the main goal of this
 /// library is to provide an efficient and modular way to creating a noise generation pipeline.
 /// </p>
-/// 
+///
 /// The usage of this struct is simple and analogous to that of [`NoiseBuffer`]:
-/// 
+///
 /// ```
 /// # use libnoise::{Source, NoiseBuffer, Visualizer};
 /// # use tempdir::TempDir;
@@ -43,10 +43,10 @@ use std::{
 /// # let mut path = &tmp_dir.path().join(path).into_os_string().into_string().unwrap();
 /// Visualizer::<3>::new([30, 20, 25], &generator).write_to_file(path);
 /// ```
-/// 
+///
 /// In fact, a visualizer can be created from a [`NoiseBuffer`] by simply converting it
 /// to a [`Visualizer`]:
-/// 
+///
 /// ```
 /// # use libnoise::{Source, NoiseBuffer, Visualizer};
 /// # use tempdir::TempDir;
@@ -55,7 +55,7 @@ use std::{
 ///
 /// // create a noise buffer
 /// let buf = NoiseBuffer::<3>::new([30, 20, 25], &generator);
-/// 
+///
 /// // create a visualizer and use it to visualize the output of the generator
 /// let path = "output.png";
 /// # let tmp_dir = TempDir::new("libnoise").unwrap();

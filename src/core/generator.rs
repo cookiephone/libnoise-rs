@@ -1107,7 +1107,7 @@ pub trait Generator3D: Generator<3> {
 /// dimension-agnostic manner. The second is to bypass certain limitations of constant generics.
 pub trait Generator4D: Generator<4> {
     /// Create a generator which rotates input points before passing them to the underlying generator.
-    /// 
+    ///
     /// <p style="background:rgba(255,181,77,0.16);padding:0.75em;">
     /// <strong>Warning:</strong>
     /// The correctness of this adapter is untested. It may not work as expected.

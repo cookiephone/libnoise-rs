@@ -7,15 +7,15 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// create a constant generator.
 ///
 /// # Direct usage of this struct
-/// 
+///
 /// Direct instantiation of this struct:
-/// 
+///
 /// ```
 /// # use libnoise::{Constant, Generator};
 /// let generator = Constant::new(6.9);
 /// let value = generator.sample([0.2, 0.5]);
 /// ```
-/// 
+///
 /// [`constant()`]: crate::Source::constant
 /// [`Source`]: crate::Source
 #[derive(Clone)]

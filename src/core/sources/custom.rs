@@ -7,15 +7,15 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// create a custom generator.
 ///
 /// # Direct usage of this struct
-/// 
+///
 /// Direct instantiation of this struct:
-/// 
+///
 /// ```
 /// # use libnoise::{Custom, Generator};
 /// let generator = Custom::new(|[x, y]| x % 2.0 + (1.0 - y * y) % 3.0);
 /// let value = generator.sample([0.2, 0.5]);
 /// ```
-/// 
+///
 /// [`custom()`]: crate::Source::custom
 /// [`Source`]: crate::Source
 #[derive(Clone)]
