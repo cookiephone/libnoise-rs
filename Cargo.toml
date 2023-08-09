@@ -13,6 +13,9 @@ keywords = ["noise", "procedural", "perlin", "simplex", "worley"]
 categories = ["algorithms", "mathematics", "game-development", "graphics"]
 include = ["LICENSE.md", "README.md"]
 
+[lib]
+name = "libnoise"
+
 [features]
 dev-tools = ["dep:criterion"]
 
