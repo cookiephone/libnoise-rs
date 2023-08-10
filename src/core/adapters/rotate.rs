@@ -37,10 +37,13 @@ impl<G: Generator<2>> Generator<2> for Rotate<2, 1, G> {
     fn sample(&self, point: [f64; 2]) -> f64 {
         let x = point[0];
         let y = point[1];
+
         let sin_theta = self.rotation[0].sin();
         let cos_theta = self.rotation[0].cos();
+
         let xr = x * cos_theta - y * sin_theta;
         let yr = x * sin_theta + y * cos_theta;
+
         self.generator.sample([xr, yr])
     }
 }
@@ -50,24 +53,20 @@ impl<G: Generator<3>> Generator<3> for Rotate<3, 3, G> {
         let x = point[0];
         let y = point[1];
         let z = point[2];
-        let sin_alpha = self.rotation[0].sin();
-        let cos_alpha = self.rotation[0].cos();
-        let sin_beta = self.rotation[1].sin();
-        let cos_beta = self.rotation[1].cos();
-        let sin_gamma = self.rotation[2].sin();
-        let cos_gamma = self.rotation[2].cos();
-        let x1 = cos_beta * cos_gamma;
-        let x2 = sin_alpha * sin_beta * cos_gamma - cos_alpha * sin_gamma;
-        let x3 = cos_alpha * sin_beta * cos_gamma + sin_alpha * sin_gamma;
-        let y1 = cos_beta * sin_gamma;
-        let y2 = sin_alpha * sin_beta * sin_gamma + cos_alpha * cos_gamma;
-        let y3 = cos_alpha * sin_beta * sin_gamma - sin_alpha * cos_gamma;
-        let z1 = -sin_beta;
-        let z2 = sin_alpha * cos_beta;
-        let z3 = cos_alpha * cos_beta;
-        let xr = x * x1 + y * y1 + z * z1;
-        let yr = x * x2 + y * y2 + z * z2;
-        let zr = x * x3 + y * y3 + z * z3;
+
+        let sin_a = self.rotation[0].sin();
+        let cos_a = self.rotation[0].cos();
+
+        let sin_b = self.rotation[1].sin();
+        let cos_b = self.rotation[1].cos();
+
+        let sin_g = self.rotation[2].sin();
+        let cos_g = self.rotation[2].cos();
+        
+        let xr = cos_b*(x*cos_g + y*sin_g) + z*(-sin_b);
+        let yr = sin_a*(sin_b*(x*cos_g + y*sin_g) + z*cos_b) - cos_a*(x*sin_g - y*cos_g);
+        let zr = cos_a*(sin_b*(x*cos_g + y*sin_g) + z*cos_b) + sin_a*(x*sin_g - y*cos_g);
+
         self.generator.sample([xr, yr, zr])
     }
 }
