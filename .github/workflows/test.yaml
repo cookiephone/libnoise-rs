@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - master
-      - ci-changes
 
 env:
   CARGO_TERM_COLOR: always
