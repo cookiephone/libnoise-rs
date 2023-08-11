@@ -62,10 +62,12 @@ impl<G: Generator<3>> Generator<3> for Rotate<3, 3, G> {
 
         let sin_g = self.rotation[2].sin();
         let cos_g = self.rotation[2].cos();
-        
-        let xr = cos_b*(x*cos_g + y*sin_g) + z*(-sin_b);
-        let yr = sin_a*(sin_b*(x*cos_g + y*sin_g) + z*cos_b) - cos_a*(x*sin_g - y*cos_g);
-        let zr = cos_a*(sin_b*(x*cos_g + y*sin_g) + z*cos_b) + sin_a*(x*sin_g - y*cos_g);
+
+        let xr = cos_b * (x * cos_g + y * sin_g) + z * (-sin_b);
+        let yr =
+            sin_a * (sin_b * (x * cos_g + y * sin_g) + z * cos_b) - cos_a * (x * sin_g - y * cos_g);
+        let zr =
+            cos_a * (sin_b * (x * cos_g + y * sin_g) + z * cos_b) + sin_a * (x * sin_g - y * cos_g);
 
         self.generator.sample([xr, yr, zr])
     }
@@ -89,72 +91,46 @@ impl<G: Generator<4>> Generator<4> for Rotate<4, 6, G> {
         let cos_epsilon = self.rotation[4].cos();
         let sin_digamma = self.rotation[5].sin();
         let cos_digamma = self.rotation[5].cos();
-        
-        let xr = 
-        cos_alpha*(
-            x*cos_beta*cos_gamma + sin_beta*(
-                sin_delta*(
-                    sin_epsilon*(z*sin_digamma + w*cos_digamma)
-                    - y*cos_epsilon)
-                + cos_delta*(- z*cos_digamma + w*sin_digamma)
-            )
-        
-            + sin_gamma*(
-                cos_beta*(
-                    cos_epsilon*(- z*sin_digamma - w*cos_digamma)
-                    - y*sin_epsilon)
-            ))
 
-        + sin_alpha*( 
-            cos_delta*(
-                sin_epsilon*(z*sin_digamma + w*cos_digamma)
-                - y*cos_epsilon)
-            + sin_delta*(z*cos_digamma - w*sin_digamma));
+        let xr = cos_alpha
+            * (x * cos_beta * cos_gamma
+                + sin_beta
+                    * (sin_delta
+                        * (sin_epsilon * (z * sin_digamma + w * cos_digamma) - y * cos_epsilon)
+                        + cos_delta * (-z * cos_digamma + w * sin_digamma))
+                + sin_gamma
+                    * (cos_beta
+                        * (cos_epsilon * (-z * sin_digamma - w * cos_digamma) - y * sin_epsilon)))
+            + sin_alpha
+                * (cos_delta
+                    * (sin_epsilon * (z * sin_digamma + w * cos_digamma) - y * cos_epsilon)
+                    + sin_delta * (z * cos_digamma - w * sin_digamma));
 
+        let yr = sin_alpha
+            * (cos_beta
+                * (sin_gamma
+                    * (cos_epsilon * (-z * sin_digamma - w * cos_digamma) - y * sin_epsilon)
+                    + x * cos_gamma)
+                + sin_beta
+                    * (sin_delta
+                        * (sin_epsilon * (z * sin_digamma + w * cos_digamma) - y * cos_epsilon)
+                        + cos_delta * (-z * cos_digamma + w * sin_digamma)))
+            + cos_alpha
+                * (cos_delta
+                    * (sin_epsilon * (-z * sin_digamma - w * cos_digamma) + y * cos_epsilon)
+                    + sin_delta * (-z * cos_digamma + w * sin_digamma));
 
-        let yr =
-        sin_alpha*(
-            cos_beta*(
-                sin_gamma*(
-                    cos_epsilon*(-z*sin_digamma - w*cos_digamma)
-                    - y*sin_epsilon)
-                + x*cos_gamma)
-        
-            + sin_beta*(
-                sin_delta*(
-                    sin_epsilon*(z*sin_digamma + w*cos_digamma)
-                    - y*cos_epsilon)
-                + cos_delta*(-z*cos_digamma + w*sin_digamma)))
-        
-        + cos_alpha*(
-            cos_delta*(
-                sin_epsilon*(-z*sin_digamma - w*cos_digamma)
-                + y*cos_epsilon)
-            + sin_delta*(-z*cos_digamma + w*sin_digamma));
+        let zr = cos_beta
+            * (sin_epsilon * (sin_delta * (-z * sin_digamma - w * cos_digamma))
+                + cos_delta * (z * cos_digamma - w * sin_digamma)
+                + y * sin_gamma * cos_epsilon)
+            + sin_beta
+                * (sin_gamma
+                    * (sin_epsilon * (-y - z * sin_digamma) - w * cos_digamma * cos_epsilon)
+                    + x * cos_gamma);
 
-
-        let zr = 
-        cos_beta*(
-            sin_epsilon*(
-                sin_delta*(-z*sin_digamma - w*cos_digamma))
-        
-            + cos_delta*(z*cos_digamma - w*sin_digamma)
-            + y*sin_gamma*cos_epsilon)
-        
-        + sin_beta*(
-            sin_gamma*(
-                sin_epsilon*(-y - z*sin_digamma)
-                - w*cos_digamma*cos_epsilon)
-        
-            + x*cos_gamma);
-
-            
-        let wr = 
-        cos_gamma*(
-            cos_epsilon*(
-                z*sin_digamma + w*cos_digamma)
-            + y*sin_epsilon)
-        + x*sin_gamma;
+        let wr = cos_gamma * (cos_epsilon * (z * sin_digamma + w * cos_digamma) + y * sin_epsilon)
+            + x * sin_gamma;
 
         self.generator.sample([xr, yr, zr, wr])
     }

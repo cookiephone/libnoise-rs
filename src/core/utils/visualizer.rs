@@ -157,10 +157,8 @@ impl Visualizer<3> {
         let scale = 0.45;
         let center = (self.shape[0] as f64 * 0.5, self.shape[1] as f64 * 0.5);
         let mut buf = vec![0; self.shape[0] * self.shape[1]];
-        for z_idx in (0..self.shape[2]).rev() 
-        {
-            for p in tensor_indices(&[self.shape[0], self.shape[1]]) 
-            {
+        for z_idx in (0..self.shape[2]).rev() {
+            for p in tensor_indices(&[self.shape[0], self.shape[1]]) {
                 if let Some(buf_idx) =
                     xyz_screen_to_buff_indices(p[0], p[1], z_idx, center.0, center.1, scale)
                 {
@@ -196,13 +194,10 @@ impl Visualizer<4> {
 
         let scale = 0.45;
         let center = (self.shape[0] as f64 * 0.5, self.shape[1] as f64 * 0.5);
-        for t in 0..self.shape[3]
-        {
+        for t in 0..self.shape[3] {
             let mut buf = vec![0; self.shape[0] * self.shape[1]];
-            for z_idx in (0..self.shape[2]).rev() 
-            {
-                for p in tensor_indices(&[self.shape[0], self.shape[1]]) 
-                {
+            for z_idx in (0..self.shape[2]).rev() {
+                for p in tensor_indices(&[self.shape[0], self.shape[1]]) {
                     if let Some(buf_idx) =
                         xyz_screen_to_buff_indices(p[0], p[1], z_idx, center.0, center.1, scale)
                     {
