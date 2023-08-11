@@ -166,6 +166,7 @@ impl Visualizer<3> {
                 }
             }
         }
+
         let image = GrayImage::from_raw(self.shape[1] as u32, self.shape[0] as u32, buf).unwrap();
         image.save(path).unwrap();
     }
@@ -187,8 +188,10 @@ impl Visualizer<4> {
             .create(true)
             .open(path)
             .unwrap();
+
         let mut encoder = GifEncoder::new(file_out);
         encoder.set_repeat(Repeat::Infinite).unwrap();
+
         let scale = 0.45;
         let center = (self.shape[0] as f64 * 0.5, self.shape[1] as f64 * 0.5);
         for t in 0..self.shape[3] {
@@ -203,10 +206,12 @@ impl Visualizer<4> {
                     }
                 }
             }
+
             buf = buf
                 .into_iter()
                 .flat_map(|val| std::iter::repeat(val).take(3))
                 .collect();
+
             encoder
                 .encode(
                     &buf,
