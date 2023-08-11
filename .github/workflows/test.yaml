@@ -35,8 +35,9 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-      - name: install tarpaulin
+      - name: install binstall
         run: curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+      - name: bininstall tarpaulin
         uses: actions-rs/cargo@v1
         with:
           command: binstall
