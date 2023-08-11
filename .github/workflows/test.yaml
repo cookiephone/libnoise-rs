@@ -45,13 +45,13 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: tarpaulin
-          args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --engine llvm
+          args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --engine llvm --skip-clean
       - name: try tarpaulin without coveralls
         if: ${{ env.COVERALLS_TOKEN == '' }}
         uses: actions-rs/cargo@v1
         with:
           command: tarpaulin
-          args: --engine llvm
+          args: --engine llvm --skip-clean
       - name: run doctests
         uses: actions-rs/cargo@v1
         with:
