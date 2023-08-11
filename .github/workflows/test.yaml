@@ -32,14 +32,14 @@ jobs:
           command: install
           args: cargo-tarpaulin
       - name: run tarpaulin
-         env:
-          coveralls_token: ${{ secrets.COVERALLS_TOKEN }}
-        if: ${{ env.coveralls_token != "" }}
+        env:
+          COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+        if: ${{ env.COVERALLS_TOKEN != "" }}
           uses: actions-rs/cargo@v1
           with:
             command: tarpaulin
             args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --engine llvm
-        if: ${{ env.coveralls_token == "" }}
+        if: ${{ env.COVERALLS_TOKEN == "" }}
           uses: actions-rs/cargo@v1
           with:
             command: tarpaulin
