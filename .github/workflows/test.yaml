@@ -1,7 +1,6 @@
 name: test
 
 on:
-  workflow_dispatch:
   pull_request:
      branches:
       - master
@@ -22,6 +21,14 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v3
+      - name: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: install toolchain
         uses: actions-rs/toolchain@v1
         with:
