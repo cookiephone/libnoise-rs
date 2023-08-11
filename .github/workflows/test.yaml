@@ -17,6 +17,8 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
+    env:
+      COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
     steps:
       - name: checkout repository
         uses: actions/checkout@v3
@@ -31,14 +33,13 @@ jobs:
         with:
           command: install
           args: cargo-tarpaulin
-      - name: run tarpaulin
-        env:
-          COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+      - name: try tarpaulin with coveralls
         if: ${{ env.COVERALLS_TOKEN != "" }}
           uses: actions-rs/cargo@v1
           with:
             command: tarpaulin
             args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --engine llvm
+      - name: try tarpaulin without coveralls
         if: ${{ env.COVERALLS_TOKEN == "" }}
           uses: actions-rs/cargo@v1
           with:
