@@ -245,17 +245,15 @@ fn xyz_screen_to_buff_indices(
     let mut y = y as f64;
     x -= center_x * (1.0 - scale) + scale * z as f64;
     y -= center_y;
-    
-    let yy = y / 3_f64.sqrt() - x;
-    
-    x = -(x + y / 3_f64.sqrt()) / scale + center_x;
+    let xx = -(x + y / 3_f64.sqrt());
+    let yy = 2.0 * y / 3_f64.sqrt() + xx;
+    x = xx / scale + center_x;
     y = yy / scale + center_y;
-    
     if x < 0.0 || y < 0.0 || x >= 2.0 * center_x || y >= 2.0 * center_y {
-        return None;
+        None
+    } else {
+        Some((x as usize, y as usize, z))
     }
-    
-    Some((x as usize, y as usize, z))
 }
 
 fn tensor_indices(shape: &[usize]) -> impl Iterator<Item = Vec<usize>> {
