@@ -111,6 +111,7 @@ impl<G: Generator<4>> Generator<4> for Rotate<4, 6, G> {
                 - y*cos_epsilon)
             + sin_delta*(z*cos_digamma - w*sin_digamma));
 
+
         let yr =
         sin_alpha*(
             cos_beta*(
@@ -125,12 +126,12 @@ impl<G: Generator<4>> Generator<4> for Rotate<4, 6, G> {
                     - y*cos_epsilon)
                 + cos_delta*(-z*cos_digamma + w*sin_digamma)))
         
-        
         + cos_alpha*(
             cos_delta*(
                 sin_epsilon*(-z*sin_digamma - w*cos_digamma)
                 + y*cos_epsilon)
             + sin_delta*(-z*cos_digamma + w*sin_digamma));
+
 
         let zr = 
         cos_beta*(
@@ -147,6 +148,7 @@ impl<G: Generator<4>> Generator<4> for Rotate<4, 6, G> {
         
             + x*cos_gamma);
 
+            
         let wr = 
         cos_gamma*(
             cos_epsilon*(
