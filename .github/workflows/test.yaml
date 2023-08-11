@@ -35,16 +35,16 @@ jobs:
           args: cargo-tarpaulin
       - name: try tarpaulin with coveralls
         if: ${{ env.COVERALLS_TOKEN != "" }}
-          uses: actions-rs/cargo@v1
-          with:
-            command: tarpaulin
-            args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --engine llvm
+        uses: actions-rs/cargo@v1
+        with:
+          command: tarpaulin
+          args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --engine llvm
       - name: try tarpaulin without coveralls
         if: ${{ env.COVERALLS_TOKEN == "" }}
-          uses: actions-rs/cargo@v1
-          with:
-            command: tarpaulin
-            args: --engine llvm
+        uses: actions-rs/cargo@v1
+        with:
+          command: tarpaulin
+          args: --engine llvm
       - name: run doctests
         uses: actions-rs/cargo@v1
         with:
