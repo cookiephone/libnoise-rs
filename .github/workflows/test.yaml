@@ -15,25 +15,45 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
+    env:
+      COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
     steps:
       - name: checkout repository
         uses: actions/checkout@v3
+      - name: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+            target_cov
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }} # dependency version changes in manifest should result in a new cache
       - name: install toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           override: true
-      - name: install tarpaulin
+      - name: install binstall
+        run: curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+      - name: bininstall tarpaulin
         uses: actions-rs/cargo@v1
         with:
-          command: install
-          args: cargo-tarpaulin
-      - name: run tarpaulin
+          command: binstall
+          args: cargo-tarpaulin --no-confirm
+      - name: try tarpaulin with coveralls
+        if: ${{ env.COVERALLS_TOKEN != '' }}
         uses: actions-rs/cargo@v1
         with:
           command: tarpaulin
-          args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --engine llvm
+          args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --target-dir target_cov --engine llvm --skip-clean
+      - name: try tarpaulin without coveralls
+        if: ${{ env.COVERALLS_TOKEN == '' }}
+        uses: actions-rs/cargo@v1
+        with:
+          command: tarpaulin
+          args: --target-dir target_cov --engine llvm --skip-clean
       - name: run doctests
         uses: actions-rs/cargo@v1
         with:
