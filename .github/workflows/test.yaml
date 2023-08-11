@@ -28,6 +28,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
+            target_cov
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }} # dependency version changes in manifest should result in a new cache
       - name: install toolchain
         uses: actions-rs/toolchain@v1
@@ -47,13 +48,13 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: tarpaulin
-          args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --engine llvm --skip-clean
+          args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --target-dir target_cov --engine llvm --skip-clean
       - name: try tarpaulin without coveralls
         if: ${{ env.COVERALLS_TOKEN == '' }}
         uses: actions-rs/cargo@v1
         with:
           command: tarpaulin
-          args: --engine llvm --skip-clean
+          args: --target-dir target_cov --engine llvm --skip-clean
       - name: run doctests
         uses: actions-rs/cargo@v1
         with:
