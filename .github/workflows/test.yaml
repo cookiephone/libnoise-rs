@@ -30,10 +30,18 @@ jobs:
           command: install
           args: cargo-tarpaulin
       - name: run tarpaulin
-        uses: actions-rs/cargo@v1
-        with:
-          command: tarpaulin
-          args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --engine llvm
+         env:
+          coveralls_token: ${{ secrets.COVERALLS_TOKEN }}
+        if: ${{ env.coveralls_token != "" }}
+          uses: actions-rs/cargo@v1
+          with:
+            command: tarpaulin
+            args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --engine llvm
+        if: ${{ env.coveralls_token == "" }}
+          uses: actions-rs/cargo@v1
+          with:
+            command: tarpaulin
+            args: --engine llvm
       - name: run doctests
         uses: actions-rs/cargo@v1
         with:
