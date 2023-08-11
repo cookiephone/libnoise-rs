@@ -36,9 +36,10 @@ jobs:
           toolchain: stable
           override: true
       - name: install tarpaulin
+        run: curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
         uses: actions-rs/cargo@v1
         with:
-          command: install
+          command: binstall
           args: cargo-tarpaulin
       - name: try tarpaulin with coveralls
         if: ${{ env.COVERALLS_TOKEN != '' }}
