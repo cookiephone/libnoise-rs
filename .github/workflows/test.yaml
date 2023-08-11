@@ -41,7 +41,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: binstall
-          args: cargo-tarpaulin
+          args: cargo-tarpaulin --no-confirm
       - name: try tarpaulin with coveralls
         if: ${{ env.COVERALLS_TOKEN != '' }}
         uses: actions-rs/cargo@v1
