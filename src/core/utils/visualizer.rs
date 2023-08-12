@@ -4,7 +4,7 @@ use image::{
     codecs::gif::{GifEncoder, Repeat},
     ColorType, GrayImage,
 };
-use itertools::Itertools;
+use itertools::iproduct;
 use std::{
     fs::OpenOptions,
     ops::{Index, IndexMut},
@@ -251,9 +251,8 @@ fn xyz_screen_to_buff_indices(
     }
 }
 
-fn tensor_indices(shape: &[usize]) -> impl Iterator<Item = Vec<usize>> {
-    shape
-        .iter()
-        .map(|&dim_size| 0..dim_size)
-        .multi_cartesian_product()
+fn tensor_indices(shape: &[usize; 2]) -> Vec<[usize; 2]> {
+    iproduct!(0..shape[0], 0..shape[1])
+        .map(|(a, b)| [a, b])
+        .collect()
 }
