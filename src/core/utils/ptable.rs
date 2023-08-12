@@ -1,5 +1,6 @@
 use super::math::{Vec2, Vec3, Vec4};
-use rand::{rngs::StdRng, seq::SliceRandom, SeedableRng};
+use rand::seq::SliceRandom;
+use rand_chacha::{ChaCha12Rng, rand_core::SeedableRng};
 
 #[derive(Clone, Debug)]
 pub(crate) struct PermutationTable {
@@ -9,7 +10,7 @@ pub(crate) struct PermutationTable {
 impl PermutationTable {
     pub(crate) fn new(seed: u64, w: usize, doubleup: bool) -> Self {
         let mut table = Vec::from_iter(0..w);
-        let mut rng = StdRng::seed_from_u64(seed);
+        let mut rng = ChaCha12Rng::seed_from_u64(seed);
         table.shuffle(&mut rng);
         if doubleup {
             table.extend_from_within(..);
