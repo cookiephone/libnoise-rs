@@ -1,6 +1,6 @@
 use super::math::{Vec2, Vec3, Vec4};
 use rand::seq::SliceRandom;
-use rand_chacha::{ChaCha12Rng, rand_core::SeedableRng};
+use rand_chacha::{rand_core::SeedableRng, ChaCha12Rng};
 
 #[derive(Clone, Debug)]
 pub(crate) struct PermutationTable {
