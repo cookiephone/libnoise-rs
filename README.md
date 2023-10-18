@@ -25,13 +25,22 @@ by applying a variety of operations which modify and combine generators.
 With a focus on customizability, the library allows users to create custom
 generators and modifiers.
 
-Most immediately relevant [documentation](https://docs.rs/libnoise) can be found in `Source` and
-`Generator` docs.
+Most immediately relevant [documentation](https://docs.rs/libnoise) can be found in
+[`Source`](https://docs.rs/libnoise/latest/libnoise/struct.Source.html) and
+[`Generator`](https://docs.rs/libnoise/latest/libnoise/trait.Generator.html) docs.
 
 ## Usage
 
+First, add the dependency to your project by editing your `Cargo.toml`:
+```toml
+[dependencies]
+libnoise = "0.1"
+```
+
 To get started easily, create a source generator using one of the many
-sources found in `Source`, and apply adapters documented in `Generator`.
+sources found in [`Source`](https://docs.rs/libnoise/latest/libnoise/struct.Source.html),
+and apply adapters documented in [`Generator`](https://docs.rs/libnoise/latest/libnoise/trait.Generator.html).
+For a more detailed introduction, see the [quickstart guide](https://docs.rs/libnoise/latest/libnoise/).
 
 
 ```rs
@@ -65,8 +74,8 @@ let generator = Source::simplex(42)                 // start with simplex noise
 let value = generator.sample([0.2, 0.5]);
 ```
 
-We can also use `NoiseBuffer` for efficiently filling n-dimensional arrays
-with noise, and `Visualizer` to get a visual representation of a given
+We can also use [`NoiseBuffer`](https://docs.rs/libnoise/latest/libnoise/struct.NoiseBuffer.html) for efficiently filling n-dimensional arrays
+with noise, and [`Visualizer`](https://docs.rs/libnoise/latest/libnoise/struct.Visualizer.html) to get a visual representation of a given
 generator. The above generator produces the following image, when sampled for
 every pixel position:
 
@@ -80,6 +89,8 @@ produce space-time noise such as:
 ## Contributing
 
 Contributors and feature suggestions are welcome!
+
+Should you want to contact me directly, it is best via discord (username: oogie).
 
 ## License
 

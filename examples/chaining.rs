@@ -21,5 +21,7 @@ fn example_chaining() {
             Source::worley(45).scale([0.033, 0.033]),
             Source::perlin(45).scale([0.033, 0.033]).add(0.3),
         );
-    Visualizer::<2>::new([1000, 1000], &generator).write_to_file("chaining.png");
+    Visualizer::<2>::new([1000, 1000], &generator)
+        .write_to_file("chaining.png")
+        .unwrap();
 }
