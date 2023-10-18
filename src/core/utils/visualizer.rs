@@ -2,11 +2,12 @@ use crate::core::generator::Generator;
 use crate::core::utils::noisebuf::NoiseBuffer;
 use image::{
     codecs::gif::{GifEncoder, Repeat},
-    ColorType, GrayImage,
+    ColorType, GrayImage, ImageError,
 };
 use itertools::Itertools;
 use std::{
     fs::OpenOptions,
+    io::Error,
     ops::{Index, IndexMut},
 };
 
@@ -41,7 +42,7 @@ use std::{
 /// let path = "output.png";
 /// # let tmp_dir = TempDir::new("libnoise").unwrap();
 /// # let path = &tmp_dir.path().join(path).into_os_string().into_string().unwrap();
-/// Visualizer::<3>::new([30, 20, 25], &generator).write_to_file(path);
+/// Visualizer::<3>::new([30, 20, 25], &generator).write_to_file(path).unwrap();
 /// ```
 ///
 /// In fact, a visualizer can be created from a [`NoiseBuffer`] by simply converting it
@@ -117,10 +118,11 @@ impl Visualizer<1> {
 
     /// Write a PNG file to the given `path`, visualizing the output of the provided
     /// generator. For further detail see the [struct-level documentation](Visualizer).
-    pub fn write_to_file(&self, path: &str) {
+    pub fn write_to_file(&self, path: &str) -> Result<(), ImageError> {
         let image =
             GrayImage::from_raw(self.shape[0] as u32, 1, self.pixel_buffer.clone()).unwrap();
-        image.save(path).unwrap();
+        image.save(path)?;
+        Ok(())
     }
 }
 
@@ -132,14 +134,15 @@ impl Visualizer<2> {
         NoiseBuffer::<2>::new(shape, generator).into()
     }
 
-    pub fn write_to_file(&self, path: &str) {
+    pub fn write_to_file(&self, path: &str) -> Result<(), ImageError> {
         let image = GrayImage::from_raw(
             self.shape[1] as u32,
             self.shape[0] as u32,
             self.pixel_buffer.clone(),
         )
         .unwrap();
-        image.save(path).unwrap();
+        image.save(path)?;
+        Ok(())
     }
 }
 
@@ -153,7 +156,7 @@ impl Visualizer<3> {
 
     /// Write a PNG file to the given `path`, visualizing the output of the provided
     /// generator. For further detail see the [struct-level documentation](Visualizer).
-    pub fn write_to_file(&self, path: &str) {
+    pub fn write_to_file(&self, path: &str) -> Result<(), ImageError> {
         let scale = 0.45;
         let center = (self.shape[0] as f64 * 0.5, self.shape[1] as f64 * 0.5);
         let mut buf = vec![0; self.shape[0] * self.shape[1]];
@@ -168,7 +171,8 @@ impl Visualizer<3> {
         }
 
         let image = GrayImage::from_raw(self.shape[1] as u32, self.shape[0] as u32, buf).unwrap();
-        image.save(path).unwrap();
+        image.save(path)?;
+        Ok(())
     }
 }
 
@@ -182,12 +186,8 @@ impl Visualizer<4> {
 
     /// Write a GIF file to the given `path`, visualizing the output of the provided
     /// generator. For further detail see the [struct-level documentation](Visualizer).
-    pub fn write_to_file(&self, path: &str) {
-        let file_out = OpenOptions::new()
-            .write(true)
-            .create(true)
-            .open(path)
-            .unwrap();
+    pub fn write_to_file(&self, path: &str) -> Result<(), Error> {
+        let file_out = OpenOptions::new().write(true).create(true).open(path)?;
 
         let mut encoder = GifEncoder::new(file_out);
         encoder.set_repeat(Repeat::Infinite).unwrap();
@@ -221,6 +221,7 @@ impl Visualizer<4> {
                 )
                 .unwrap();
         }
+        Ok(())
     }
 }
 

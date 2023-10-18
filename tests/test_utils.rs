@@ -47,7 +47,7 @@ proptest! {
         let generator = Source::constant(val);
         let tmp_dir = TempDir::new("libnoise").unwrap();
         let path = &tmp_dir.path().join("output.png").into_os_string().into_string().unwrap();
-        Visualizer::<1>::new([1000], &generator).write_to_file(path);
+        Visualizer::<1>::new([1000], &generator).write_to_file(path).unwrap();
     }
 
     #[test]
@@ -55,7 +55,7 @@ proptest! {
         let generator = Source::constant(val);
         let tmp_dir = TempDir::new("libnoise").unwrap();
         let path = &tmp_dir.path().join("output.png").into_os_string().into_string().unwrap();
-        Visualizer::<2>::new([100, 100], &generator).write_to_file(path);
+        Visualizer::<2>::new([100, 100], &generator).write_to_file(path).unwrap();
     }
 
     #[test]
@@ -63,7 +63,7 @@ proptest! {
         let generator = Source::constant(val);
         let tmp_dir = TempDir::new("libnoise").unwrap();
         let path = &tmp_dir.path().join("output.png").into_os_string().into_string().unwrap();
-        Visualizer::<3>::new([30, 30, 30], &generator).write_to_file(path);
+        Visualizer::<3>::new([30, 30, 30], &generator).write_to_file(path).unwrap();
     }
 
     #[test]
@@ -71,6 +71,6 @@ proptest! {
         let generator = Source::constant(val);
         let tmp_dir = TempDir::new("libnoise").unwrap();
         let path = &tmp_dir.path().join("output.png").into_os_string().into_string().unwrap();
-        Visualizer::<4>::new([10, 10, 10, 10], &generator).write_to_file(path);
+        Visualizer::<4>::new([10, 10, 10, 10], &generator).write_to_file(path).unwrap();
     }
 }
