@@ -17,38 +17,26 @@ macro_rules! permit_cast {
 }
 
 macro_rules! permit_cast_to_all_primitive_numeric_types_for {
-    ($t1:ty) => {
-        permit_cast!($t1 as i8);
-        permit_cast!($t1 as i16);
-        permit_cast!($t1 as i32);
-        permit_cast!($t1 as i64);
-        permit_cast!($t1 as i128);
-        permit_cast!($t1 as u8);
-        permit_cast!($t1 as u16);
-        permit_cast!($t1 as u32);
-        permit_cast!($t1 as u64);
-        permit_cast!($t1 as u128);
-        permit_cast!($t1 as isize);
-        permit_cast!($t1 as usize);
-        permit_cast!($t1 as f32);
-        permit_cast!($t1 as f64);
-    };
+    ($($t1:ident)*)=>{
+        $(
+            permit_cast!($t1 as i8);
+            permit_cast!($t1 as i16);
+            permit_cast!($t1 as i32);
+            permit_cast!($t1 as i64);
+            permit_cast!($t1 as i128);
+            permit_cast!($t1 as u8);
+            permit_cast!($t1 as u16);
+            permit_cast!($t1 as u32);
+            permit_cast!($t1 as u64);
+            permit_cast!($t1 as u128);
+            permit_cast!($t1 as isize);
+            permit_cast!($t1 as usize);
+            permit_cast!($t1 as f32);
+            permit_cast!($t1 as f64);
+        )*
+    }
 }
-
-permit_cast_to_all_primitive_numeric_types_for!(i8);
-permit_cast_to_all_primitive_numeric_types_for!(i16);
-permit_cast_to_all_primitive_numeric_types_for!(i32);
-permit_cast_to_all_primitive_numeric_types_for!(i64);
-permit_cast_to_all_primitive_numeric_types_for!(i128);
-permit_cast_to_all_primitive_numeric_types_for!(u8);
-permit_cast_to_all_primitive_numeric_types_for!(u16);
-permit_cast_to_all_primitive_numeric_types_for!(u32);
-permit_cast_to_all_primitive_numeric_types_for!(u64);
-permit_cast_to_all_primitive_numeric_types_for!(u128);
-permit_cast_to_all_primitive_numeric_types_for!(isize);
-permit_cast_to_all_primitive_numeric_types_for!(usize);
-permit_cast_to_all_primitive_numeric_types_for!(f32);
-permit_cast_to_all_primitive_numeric_types_for!(f64);
+permit_cast_to_all_primitive_numeric_types_for! {i8 i16 i32 i64 i128 isize u8 u16 u32 u64 u128 usize f32 f64}
 
 macro_rules! impl_vector {
     ($name:ident, $dim:literal, $($xi:literal:$x:ident),+) => {

@@ -1,7 +1,7 @@
 mod checkerboard;
 mod constant;
 mod custom;
-pub(self) mod functional;
+mod functional;
 mod improved_perlin;
 mod perlin;
 mod simplex;
