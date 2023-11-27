@@ -8,10 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`exp()`]: Generator::exp
 #[derive(Clone, Copy, Debug)]
-pub struct Exp<const D: usize, G>
-where
-    G: Generator<D>,
-{
+pub struct Exp<const D: usize, G> {
     generator: G,
 }
 

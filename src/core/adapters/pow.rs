@@ -9,10 +9,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// [`powi()`]: Generator::powi
 /// [`powf()`]: Generator::powf
 #[derive(Clone, Copy, Debug)]
-pub struct Pow<const D: usize, G, T>
-where
-    G: Generator<D>,
-{
+pub struct Pow<const D: usize, G, T> {
     generator: G,
     exponent: T,
 }

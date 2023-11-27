@@ -9,11 +9,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`max()`]: Generator::max
 #[derive(Clone, Copy, Debug)]
-pub struct Max<const D: usize, GA, GB>
-where
-    GA: Generator<D>,
-    GB: Generator<D>,
-{
+pub struct Max<const D: usize, GA, GB> {
     generator_a: GA,
     generator_b: GB,
 }

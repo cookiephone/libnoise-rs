@@ -8,10 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`clamp()`]: Generator::clamp
 #[derive(Clone, Copy, Debug)]
-pub struct Clamp<const D: usize, G>
-where
-    G: Generator<D>,
-{
+pub struct Clamp<const D: usize, G> {
     generator: G,
     min: f64,
     max: f64,

@@ -8,11 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`lambda()`]: Generator::lambda
 #[derive(Clone, Copy, Debug)]
-pub struct Lambda<const D: usize, G, L>
-where
-    G: Generator<D>,
-    L: Fn(f64) -> f64,
-{
+pub struct Lambda<const D: usize, G, L> {
     generator: G,
     lambda: L,
 }
