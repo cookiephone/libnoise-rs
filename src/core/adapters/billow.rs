@@ -8,10 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`billow()`]: Generator::billow
 #[derive(Clone, Copy, Debug)]
-pub struct Billow<const D: usize, G>
-where
-    G: Generator<D>,
-{
+pub struct Billow<const D: usize, G> {
     generator: G,
     octaves: u32,
     frequency: f64,

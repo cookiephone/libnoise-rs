@@ -8,10 +8,7 @@ use crate::core::generator::{Generator, Generator2D, Generator3D, Generator4D};
 ///
 /// [`rotate()`]: Generator2D::rotate
 #[derive(Clone, Copy, Debug)]
-pub struct Rotate<const D: usize, const P: usize, G>
-where
-    G: Generator<D>,
-{
+pub struct Rotate<const D: usize, const P: usize, G> {
     generator: G,
     rotation: [f64; P],
 }

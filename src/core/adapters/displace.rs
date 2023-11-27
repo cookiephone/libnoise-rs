@@ -9,11 +9,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`displace_x()`]: Generator2D::displace_x
 #[derive(Clone, Copy, Debug)]
-pub struct Displace<const D: usize, const A: usize, G, GA>
-where
-    G: Generator<D>,
-    GA: Generator<D>,
-{
+pub struct Displace<const D: usize, const A: usize, G, GA> {
     generator: G,
     displacement_generator: GA,
 }

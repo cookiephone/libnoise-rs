@@ -8,10 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`mul()`]: Generator::mul
 #[derive(Clone, Copy, Debug)]
-pub struct Mul<const D: usize, G>
-where
-    G: Generator<D>,
-{
+pub struct Mul<const D: usize, G> {
     generator: G,
     scale: f64,
 }

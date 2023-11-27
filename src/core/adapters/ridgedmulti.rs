@@ -9,10 +9,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 /// [`fbm()`]: Generator:fbm
 /// [`ridgedmulti()`]: Generator::ridgedmulti
 #[derive(Clone, Copy, Debug)]
-pub struct RidgedMulti<const D: usize, G>
-where
-    G: Generator<D>,
-{
+pub struct RidgedMulti<const D: usize, G> {
     generator: G,
     octaves: u32,
     frequency: f64,

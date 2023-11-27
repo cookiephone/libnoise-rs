@@ -8,10 +8,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`add()`]: Generator::add
 #[derive(Clone, Copy, Debug)]
-pub struct Add<const D: usize, G>
-where
-    G: Generator<D>,
-{
+pub struct Add<const D: usize, G> {
     generator: G,
     offset: f64,
 }

@@ -10,12 +10,7 @@ use crate::core::generator::{Generator, Generator1D, Generator2D, Generator3D, G
 ///
 /// [`select()`]: Generator::select
 #[derive(Clone, Copy, Debug)]
-pub struct Select<const D: usize, GA, GB, GC>
-where
-    GA: Generator<D>,
-    GB: Generator<D>,
-    GC: Generator<D>,
-{
+pub struct Select<const D: usize, GA, GB, GC> {
     generator_a: GA,
     generator_b: GB,
     generator_control: GC,
