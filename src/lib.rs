@@ -45,8 +45,7 @@
 //! ```
 //!
 //! We can also use [`NoiseBuffer`] for efficiently filling n-dimensional arrays
-//! with noise, and [`Visualizer`] to get a visual representation of a given
-//! generator. The above generator produces the following image, when sampled for
+//! with noise. The above generator produces the following image, when sampled for
 //! every pixel position:
 //!
 //! ![image](https://raw.githubusercontent.com/cookiephone/libnoise-rs/master/images/doc_image_000_f7049b4.png)
@@ -55,6 +54,11 @@
 //! produce space-time noise such as:
 //!
 //! ![image](https://raw.githubusercontent.com/cookiephone/libnoise-rs/master/images/doc_image_001_f7049b4.gif)
+//!
+#![cfg_attr(
+    feature = "image",
+    doc = "[`Visualizer`] allows us to get such a visual representation of a given generator when using the `image` feature."
+)]
 
 mod core;
 pub mod prelude;
