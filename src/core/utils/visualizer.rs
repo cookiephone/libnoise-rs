@@ -12,7 +12,7 @@ use std::{
 };
 
 /// A struct for visualizing the output of a generator.
-/// 
+///
 /// The `image` feature must be enabled for writing images of visualizations.
 ///
 /// This struct represents a simple way to quickly visualize the output of a [`Generator`] by
