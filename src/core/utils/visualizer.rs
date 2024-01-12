@@ -12,6 +12,8 @@ use std::{
 };
 
 /// A struct for visualizing the output of a generator.
+/// 
+/// The `image` feature must be enabled for writing images of visualizations.
 ///
 /// This struct represents a simple way to quickly visualize the output of a [`Generator`] by
 /// building a [`NoiseBuffer`] of a given size, populating it with data, and creating an PNG or
