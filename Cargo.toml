@@ -12,6 +12,9 @@ description = "A simple, performant, and customizable procedural noise generatio
 keywords = ["noise", "procedural", "perlin", "simplex", "worley"]
 categories = ["algorithms", "mathematics", "game-development", "graphics"]
 
+[package.metadata.docs.rs]
+all-features = true
+
 [features]
 dev-tools = ["dep:criterion"]
 image = ["dep:image"]
