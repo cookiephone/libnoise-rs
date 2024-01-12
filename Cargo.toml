@@ -14,13 +14,14 @@ categories = ["algorithms", "mathematics", "game-development", "graphics"]
 
 [features]
 dev-tools = ["dep:criterion"]
+image = ["dep:image"]
 
 [dependencies]
 num-traits = "0.2.16"
 rand_chacha = { version = "0.3.1" }
 rand = { version = "0.8.5", features = [], default-features = false }
 itertools = "0.10.5"
-image = { version = "0.24.6", features = ["gif"], default-features = false, optional = true }
+image = { version = "0.24.6", features = ["gif"], optional = true }
 criterion = { version = "0.5.1", optional = true }
 
 [dev-dependencies]
