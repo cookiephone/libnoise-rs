@@ -1,7 +1,7 @@
 use super::functional::{self, constants::PERMUTATION_TABLE_SIZE};
 use crate::core::{
     generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D},
-    utils::ptable::PermutationTable,
+    utils::ptable::{PermutationTable, Seed},
 };
 
 /// A generator which produces n-dimensional perlin noise.
@@ -35,7 +35,7 @@ impl Generator4D for Perlin<4> {}
 impl<const D: usize> Perlin<D> {
     /// Create a new perlin noise generator.
     #[inline]
-    pub fn new(seed: u64) -> Self {
+    pub fn new(seed: impl Seed) -> Self {
         let permutation_table = PermutationTable::new(seed, PERMUTATION_TABLE_SIZE, true);
         Self { permutation_table }
     }

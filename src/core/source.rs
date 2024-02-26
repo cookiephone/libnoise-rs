@@ -1,3 +1,4 @@
+use super::utils::ptable::Seed;
 use crate::core::sources::{
     Checkerboard, Constant, Custom, ImprovedPerlin, Perlin, Simplex, Value, Worley,
 };
@@ -84,7 +85,7 @@ impl<const D: usize> Source<D> {
     /// let generator = Source::simplex(42);
     /// let value = generator.sample([0.2, 0.5]);
     /// ```
-    pub fn simplex(seed: u64) -> Simplex<D> {
+    pub fn simplex(seed: impl Seed) -> Simplex<D> {
         Simplex::new(seed)
     }
 
@@ -110,7 +111,7 @@ impl<const D: usize> Source<D> {
     /// let generator = Source::value(42);
     /// let value = generator.sample([0.2, 0.5]);
     /// ```
-    pub fn value(seed: u64) -> Value<D> {
+    pub fn value(seed: impl Seed) -> Value<D> {
         Value::new(seed)
     }
 
@@ -137,7 +138,7 @@ impl<const D: usize> Source<D> {
     /// let generator = Source::perlin(42);
     /// let value = generator.sample([0.2, 0.5]);
     /// ```
-    pub fn perlin(seed: u64) -> Perlin<D> {
+    pub fn perlin(seed: impl Seed) -> Perlin<D> {
         Perlin::new(seed)
     }
 
@@ -168,7 +169,7 @@ impl<const D: usize> Source<D> {
     /// let generator = Source::improved_perlin(42);
     /// let value = generator.sample([0.2, 0.5]);
     /// ```
-    pub fn improved_perlin(seed: u64) -> ImprovedPerlin<D> {
+    pub fn improved_perlin(seed: impl Seed) -> ImprovedPerlin<D> {
         ImprovedPerlin::new(seed)
     }
 
@@ -202,7 +203,7 @@ impl<const D: usize> Source<D> {
     /// let generator = Source::worley(42);
     /// let value = generator.sample([0.2, 0.5]);
     /// ```
-    pub fn worley(seed: u64) -> Worley<D> {
+    pub fn worley(seed: impl Seed) -> Worley<D> {
         Worley::new(seed)
     }
 
