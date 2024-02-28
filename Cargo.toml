@@ -1,6 +1,6 @@
 [package]
 name = "libnoise"
-version = "1.1.1"
+version = "1.1.2"
 authors = ["Contributors to the libnoise-rs Repository"]
 edition = "2021"
 license = "MIT"
@@ -57,6 +57,9 @@ strip = false
 
 [[test]]
 name = "test_sources"
+
+[[test]]
+name = "test_other"
 
 [[test]]
 name = "test_adapters"

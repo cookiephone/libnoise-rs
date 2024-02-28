@@ -69,5 +69,6 @@ pub use crate::core::generator::*;
 pub use crate::core::source::Source;
 pub use crate::core::sources::*;
 pub use crate::core::utils::noisebuf::NoiseBuffer;
+pub use crate::core::utils::ptable::Seed;
 #[cfg(feature = "image")]
 pub use crate::core::utils::visualizer::Visualizer;

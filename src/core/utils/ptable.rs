@@ -2,15 +2,35 @@ use super::math::{Vec2, Vec3, Vec4};
 use rand::seq::SliceRandom;
 use rand_chacha::{rand_core::SeedableRng, ChaCha12Rng};
 
+/// A trait attached to valid seed types for noise sources.
+///
+/// This trait is implemented for `u64` and `[u8; 32]`. In doing so, both
+/// approaches to seed the underlying RNG are exposed.
+pub trait Seed {
+    fn construct_rng(self) -> ChaCha12Rng;
+}
+
+impl Seed for u64 {
+    fn construct_rng(self) -> ChaCha12Rng {
+        ChaCha12Rng::seed_from_u64(self)
+    }
+}
+
+impl Seed for [u8; 32] {
+    fn construct_rng(self) -> ChaCha12Rng {
+        ChaCha12Rng::from_seed(self)
+    }
+}
+
 #[derive(Clone, Debug)]
 pub(crate) struct PermutationTable {
     pub(crate) table: Vec<usize>,
 }
 
 impl PermutationTable {
-    pub(crate) fn new(seed: u64, w: usize, doubleup: bool) -> Self {
+    pub(crate) fn new(seed: impl Seed, w: usize, doubleup: bool) -> Self {
         let mut table = Vec::from_iter(0..w);
-        let mut rng = ChaCha12Rng::seed_from_u64(seed);
+        let mut rng = seed.construct_rng();
         table.shuffle(&mut rng);
         if doubleup {
             table.extend_from_within(..);

@@ -1,7 +1,7 @@
 use super::functional::{self, constants::PERMUTATION_TABLE_SIZE};
 use crate::core::{
     generator::{Generator, Generator1D, Generator2D, Generator3D, Generator4D},
-    utils::ptable::PermutationTable,
+    utils::ptable::{PermutationTable, Seed},
 };
 
 /// A generator which produces n-dimensional simplex noise.
@@ -35,7 +35,7 @@ impl Generator4D for Simplex<4> {}
 impl<const D: usize> Simplex<D> {
     /// Create a new simplex noise generator.
     #[inline]
-    pub fn new(seed: u64) -> Self {
+    pub fn new(seed: impl Seed) -> Self {
         let permutation_table = PermutationTable::new(seed, PERMUTATION_TABLE_SIZE, true);
         Self { permutation_table }
     }
