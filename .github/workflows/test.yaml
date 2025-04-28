@@ -2,7 +2,7 @@ name: test
 
 on:
   pull_request:
-     branches:
+    branches:
       - master
   push:
     branches:
@@ -20,6 +20,10 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v3
+
+      - name: install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libfontconfig1-dev
+
       - name: cache
         uses: actions/cache@v3
         with:
@@ -28,32 +32,38 @@ jobs:
             ~/.cargo/git
             target
             target_cov
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }} # dependency version changes in manifest should result in a new cache
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+
       - name: install toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           override: true
+
       - name: install binstall
         run: curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+
       - name: bininstall tarpaulin
         uses: actions-rs/cargo@v1
         with:
           command: binstall
           args: cargo-tarpaulin --no-confirm
+
       - name: try tarpaulin with coveralls
         if: ${{ env.COVERALLS_TOKEN != '' }}
         uses: actions-rs/cargo@v1
         with:
           command: tarpaulin
           args: --coveralls ${{ secrets.COVERALLS_TOKEN }} --target-dir target_cov --engine llvm --skip-clean
+
       - name: try tarpaulin without coveralls
         if: ${{ env.COVERALLS_TOKEN == '' }}
         uses: actions-rs/cargo@v1
         with:
           command: tarpaulin
           args: --target-dir target_cov --engine llvm --skip-clean
+
       - name: run doctests
         uses: actions-rs/cargo@v1
         with:

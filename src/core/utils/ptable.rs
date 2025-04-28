@@ -1,6 +1,6 @@
 use super::math::{Vec2, Vec3, Vec4};
 use rand::seq::SliceRandom;
-use rand_chacha::{rand_core::SeedableRng, ChaCha12Rng};
+use rand_chacha::{ChaCha12Rng, rand_core::SeedableRng};
 
 /// A trait attached to valid seed types for noise sources.
 ///
@@ -41,41 +41,41 @@ impl PermutationTable {
 
     #[inline]
     pub(crate) unsafe fn get(&self, i: usize) -> usize {
-        *self.table.get_unchecked(i)
+        unsafe { *self.table.get_unchecked(i) }
     }
 
     #[inline]
     pub(crate) unsafe fn hash1d(&self, i: usize) -> usize {
-        self.get(i)
+        unsafe { self.get(i) }
     }
 
     #[inline]
     pub(crate) unsafe fn hash2d(&self, i: usize, j: usize) -> usize {
-        self.get(j + self.get(i))
+        unsafe { self.get(j + self.get(i)) }
     }
 
     #[inline]
     pub(crate) unsafe fn hash3d(&self, i: usize, j: usize, k: usize) -> usize {
-        self.get(k + self.get(j + self.get(i)))
+        unsafe { self.get(k + self.get(j + self.get(i))) }
     }
 
     #[inline]
     pub(crate) unsafe fn hash4d(&self, i: usize, j: usize, k: usize, l: usize) -> usize {
-        self.get(l + self.get(k + self.get(j + self.get(i))))
+        unsafe { self.get(l + self.get(k + self.get(j + self.get(i)))) }
     }
 
     #[inline]
     pub(crate) unsafe fn hash2d_vec(&self, value: Vec2<usize>) -> usize {
-        self.get(value.y + self.get(value.x))
+        unsafe { self.get(value.y + self.get(value.x)) }
     }
 
     #[inline]
     pub(crate) unsafe fn hash3d_vec(&self, value: Vec3<usize>) -> usize {
-        self.get(value.z + self.get(value.y + self.get(value.x)))
+        unsafe { self.get(value.z + self.get(value.y + self.get(value.x))) }
     }
 
     #[inline]
     pub(crate) unsafe fn hash4d_vec(&self, value: Vec4<usize>) -> usize {
-        self.get(value.w + self.get(value.z + self.get(value.y + self.get(value.x))))
+        unsafe { self.get(value.w + self.get(value.z + self.get(value.y + self.get(value.x)))) }
     }
 }

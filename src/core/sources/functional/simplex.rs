@@ -141,51 +141,59 @@ pub(crate) fn noise4d(perm: &PermutationTable, point: [f64; 4]) -> f64 {
 }
 
 unsafe fn contribution1d(x: f64, gi: usize) -> f64 {
-    if x.abs() >= std::f64::consts::FRAC_1_SQRT_2 {
-        0.0
-    } else {
-        let mut t = SIMPLEX_R_SQUARED - x * x;
-        t *= t;
-        t * t * GRADIENT_LUT_1D.get_unchecked(gi) * x
+    unsafe {
+        if x.abs() >= std::f64::consts::FRAC_1_SQRT_2 {
+            0.0
+        } else {
+            let mut t = SIMPLEX_R_SQUARED - x * x;
+            t *= t;
+            t * t * GRADIENT_LUT_1D.get_unchecked(gi) * x
+        }
     }
 }
 
 unsafe fn contribution2d(x: Vec2<f64>, gi: usize) -> f64 {
-    let mut t = SIMPLEX_R_SQUARED - x.x * x.x - x.y * x.y;
-    if t <= 0.0 {
-        0.0
-    } else {
-        let gradient = MIDPOINT_GRADIENT_LUT_2D.get_unchecked(gi);
-        t *= t;
-        t * t * (gradient.get_unchecked(0) * x.x + gradient.get_unchecked(1) * x.y)
+    unsafe {
+        let mut t = SIMPLEX_R_SQUARED - x.x * x.x - x.y * x.y;
+        if t <= 0.0 {
+            0.0
+        } else {
+            let gradient = MIDPOINT_GRADIENT_LUT_2D.get_unchecked(gi);
+            t *= t;
+            t * t * (gradient.get_unchecked(0) * x.x + gradient.get_unchecked(1) * x.y)
+        }
     }
 }
 
 unsafe fn contribution3d(x: Vec3<f64>, gi: usize) -> f64 {
-    let mut t = SIMPLEX_R_SQUARED - x.x * x.x - x.y * x.y - x.z * x.z;
-    if t <= 0.0 {
-        0.0
-    } else {
-        let gradient = MIDPOINT_GRADIENT_LUT_3D.get_unchecked(gi);
-        t *= t;
-        t * t
-            * (gradient.get_unchecked(0) * x.x
-                + gradient.get_unchecked(1) * x.y
-                + gradient.get_unchecked(2) * x.z)
+    unsafe {
+        let mut t = SIMPLEX_R_SQUARED - x.x * x.x - x.y * x.y - x.z * x.z;
+        if t <= 0.0 {
+            0.0
+        } else {
+            let gradient = MIDPOINT_GRADIENT_LUT_3D.get_unchecked(gi);
+            t *= t;
+            t * t
+                * (gradient.get_unchecked(0) * x.x
+                    + gradient.get_unchecked(1) * x.y
+                    + gradient.get_unchecked(2) * x.z)
+        }
     }
 }
 
 unsafe fn contribution4d(x: Vec4<f64>, gi: usize) -> f64 {
-    let mut t = SIMPLEX_R_SQUARED - x.x * x.x - x.y * x.y - x.z * x.z - x.w * x.w;
-    if t <= 0.0 {
-        0.0
-    } else {
-        let gradient = MIDPOINT_GRADIENT_LUT_4D.get_unchecked(gi);
-        t *= t;
-        t * t
-            * (gradient.get_unchecked(0) * x.x
-                + gradient.get_unchecked(1) * x.y
-                + gradient.get_unchecked(2) * x.z
-                + gradient.get_unchecked(3) * x.w)
+    unsafe {
+        let mut t = SIMPLEX_R_SQUARED - x.x * x.x - x.y * x.y - x.z * x.z - x.w * x.w;
+        if t <= 0.0 {
+            0.0
+        } else {
+            let gradient = MIDPOINT_GRADIENT_LUT_4D.get_unchecked(gi);
+            t *= t;
+            t * t
+                * (gradient.get_unchecked(0) * x.x
+                    + gradient.get_unchecked(1) * x.y
+                    + gradient.get_unchecked(2) * x.z
+                    + gradient.get_unchecked(3) * x.w)
+        }
     }
 }

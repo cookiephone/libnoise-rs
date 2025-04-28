@@ -164,19 +164,27 @@ fn lerp(a: f64, b: f64, t: f64) -> f64 {
 }
 
 unsafe fn contribution2d(x: f64, y: f64, gi: usize) -> f64 {
-    let gradient = MIDPOINT_GRADIENT_LUT_2D.get_unchecked(gi);
-    gradient.get_unchecked(0) * x + gradient.get_unchecked(1) * y
+    unsafe {
+        let gradient = MIDPOINT_GRADIENT_LUT_2D.get_unchecked(gi);
+        gradient.get_unchecked(0) * x + gradient.get_unchecked(1) * y
+    }
 }
 
 unsafe fn contribution3d(x: f64, y: f64, z: f64, gi: usize) -> f64 {
-    let gradient = MIDPOINT_GRADIENT_LUT_3D.get_unchecked(gi);
-    gradient.get_unchecked(0) * x + gradient.get_unchecked(1) * y + gradient.get_unchecked(2) * z
+    unsafe {
+        let gradient = MIDPOINT_GRADIENT_LUT_3D.get_unchecked(gi);
+        gradient.get_unchecked(0) * x
+            + gradient.get_unchecked(1) * y
+            + gradient.get_unchecked(2) * z
+    }
 }
 
 unsafe fn contribution4d(x: f64, y: f64, z: f64, w: f64, gi: usize) -> f64 {
-    let gradient = MIDPOINT_GRADIENT_LUT_4D.get_unchecked(gi);
-    gradient.get_unchecked(0) * x
-        + gradient.get_unchecked(1) * y
-        + gradient.get_unchecked(2) * z
-        + gradient.get_unchecked(3) * w
+    unsafe {
+        let gradient = MIDPOINT_GRADIENT_LUT_4D.get_unchecked(gi);
+        gradient.get_unchecked(0) * x
+            + gradient.get_unchecked(1) * y
+            + gradient.get_unchecked(2) * z
+            + gradient.get_unchecked(3) * w
+    }
 }
