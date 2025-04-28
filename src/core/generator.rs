@@ -827,6 +827,54 @@ pub trait Generator<const D: usize>: Sized {
     {
         adapters::Select::new(self, other, control, selection_min, selection_max)
     }
+
+    /// Create a generator returning the function value of a provided spline given the result of the
+    /// underlying generator as input.
+    ///
+    /// Creates a generator which maps outputs of the underlying generator to function values of
+    /// the defined spline. This is equivalent to using [`lambda()`] and supplying a function which
+    /// evaluates a spline at a given position and returns [`f64::NAN`] if the value was out of bounds
+    /// for the domain of the spline. `knot_vector` is an array of `f64` values representing the
+    /// ordered list of interval boundaries over which the spline is defined. `knots` represents the
+    /// value attached to the respective interval boundary. Therefore `knot_vector[i]` is associated
+    /// to `knots[i]` for each `i`.
+    ///
+    /// <p style="background:rgba(255,181,77,0.16);padding:0.75em;">
+    /// <strong>Note:</strong>
+    /// This adapter performs sanity checks on whether there are enough knots, whether knot_vector and
+    /// knots are all finite values and of the same length, and whether knot_vector is sorted. Ensure
+    /// inputs are well formed.
+    /// </p>
+    ///
+    /// <p style="background:rgba(122,186,255,0.16);padding:0.75em;">
+    /// <strong>Note:</strong>
+    /// Values out of bounds for the spline domain cause the generator to yield NaN.
+    /// </p>
+    ///
+    /// # Examples
+    ///
+    /// Basic usage:
+    ///
+    /// ```
+    /// # use libnoise::{Source, Generator, NaturalCubicSpline};
+    /// let point = [0.2, 0.5];
+    ///
+    /// let generator = Source::simplex(42)     // build a generator
+    ///     .spline::<NaturalCubicSpline>(      // apply the adapter
+    ///         &[-1.0, 1.5, 3.0, 7.5, 9.2],
+    ///         &[5.0, 0.0, -6.5, 2.0, -11.0],
+    ///     );
+    ///
+    /// let value = generator.sample(point);    // sample the generator
+    /// ```
+    /// [`lambda()`]: Generator::lambda
+    #[inline]
+    fn spline<S>(self, knot_vector: &[f64], knots: &[f64]) -> adapters::Spline<D, Self, S>
+    where
+        S: adapters::SplineImpl,
+    {
+        adapters::Spline::new(self, knot_vector, knots)
+    }
 }
 
 /// A trait representing the specialization of [`Generator<D>`] for 1-dimensional input spaces.
