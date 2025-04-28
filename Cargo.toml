@@ -2,7 +2,7 @@
 name = "libnoise"
 version = "1.1.2"
 authors = ["Contributors to the libnoise-rs Repository"]
-edition = "2021"
+edition = "2024"
 license = "MIT"
 readme = "README.md"
 documentation = "https://docs.rs/libnoise"

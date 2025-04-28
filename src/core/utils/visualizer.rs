@@ -1,8 +1,8 @@
 use crate::core::generator::Generator;
 use crate::core::utils::noisebuf::NoiseBuffer;
 use image::{
-    codecs::gif::{GifEncoder, Repeat},
     ColorType, GrayImage, ImageError,
+    codecs::gif::{GifEncoder, Repeat},
 };
 use itertools::Itertools;
 use std::{
@@ -189,7 +189,11 @@ impl Visualizer<4> {
     /// Write a GIF file to the given `path`, visualizing the output of the provided
     /// generator. For further detail see the [struct-level documentation](Visualizer).
     pub fn write_to_file(&self, path: &str) -> Result<(), Error> {
-        let file_out = OpenOptions::new().write(true).create(true).open(path)?;
+        let file_out = OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .create(true)
+            .open(path)?;
 
         let mut encoder = GifEncoder::new(file_out);
         encoder.set_repeat(Repeat::Infinite).unwrap();
@@ -211,7 +215,7 @@ impl Visualizer<4> {
 
             buf = buf
                 .into_iter()
-                .flat_map(|val| std::iter::repeat(val).take(3))
+                .flat_map(|val| std::iter::repeat_n(val, 3))
                 .collect();
 
             encoder
@@ -254,7 +258,7 @@ fn xyz_screen_to_buff_indices(
     }
 }
 
-fn tensor_indices(shape: &[usize]) -> impl Iterator<Item = Vec<usize>> {
+fn tensor_indices(shape: &[usize]) -> impl Iterator<Item = Vec<usize>> + use<> {
     shape
         .iter()
         .map(|&dim_size| 0..dim_size)

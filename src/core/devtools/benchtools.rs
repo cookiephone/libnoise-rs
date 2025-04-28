@@ -1,5 +1,5 @@
 use crate::Generator;
-use criterion::{black_box, Criterion};
+use criterion::{Criterion, black_box};
 use itertools::Itertools;
 
 pub fn bench_noise1d<G: Generator<1>>(
@@ -56,14 +56,14 @@ fn noise_bencher<const D: usize, G: Generator<D>>(generator: &G, shape: &[usize]
     }
 }
 
-fn tensor_indices(shape: &[usize]) -> impl Iterator<Item = Vec<usize>> {
+fn tensor_indices(shape: &[usize]) -> impl Iterator<Item = Vec<usize>> + use<> {
     shape
         .iter()
         .map(|&dim_size| 0..dim_size)
         .multi_cartesian_product()
 }
 
-fn cartesian_lattice_points(shape: &[usize], scale: f64) -> impl Iterator<Item = Vec<f64>> {
+fn cartesian_lattice_points(shape: &[usize], scale: f64) -> impl Iterator<Item = Vec<f64>> + use<> {
     tensor_indices(shape).map(move |point| {
         point
             .iter()

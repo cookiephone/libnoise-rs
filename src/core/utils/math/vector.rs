@@ -1,4 +1,4 @@
-use num_traits::{identities::Zero, Euclid, Float, Pow};
+use num_traits::{Euclid, Float, Pow, identities::Zero};
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 pub(crate) trait NumCast<T>: Sized {

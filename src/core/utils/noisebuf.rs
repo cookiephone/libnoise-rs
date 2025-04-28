@@ -116,7 +116,7 @@ impl<const D: usize> NoiseBuffer<D> {
             .sum()
     }
 
-    pub(crate) fn tensor_indices(&self) -> impl Iterator<Item = [usize; D]> {
+    pub(crate) fn tensor_indices(&self) -> impl Iterator<Item = [usize; D]> + use<D> {
         self.shape
             .iter()
             .map(|&dim_size| 0..dim_size)

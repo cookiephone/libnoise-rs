@@ -1,4 +1,4 @@
-use criterion::{criterion_group, criterion_main, Criterion, PlottingBackend};
+use criterion::{Criterion, PlottingBackend, criterion_group, criterion_main};
 use libnoise::prelude::*;
 
 const SCALE: f64 = 0.033;
