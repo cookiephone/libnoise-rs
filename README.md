@@ -34,7 +34,7 @@ Most immediately relevant [documentation](https://docs.rs/libnoise) can be found
 First, add the dependency to your project by editing your `Cargo.toml`:
 ```toml
 [dependencies]
-libnoise = "1.1"
+libnoise = "1.2"
 ```
 
 To get started easily, create a source generator using one of the many
